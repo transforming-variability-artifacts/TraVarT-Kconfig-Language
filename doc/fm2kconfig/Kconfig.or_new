@@ -1,0 +1,67 @@
+config F1
+  bool "Feature 1"
+
+choice CH_F1
+  bool "Or group of Feature 1 (first selection)"
+  depends on F1
+
+  config F2
+    bool "Feature 2"
+    select OPTIONS
+
+  config F3
+    bool "Feature 3"
+    select OPTIONS
+
+  config F4
+    bool "Feature 4"
+    select OPTIONS
+
+endchoice
+
+menuconfig OPTIONS
+  bool "Additional selections for or group of Feature 1"
+  depends on false
+
+config OPT_F2
+  bool "Additional selection F2"
+  depends on !F2
+  depends on OPTIONS
+
+config OPT_F3
+  bool "Additional selection F3"
+  depends on !F3
+  depends on OPTIONS
+
+config OPT_F4
+  bool "Additional selection F4"
+  depends on !F4
+  depends on OPTIONS
+
+choice CH_F4
+  bool "Or group of Feature 4 (first selection)"
+  depends on F4 || OPT_F4
+
+  config F7
+    bool "Feature 7"
+    select OPTIONS_F4
+
+  config F8
+    bool "Feature 8"
+    select OPTIONS_F4
+
+endchoice
+
+menuconfig OPTIONS_F4
+  bool "Additional selections for or group of Feature 4"
+  depends on false
+
+config OPT_F7
+  bool "Additional selection F7"
+  depends on !F7
+  depends on OPTIONS_F4
+
+config OPT_F8
+  bool "Additional selection F8"
+  depends on !F8
+  depends on OPTIONS_F4

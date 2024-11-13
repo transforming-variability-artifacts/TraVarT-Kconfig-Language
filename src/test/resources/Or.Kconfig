@@ -1,0 +1,69 @@
+config FEATURE_A
+	bool "Feature A"
+
+choice CH_FEATURE_A
+
+	bool "Or group of Feature A (first selection)"
+		depends on FEATURE_A
+
+	config FEATURE_B
+		bool "Feature B"
+		select CH_FEATURE_A_OPT
+
+	config FEATURE_C
+		bool "Feature C"
+		select CH_FEATURE_A_OPT
+
+	config FEATURE_D
+		bool "Feature D"
+		select CH_FEATURE_A_OPT
+
+endchoice
+
+config CH_FEATURE_A_OPT
+	bool "Additional selections for or group of Feature 1"
+	depends on $false
+
+config OPT_FEATURE_B
+	bool "Additional selection B"
+	depends on ~FEATURE_B
+	depends on CH_FEATURE_A_OPT
+
+config OPT_FEATURE_C
+	bool "Additional selection C"
+	depends on ~FEATURE_C
+	depends on CH_FEATURE_A_OPT
+
+config OPT_FEATURE_D
+	bool "Additional selection D"
+	depends on ~FEATURE_D
+	depends on CH_FEATURE_A_OPT
+
+choice CH_FEATURE_D
+	bool "Or group of Feature D (first selection)"
+	depends on FEATURE_D | OPT_FEATURE_D
+
+	config FEATURE_E
+		bool "Feature E"
+		select CH_FEATURE_D_OPT
+
+	config FEATURE_F
+		bool "Feature F"
+		select CH_FEATURE_D_OPT
+
+endchoice
+
+config CH_FEATURE_D_OPT
+	bool "Additional selections for or group of Feature 4"
+	depends on $false
+
+config OPT_FEATURE_E
+	bool "Additional selection E"
+	depends on ~FEATURE_E
+	depends on OPT_FEATURE_D
+
+config OPT_FEATURE_F
+	bool "Additional selection F"
+	depends on ~FEATURE_F
+	depends on OPT_FEATURE_D
+

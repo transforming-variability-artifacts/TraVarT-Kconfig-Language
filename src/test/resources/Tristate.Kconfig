@@ -1,0 +1,14 @@
+config SYMBOL_A
+	tristate "Configuration symbol A"
+
+config SYMBOL_B
+	tristate "Configuration symbol B"
+	depends on SYMBOL_A
+	depends on SYMBOL_C
+
+config SYMBOL_C
+	bool "Configuration symbol C"
+
+config SYMBOL_D
+	bool "Configuration symbol D"
+	depends on SYMBOL_B

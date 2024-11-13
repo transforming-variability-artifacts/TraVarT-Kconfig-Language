@@ -1,0 +1,35 @@
+config SYMBOL_A
+	bool "Configuration symbol A"
+
+config SYMBOL_X
+	bool "Configuration symbol X"
+	select SYMBOL_A
+
+menu "Menu block M"
+
+	choice CHOICE_C
+		bool "Choice block C"
+		depends on SYMBOL_A
+
+		config SYMBOL_B
+			bool "Configuration symbol B"
+
+		config SYMBOL_D
+			bool "Configuration symbol D"
+	
+	endchoice
+
+	choice CHOICE_E
+		bool "Choice block D"
+		depends on SYMBOL_X
+		optional
+
+		config SYMBOL_F
+			bool "Configuration symbol F"
+
+		config SYMBOL_G
+			bool "Configuration symbol G"
+
+	endchoice
+
+endmenu

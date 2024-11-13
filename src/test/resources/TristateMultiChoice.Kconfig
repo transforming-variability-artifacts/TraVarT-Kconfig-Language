@@ -1,0 +1,35 @@
+config SYMBOL_A
+	tristate "Configuration symbol A"
+
+choice CHOICE_C
+	tristate "Choice block C"
+	depends on SYMBOL_A
+	optional
+
+	config SYMBOL_B
+		tristate "Configuration symbol B"
+		depends on SYMBOL_Y | SYMBOL_X
+
+	config SYMBOL_C
+		tristate "Configuration symbol C"
+		depends on SYMBOL_X
+
+endchoice
+
+config SYMBOL_Y
+	bool "Configuration symbol Y"
+
+config SYMBOL_X
+	tristate "Configuration symbol X"
+
+choice CHOICE_D
+	bool "Choice block C"
+	depends on SYMBOL_Y
+
+	config SYMBOL_E
+		bool "Configuration symbol E"
+
+	config SYMBOL_F
+		bool "Configuration symbol F"
+
+endchoice
