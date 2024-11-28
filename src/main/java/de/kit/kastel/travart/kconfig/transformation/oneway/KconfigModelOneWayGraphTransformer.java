@@ -1,3 +1,17 @@
+/*******************************************************************************
+ * This Source Code Form is subject to the terms of the Mozilla
+ * Public License, v. 2.0. If a copy of the MPL was not distributed
+ * with this file, You can obtain one at
+ * https://mozilla.org/MPL/2.0/.
+ *
+ * Contributors:
+ * 	@author Kaan Berk Yaman
+ * 	@author Kevin Feichtinger
+ *
+ * Copyright 2024 Karlsruhe Institute of Technology (KIT)
+ * KASTEL - Dependability of Software-intensive Systems
+ * All rights reserved
+ *******************************************************************************/
 package de.kit.kastel.travart.kconfig.transformation.oneway;
 
 import java.util.Collection;
@@ -29,16 +43,18 @@ import de.vill.model.constraint.ImplicationConstraint;
 public class KconfigModelOneWayGraphTransformer {
 
 	// FIXME Should probably not be static
-	static final private Map<Variable, Formula> NODE_EXP_SUB_MAP = new HashMap<>();
+	private static final  Map<Variable, Formula> NODE_EXP_SUB_MAP = new HashMap<>();
+
+	private KconfigModelOneWayGraphTransformer() {}
 
 	/***
 	 * This method is unused, for the one-way Kconfig transformation, we utilize the
 	 * partial two-way transformation in KconfigTwoWayGraphTransformer.
-	 * 
+	 *
 	 * TODO Clean up code
 	 */
 	// Build a feature model using the data contained in a finalised TreeProcessor
-	static public FeatureModel processGraph(KconfigGraph graph) {
+	public static FeatureModel processGraph(KconfigGraph graph) {
 		throw new UnsupportedOperationException("Dummy method, use partial two-way transformation instead!");
 	}
 
@@ -67,7 +83,9 @@ public class KconfigModelOneWayGraphTransformer {
 			for (MutablePair<Formula, Boolean> exp : deps.getValue()) {
 				Formula subExp = exp.getLeft();
 				for (Map.Entry<Variable, Formula> substitution : NODE_EXP_SUB_MAP.entrySet()) {
-					if (substitution.getValue().containsVariable(deps.getKey().getName())) continue;
+					if (substitution.getValue().containsVariable(deps.getKey().getName())) {
+						continue;
+					}
 					// Not very robust, but seems to work... for now
 					// In general, avoid substituting if the source node occurs on the rhs of the substitution tuple
 					subExp = subExp.substitute(substitution.getKey(), substitution.getValue());
@@ -95,7 +113,8 @@ public class KconfigModelOneWayGraphTransformer {
 			}
 			graph.nodes().put(current.getFeatureName(), initial);
 			return initial;
-		} else if (TraVarTUtils.hasGroup(current, GroupType.OR)) {
+		}
+		if (TraVarTUtils.hasGroup(current, GroupType.OR)) {
 			// FIXME Unclear how node enclosures are defined for the group-specific choice blocks
 			KconfigBooleanChoice node = new KconfigBooleanChoice("CH_" + current.getFeatureName(), null);
 			graph.nodes().put(node.getName(), node);
@@ -120,16 +139,12 @@ public class KconfigModelOneWayGraphTransformer {
 				NODE_EXP_SUB_MAP.put(f.variable(feature.getFeatureName()),
 						f.or(List.of(f.variable(firstChoice.getName()), f.variable(optNode.getName()))));
 			}
-			graph.nodes().put(current.getFeatureName(), initial);
-			return initial;
 		} else if (TraVarTUtils.hasGroup(current, GroupType.OPTIONAL)) {
 			for (Feature feature : TraVarTUtils.getGroup(current, GroupType.MANDATORY, 0).getFeatures()) {
 				KconfigNode child = processFeature(feature, enclosing, graph);
 				// Add B -> A forward dependency for each group member
 				graph.dependencies().put(child, MutablePair.of(f.variable(initial.getName()), false));
 			}
-			graph.nodes().put(current.getFeatureName(), initial);
-			return initial;
 		} else if (TraVarTUtils.hasGroup(current, GroupType.MANDATORY)) {
 			for (Feature feature : TraVarTUtils.getGroup(current, GroupType.MANDATORY, 0).getFeatures()) {
 				KconfigNode child = processFeature(feature, enclosing, graph);
@@ -139,12 +154,8 @@ public class KconfigModelOneWayGraphTransformer {
 				graph.dependencies().put(child, MutablePair.of(f.falsum(), false));
 				// FIXME Does `select` recursively enable an entire chain of mandatory features?
 			}
-			graph.nodes().put(current.getFeatureName(), initial);
-			return initial;
-		} else {
-			// Current feature has no children! Just return initial node (boolean)
-			graph.nodes().put(current.getFeatureName(), initial);
-			return initial;
 		}
+		graph.nodes().put(current.getFeatureName(), initial);
+		return initial;
 	}
 }

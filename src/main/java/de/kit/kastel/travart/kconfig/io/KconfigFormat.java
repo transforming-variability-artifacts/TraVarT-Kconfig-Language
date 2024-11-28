@@ -4,11 +4,9 @@
  * with this file, You can obtain one at
  * https://mozilla.org/MPL/2.0/.
  *
- * Contributors:
+ * Contributors: 
  * 	@author Kaan Berk Yaman
  * 	@author Kevin Feichtinger
- *
- * Kconfig Format for de-/serialization.
  *
  * Copyright 2024 Karlsruhe Institute of Technology (KIT)
  * KASTEL - Dependability of Software-intensive Systems

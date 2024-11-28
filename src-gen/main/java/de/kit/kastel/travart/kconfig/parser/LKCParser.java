@@ -24,22 +24,6 @@ import org.antlr.runtime.tree.RewriteRuleSubtreeStream;
 import org.antlr.runtime.tree.RewriteRuleTokenStream;
 import org.antlr.runtime.tree.TreeAdaptor;
 
-
-/**
- * Copyright (c) 2023 Kaan Berk Yaman
- * Copyright (c) 2009 Steven She
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * The original version of this file can be found under
- * https://code.google.com/archive/p/kconfig-g/
- *
- * Contributors:
- *   Steven She - initial API and implementation
- *   Kaan Berk Yaman - KFeature adaptation and minor bug fixes
- */
 @SuppressWarnings("all")
 public class LKCParser extends Parser {
 	public static final String[] tokenNames = new String[] {

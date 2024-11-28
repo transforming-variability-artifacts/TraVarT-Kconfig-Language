@@ -1,3 +1,17 @@
+/*******************************************************************************
+ * This Source Code Form is subject to the terms of the Mozilla
+ * Public License, v. 2.0. If a copy of the MPL was not distributed
+ * with this file, You can obtain one at
+ * https://mozilla.org/MPL/2.0/.
+ *
+ * Contributors: 
+ * 	@author Kaan Berk Yaman
+ * 	@author Kevin Feichtinger
+ *
+ * Copyright 2024 Karlsruhe Institute of Technology (KIT)
+ * KASTEL - Dependability of Software-intensive Systems
+ * All rights reserved
+ *******************************************************************************/
 // $ANTLR 3.5.3 de/kit/kastel/travart/kconfig/parser/LKC.g 2024-09-10 12:06:39
 
 package de.kit.kastel.travart.kconfig.parser;

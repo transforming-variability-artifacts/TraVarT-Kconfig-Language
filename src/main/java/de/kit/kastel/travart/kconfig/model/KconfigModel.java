@@ -1,10 +1,15 @@
 /*******************************************************************************
- * TODO: explanation what the class does
+ * This Source Code Form is subject to the terms of the Mozilla
+ * Public License, v. 2.0. If a copy of the MPL was not distributed
+ * with this file, You can obtain one at
+ * https://mozilla.org/MPL/2.0/.
  *
- *  @author Kevin Feichtinger
+ * Contributors:
+ * 	@author Kaan Berk Yaman
+ * 	@author Kevin Feichtinger
  *
- * Copyright 2023 Johannes Kepler University Linz
- * LIT Cyber-Physical Systems Lab
+ * Copyright 2024 Karlsruhe Institute of Technology (KIT)
+ * KASTEL - Dependability of Software-intensive Systems
  * All rights reserved
  *******************************************************************************/
 package de.kit.kastel.travart.kconfig.model;
@@ -19,7 +24,6 @@ import org.apache.commons.lang3.tuple.MutablePair;
 import org.logicng.formulas.Formula;
 import org.logicng.formulas.FormulaFactory;
 
-@SuppressWarnings("rawtypes")
 public final class KconfigModel implements IKconfigModel {
 
 	public static final String DEFAULT_NAME = "Kconfig";
@@ -43,7 +47,7 @@ public final class KconfigModel implements IKconfigModel {
 	public KconfigModel(final String factoryId, final String name) {
 		this.factoryId = Objects.requireNonNull(factoryId);
 		this.name = Objects.requireNonNull(name);
-		this.graph = new KconfigGraph(new HashMap<String, KconfigNode>(), new ArrayListValuedHashMap<KconfigNode, MutablePair<Formula, Boolean>>());
+		this.graph = new KconfigGraph(new HashMap<>(), new ArrayListValuedHashMap<>());
 	}
 
 	@Override
