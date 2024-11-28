@@ -2,10 +2,10 @@
  * Provides the actual plugin information for DOPLER.
  *
  * @author Kevin Feichtinger
-*
-* Copyright 2023 Johannes Kepler University Linz
-* LIT Cyber-Physical Systems Lab
-* All rights reserved
+ *
+ * Copyright 2023 Johannes Kepler University Linz
+ * LIT Cyber-Physical Systems Lab
+ * All rights reserved
  */
 package de.kit.kastel.travart.kconfig.plugin;
 
@@ -14,13 +14,15 @@ import java.util.List;
 
 import org.pf4j.Extension;
 
+import at.jku.cps.travart.core.common.IDeserializer;
 import at.jku.cps.travart.core.common.IModelTransformer;
 import at.jku.cps.travart.core.common.IPlugin;
-import at.jku.cps.travart.core.common.IReader;
+import at.jku.cps.travart.core.common.ISerializer;
 import at.jku.cps.travart.core.common.IStatistics;
-import at.jku.cps.travart.core.common.IWriter;
-import de.kit.kastel.travart.kconfig.io.KconfigModelReader;
-import de.kit.kastel.travart.kconfig.io.KconfigModelWriter;
+import de.kit.kastel.travart.kconfig.io.KconfigFormat;
+import de.kit.kastel.travart.kconfig.io.KconfigModelDeserializer;
+import de.kit.kastel.travart.kconfig.io.KconfigModelSerializer;
+import de.kit.kastel.travart.kconfig.model.IKconfigModel;
 import de.kit.kastel.travart.kconfig.transformation.KconfigModelTransformer;
 
 @Extension
@@ -35,8 +37,8 @@ public class KconfigPluginImpl implements IPlugin {
 	}
 
 	@Override
-	public IReader getReader() {
-		return new KconfigModelReader();
+	public IDeserializer<IKconfigModel> getDeserializer() {
+		return new KconfigModelDeserializer();
 	}
 
 	@Override
@@ -45,8 +47,8 @@ public class KconfigPluginImpl implements IPlugin {
 	}
 
 	@Override
-	public IWriter getWriter() {
-		return new KconfigModelWriter();
+	public ISerializer<IKconfigModel> getSerializer() {
+		return new KconfigModelSerializer();
 	}
 
 	@Override
@@ -56,7 +58,7 @@ public class KconfigPluginImpl implements IPlugin {
 
 	@Override
 	public String getVersion() {
-		return "0.0.0";
+		return "0.0.2";
 	}
 
 	@Override
@@ -66,7 +68,11 @@ public class KconfigPluginImpl implements IPlugin {
 
 	@Override
 	public List getSupportedFileExtensions() {
-		return Collections.unmodifiableList(List.of(KconfigModelReader.FILE_EXTENSION_KCONFIG));		
+		return Collections.unmodifiableList(List.of(KconfigFormat.FILE_EXTENSION));
 	}
 
+	@Override
+	public String getAbbreviation() {
+		return KconfigFormat.LANGUAGE_NAME;
+	}
 }

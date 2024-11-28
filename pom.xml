@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.kit.kastel</groupId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2</version>
 	<artifactId>TraVarT-kconfig</artifactId>
 	<name>Kconfig plugin for TraVarT</name>
 	<description>Plugin based on Kfeature for TraVarT, work-in-progress</description>
@@ -45,7 +45,7 @@
 		<dependency>
 			<groupId>at.jku.cps</groupId>
 			<artifactId>travart-core</artifactId>
-			<version>1.1.0</version>
+			<version>2.0.0</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -63,11 +63,13 @@
 			<artifactId>logicng-j11</artifactId>
 			<version>2.4.3</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
+		<!--
+		https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter</artifactId>
-			<version>5.9.1</version>
+			<version>5.10.0</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.assertj</groupId>
@@ -77,8 +79,8 @@
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-params</artifactId>
-			<version>5.9.1</version>
+			<artifactId>junit-jupiter</artifactId>
+			<version>5.10.0</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

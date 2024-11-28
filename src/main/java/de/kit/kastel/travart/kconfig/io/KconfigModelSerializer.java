@@ -9,21 +9,26 @@
  *******************************************************************************/
 package de.kit.kastel.travart.kconfig.io;
 
-import java.io.IOException;
-import java.nio.file.Path;
-
-import at.jku.cps.travart.core.common.IWriter;
+import at.jku.cps.travart.core.common.Format;
+import at.jku.cps.travart.core.common.ISerializer;
+import at.jku.cps.travart.core.exception.NotSupportedVariabilityTypeException;
 import de.kit.kastel.travart.kconfig.model.IKconfigModel;
 
 //@SuppressWarnings({ "rawtypes", "unchecked" })
-public class KconfigModelWriter implements IWriter<IKconfigModel> {
-	
-	public void write(final IKconfigModel km, final Path path) throws IOException {
+public class KconfigModelSerializer implements ISerializer<IKconfigModel> {
+
+	@Override
+	public String getFileExtension() {
+		return KconfigFormat.FILE_EXTENSION;
+	}
+
+	@Override
+	public String serialize(IKconfigModel model) throws NotSupportedVariabilityTypeException {
 		throw new UnsupportedOperationException("Not implemented!");
 	}
 
 	@Override
-	public String getFileExtension() {
-		return ".Kconfig";
+	public Format getFormat() {
+		return KconfigFormat.getInstance();
 	}
 }
