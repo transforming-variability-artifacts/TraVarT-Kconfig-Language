@@ -32,6 +32,7 @@ import at.jku.cps.travart.core.factory.impl.CoreModelFactory;
 import at.jku.cps.travart.core.helpers.TraVarTUtils;
 import de.kit.kastel.travart.kconfig.io.KconfigFormat;
 import de.kit.kastel.travart.kconfig.io.KconfigModelDeserializer;
+import de.kit.kastel.travart.kconfig.io.KconfigModelSerializer;
 import de.kit.kastel.travart.kconfig.model.IKconfigModel;
 import de.kit.kastel.travart.kconfig.transformation.oneway.KconfigModelOneWayTransformer;
 import de.kit.kastel.travart.kconfig.transformation.roundtrip.KconfigModelRoundtripTransformer;
@@ -63,6 +64,11 @@ class KconfigTest {
 		TraVarTUtils.addGroup(fmSource, featureDOrGroup, featureD, GroupType.OR);
 		KconfigModelOneWayTransformer rtt = new KconfigModelOneWayTransformer();
 		IKconfigModel fmResult = rtt.transform(fmSource);
+		KconfigModelSerializer serializer = new KconfigModelSerializer();
+		Path resourcesFolder = Paths.get(this.getClass().getResource("/").getPath());
+		Path output = Paths.get(resourcesFolder.toAbsolutePath() + "/Oneway.Kconfig");
+		serializer.serializeToFile(fmResult, output);
+		// TODO Add some assertion for the serialized Kconfig file
 		// Ignore model-specific metadata
 		assertThat(fmResult).usingRecursiveComparison()
 		.ignoringFields("graph.dependencies.asMapView", "sourceFile", "name", "factoryId")

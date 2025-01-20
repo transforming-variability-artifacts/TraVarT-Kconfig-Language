@@ -36,8 +36,8 @@ public class KconfigParserDispatcher {
 		return parse(lexer);
 	}
 
-	public Pair<CommonTree, CommonTokenStream> parse(String serial) throws IOException {
-		ANTLRStringStream antlrStream = new ANTLRStringStream(serial);
+	public Pair<CommonTree, CommonTokenStream> parse(String parsed) throws IOException {
+		ANTLRStringStream antlrStream = new ANTLRStringStream(parsed);
 		LKCLexer lexer = new LKCLexer(antlrStream);
 		return parse(lexer);
 	}
