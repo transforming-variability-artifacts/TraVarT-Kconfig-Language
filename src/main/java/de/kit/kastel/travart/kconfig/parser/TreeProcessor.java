@@ -15,15 +15,10 @@
 package de.kit.kastel.travart.kconfig.parser;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
-import java.util.OptionalInt;
 
 import org.antlr.runtime.TokenStream;
 import org.antlr.runtime.tree.CommonTree;
@@ -32,17 +27,19 @@ import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.collections4.PredicateUtils;
 import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
 import org.apache.commons.lang3.tuple.MutablePair;
-
 import org.logicng.formulas.Formula;
 import org.logicng.formulas.FormulaFactory;
 import org.logicng.formulas.Variable;
 import org.logicng.io.parsers.ParserException;
 
-import de.kit.kastel.travart.kconfig.model.*;
-import de.kit.kastel.travart.kconfig.model.nodes.*;
-import de.kit.kastel.travart.kconfig.model.nodes.choice.*;
-import de.kit.kastel.travart.kconfig.model.nodes.menu.*;
-import de.kit.kastel.travart.kconfig.model.nodes.value.*;
+import de.kit.kastel.travart.kconfig.model.KconfigGraph;
+import de.kit.kastel.travart.kconfig.model.KconfigNode;
+import de.kit.kastel.travart.kconfig.model.KconfigUnknownNode;
+import de.kit.kastel.travart.kconfig.model.nodes.choice.KconfigBooleanChoice;
+import de.kit.kastel.travart.kconfig.model.nodes.choice.KconfigTristateChoice;
+import de.kit.kastel.travart.kconfig.model.nodes.menu.KconfigMenuNode;
+import de.kit.kastel.travart.kconfig.model.nodes.value.KconfigBooleanNode;
+import de.kit.kastel.travart.kconfig.model.nodes.value.KconfigTristateNode;
 
 // TODO: Refactor into KconfigPostProcessor
 public class TreeProcessor {
