@@ -15,8 +15,8 @@
 package de.kit.kastel.travart.kconfig.factory;
 
 import at.jku.cps.travart.core.common.IFactory;
-import de.kit.kastel.travart.kconfig.model.KconfigModel;
+import de.kit.kastel.travart.kconfig.model.KconfigModelImpl;
 
-public interface IKconfigModelFactory extends IFactory<KconfigModel> {
+public interface IKconfigModelFactory extends IFactory<KconfigModelImpl> {
 
 }

@@ -27,7 +27,7 @@ import at.jku.cps.travart.core.common.IStatistics;
 import de.kit.kastel.travart.kconfig.io.KconfigFormat;
 import de.kit.kastel.travart.kconfig.io.KconfigModelDeserializer;
 import de.kit.kastel.travart.kconfig.io.KconfigModelSerializer;
-import de.kit.kastel.travart.kconfig.model.IKconfigModel;
+import de.kit.kastel.travart.kconfig.model.KconfigModel;
 import de.kit.kastel.travart.kconfig.transformation.KconfigModelTransformer;
 
 @Extension
@@ -42,7 +42,7 @@ public class KconfigPluginImpl implements IPlugin {
 	}
 
 	@Override
-	public IDeserializer<IKconfigModel> getDeserializer() {
+	public IDeserializer<KconfigModel> getDeserializer() {
 		return new KconfigModelDeserializer();
 	}
 
@@ -52,7 +52,7 @@ public class KconfigPluginImpl implements IPlugin {
 	}
 
 	@Override
-	public ISerializer<IKconfigModel> getSerializer() {
+	public ISerializer<KconfigModel> getSerializer() {
 		return new KconfigModelSerializer();
 	}
 

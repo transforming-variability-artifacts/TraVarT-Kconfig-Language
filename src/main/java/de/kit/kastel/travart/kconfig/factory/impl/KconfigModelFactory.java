@@ -15,7 +15,7 @@
 package de.kit.kastel.travart.kconfig.factory.impl;
 
 import de.kit.kastel.travart.kconfig.factory.IKconfigModelFactory;
-import de.kit.kastel.travart.kconfig.model.KconfigModel;
+import de.kit.kastel.travart.kconfig.model.KconfigModelImpl;
 
 public class KconfigModelFactory implements IKconfigModelFactory {
 
@@ -39,7 +39,7 @@ public class KconfigModelFactory implements IKconfigModelFactory {
 	}
 
 	@Override
-	public KconfigModel create() {
-		return new KconfigModel(ID);
+	public KconfigModelImpl create() {
+		return new KconfigModelImpl(ID);
 	}
 }

@@ -22,12 +22,12 @@ import at.jku.cps.travart.core.common.Format;
 import at.jku.cps.travart.core.common.IDeserializer;
 import at.jku.cps.travart.core.exception.NotSupportedVariabilityTypeException;
 import de.kit.kastel.travart.kconfig.factory.impl.KconfigModelFactory;
-import de.kit.kastel.travart.kconfig.model.IKconfigModel;
 import de.kit.kastel.travart.kconfig.model.KconfigModel;
+import de.kit.kastel.travart.kconfig.model.KconfigModelImpl;
 import de.kit.kastel.travart.kconfig.parser.KconfigParserDispatcher;
 import de.kit.kastel.travart.kconfig.parser.TreeProcessor;
 
-public class KconfigModelDeserializer implements IDeserializer<IKconfigModel> {
+public class KconfigModelDeserializer implements IDeserializer<KconfigModel> {
 
 	private final KconfigModelFactory factory;
 
@@ -41,8 +41,8 @@ public class KconfigModelDeserializer implements IDeserializer<IKconfigModel> {
 	}
 
 	@Override
-	public IKconfigModel deserialize(String serial, Format format) throws NotSupportedVariabilityTypeException {
-		KconfigModel km = factory.create();
+	public KconfigModel deserialize(String serial, Format format) throws NotSupportedVariabilityTypeException {
+		KconfigModelImpl km = factory.create();
 		KconfigParserDispatcher dispatcher = new KconfigParserDispatcher();
 		// Might throw IOException
 		try {

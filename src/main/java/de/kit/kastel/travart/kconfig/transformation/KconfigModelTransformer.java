@@ -14,33 +14,34 @@
  *******************************************************************************/
 package de.kit.kastel.travart.kconfig.transformation;
 
-import at.jku.cps.travart.core.common.IModelTransformer;
+import at.jku.cps.travart.core.transformation.*;
 import at.jku.cps.travart.core.exception.NotSupportedVariabilityTypeException;
-import de.kit.kastel.travart.kconfig.model.IKconfigModel;
+import de.kit.kastel.travart.kconfig.model.KconfigModel;
 import de.kit.kastel.travart.kconfig.transformation.oneway.KconfigModelOneWayTransformer;
-//import de.kit.kastel.travart.kconfig.transformation.roundtrip.DecisionModelRoundtripTransformer;
+import de.kit.kastel.travart.kconfig.transformation.roundtrip.KconfigModelRoundtripTransformer;
 import de.vill.model.FeatureModel;
 
-public class KconfigModelTransformer implements IModelTransformer<IKconfigModel> {
+public class KconfigModelTransformer extends AbstractBenchmarkingTransformer<KconfigModel> {
 
-	private final KconfigModelOneWayTransformer decisionModelOneWayTransformer = new KconfigModelOneWayTransformer();
+	private final KconfigModelOneWayTransformer kconfigModelOneWayTransformer = new KconfigModelOneWayTransformer();
+	private final KconfigModelRoundtripTransformer kconfigModelRoundtripTransformer = new KconfigModelRoundtripTransformer();
 
 	@Override
-	public FeatureModel transform(final IKconfigModel model, final String modelName, final STRATEGY level)
+	public FeatureModel transformInner(final KconfigModel model, final String modelName, final STRATEGY level)
 			throws NotSupportedVariabilityTypeException {
 		if (level == STRATEGY.ROUNDTRIP) {
-			throw new UnsupportedOperationException("Not implemented yet");
+			kconfigModelRoundtripTransformer.transform(model, modelName);			
 		}
-		return decisionModelOneWayTransformer.transform(model, modelName);
+		return kconfigModelOneWayTransformer.transform(model, modelName);
 	}
 
 	@Override
-	public IKconfigModel transform(final FeatureModel model, final String modelName, final STRATEGY level)
+	public KconfigModel transformInner(final FeatureModel model, final String modelName, final STRATEGY level)
 			throws NotSupportedVariabilityTypeException {
 		if (level == STRATEGY.ROUNDTRIP) {
-			throw new UnsupportedOperationException("Not implemented yet");
+			kconfigModelRoundtripTransformer.transform(model, modelName);
 		}
-		return decisionModelOneWayTransformer.transform(model, modelName);
+		return kconfigModelOneWayTransformer.transform(model, modelName);
 	}
-
+	
 }

@@ -30,9 +30,9 @@ import org.logicng.formulas.Variable;
 
 import at.jku.cps.travart.core.factory.impl.CoreModelFactory;
 import at.jku.cps.travart.core.helpers.TraVarTUtils;
-import de.kit.kastel.travart.kconfig.model.IKconfigModel;
-import de.kit.kastel.travart.kconfig.model.KconfigGraph;
 import de.kit.kastel.travart.kconfig.model.KconfigModel;
+import de.kit.kastel.travart.kconfig.model.KconfigGraph;
+import de.kit.kastel.travart.kconfig.model.KconfigModelImpl;
 import de.kit.kastel.travart.kconfig.model.KconfigNode;
 import de.kit.kastel.travart.kconfig.model.nodes.choice.KconfigBooleanChoice;
 import de.kit.kastel.travart.kconfig.model.nodes.choice.KconfigChoice;
@@ -64,7 +64,7 @@ public class KconfigModelTwoWayGraphTransformer {
 	 * Model metadata copied into root feature of the generated feature model.
 	 */
 	// Build a feature model using the data contained in a finalised TreeProcessor
-	public static FeatureModel processGraph(IKconfigModel model) {
+	public static FeatureModel processGraph(KconfigModel model) {
 		KconfigGraph graph = model.getInnerGraph();
 		// Initialize factory
 		CoreModelFactory factory = CoreModelFactory.getInstance();
@@ -313,10 +313,10 @@ public class KconfigModelTwoWayGraphTransformer {
 		}
 	}
 
-	public static IKconfigModel processToGraph(FeatureModel model) {
+	public static KconfigModel processToGraph(FeatureModel model) {
 		FormulaFactory f = new FormulaFactory();
 		Feature root = model.getRootFeature();
-		KconfigModel kmodel = new KconfigModel(
+		KconfigModelImpl kmodel = new KconfigModelImpl(
 				(String) TraVarTUtils.getAttributeValue(root, "factoryId"),
 				(String) TraVarTUtils.getAttributeValue(root, "name"));
 		kmodel.setSourceFile((String) TraVarTUtils.getAttributeValue(root, "sourceFile"));

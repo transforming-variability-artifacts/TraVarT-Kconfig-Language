@@ -21,40 +21,40 @@ import java.util.Set;
 import at.jku.cps.travart.core.common.IConfigurable;
 import at.jku.cps.travart.core.common.ISampler;
 import at.jku.cps.travart.core.exception.NotSupportedVariabilityTypeException;
-import de.kit.kastel.travart.kconfig.model.KconfigModel;
+import de.kit.kastel.travart.kconfig.model.KconfigModelImpl;
 
-public class KFeatureValidator implements ISampler<KconfigModel> {
+public class KFeatureValidator implements ISampler<KconfigModelImpl> {
 
 	@Override
-	public Set<Map<IConfigurable, Boolean>> sampleValidConfigurations(KconfigModel model)
+	public Set<Map<IConfigurable, Boolean>> sampleValidConfigurations(KconfigModelImpl model)
 			throws NotSupportedVariabilityTypeException {
 		// TODO Auto-generated method stub
 		return Collections.emptySet();
 	}
 
 	@Override
-	public Set<Map<IConfigurable, Boolean>> sampleValidConfigurations(KconfigModel model, long maxNumber)
+	public Set<Map<IConfigurable, Boolean>> sampleValidConfigurations(KconfigModelImpl model, long maxNumber)
 			throws NotSupportedVariabilityTypeException {
 		// TODO Auto-generated method stub
 		return Collections.emptySet();
 	}
 
 	@Override
-	public Set<Map<IConfigurable, Boolean>> sampleInvalidConfigurations(KconfigModel model)
+	public Set<Map<IConfigurable, Boolean>> sampleInvalidConfigurations(KconfigModelImpl model)
 			throws NotSupportedVariabilityTypeException {
 		// TODO Auto-generated method stub
 		return Collections.emptySet();
 	}
 
 	@Override
-	public Set<Map<IConfigurable, Boolean>> sampleInvalidConfigurations(KconfigModel model, long maxNumber)
+	public Set<Map<IConfigurable, Boolean>> sampleInvalidConfigurations(KconfigModelImpl model, long maxNumber)
 			throws NotSupportedVariabilityTypeException {
 		// TODO Auto-generated method stub
 		return Collections.emptySet();
 	}
 
 	@Override
-	public boolean verifySampleAs(KconfigModel model, Map<IConfigurable, Boolean> sample)
+	public boolean verifySampleAs(KconfigModelImpl model, Map<IConfigurable, Boolean> sample)
 			throws NotSupportedVariabilityTypeException {
 		// TODO Auto-generated method stub
 		return false;

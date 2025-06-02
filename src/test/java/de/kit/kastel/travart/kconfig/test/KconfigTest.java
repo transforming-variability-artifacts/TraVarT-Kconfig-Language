@@ -33,7 +33,7 @@ import at.jku.cps.travart.core.helpers.TraVarTUtils;
 import de.kit.kastel.travart.kconfig.io.KconfigFormat;
 import de.kit.kastel.travart.kconfig.io.KconfigModelDeserializer;
 import de.kit.kastel.travart.kconfig.io.KconfigModelSerializer;
-import de.kit.kastel.travart.kconfig.model.IKconfigModel;
+import de.kit.kastel.travart.kconfig.model.KconfigModel;
 import de.kit.kastel.travart.kconfig.transformation.oneway.KconfigModelOneWayTransformer;
 import de.kit.kastel.travart.kconfig.transformation.roundtrip.KconfigModelRoundtripTransformer;
 import de.vill.model.Feature;
@@ -47,7 +47,7 @@ class KconfigTest {
 	// TODO Rewrite test: Compare pre-built model to produced model from one-way transformer
 	void oneWayOrTest() throws IOException, URISyntaxException, NotSupportedVariabilityTypeException {
 		CoreModelFactory factory = CoreModelFactory.getInstance();
-		IKconfigModel model = parse("Or.Kconfig");
+		KconfigModel model = parse("Or.Kconfig");
 		FeatureModel fmSource = new FeatureModel();
 		Feature featureA = factory.createFeature("FEATURE_A");
 		TraVarTUtils.addFeature(fmSource, featureA);
@@ -63,7 +63,7 @@ class KconfigTest {
 		featureDOrGroup.add(factory.createFeature("FEATURE_F"));
 		TraVarTUtils.addGroup(fmSource, featureDOrGroup, featureD, GroupType.OR);
 		KconfigModelOneWayTransformer rtt = new KconfigModelOneWayTransformer();
-		IKconfigModel fmResult = rtt.transform(fmSource);
+		KconfigModel fmResult = rtt.transform(fmSource);
 		KconfigModelSerializer serializer = new KconfigModelSerializer();
 		Path resourcesFolder = Paths.get(this.getClass().getResource("/").getPath());
 		Path output = Paths.get(resourcesFolder.toAbsolutePath() + "/Oneway.Kconfig");
@@ -78,10 +78,10 @@ class KconfigTest {
 	// TODO Move common parts of unit tests into preamble method
 	@Test
 	void simpleTristateTest() throws  IOException, URISyntaxException, NotSupportedVariabilityTypeException {
-		IKconfigModel model = parse("Tristate.Kconfig");
+		KconfigModel model = parse("Tristate.Kconfig");
 		KconfigModelRoundtripTransformer rtt = new KconfigModelRoundtripTransformer();
 		FeatureModel fm = rtt.transform(model);
-		IKconfigModel rtResult = rtt.transform(fm);
+		KconfigModel rtResult = rtt.transform(fm);
 		// Must ignore graph.dependencies.asMapView!
 		// Field used by AbstractMultiValuedMap for caching asMap result
 		// See AsMap private member in AbstractMultiValuedMap for more details
@@ -91,45 +91,45 @@ class KconfigTest {
 
 	@Test
 	void combinationTristateChoiceTest() throws  IOException, URISyntaxException, NotSupportedVariabilityTypeException {
-		IKconfigModel model = parse("TristateMultiChoice.Kconfig");
+		KconfigModel model = parse("TristateMultiChoice.Kconfig");
 		KconfigModelRoundtripTransformer rtt = new KconfigModelRoundtripTransformer();
 		FeatureModel fm = rtt.transform(model);
-		IKconfigModel rtResult = rtt.transform(fm);
+		KconfigModel rtResult = rtt.transform(fm);
 		assertThat(rtResult).usingRecursiveComparison().ignoringFields("graph.dependencies.asMapView").isEqualTo(model);
 	}
 
 	@Test
 	void multiMenuTest() throws  IOException, URISyntaxException, NotSupportedVariabilityTypeException {
-		IKconfigModel model = parse("Multimenu.Kconfig");
+		KconfigModel model = parse("Multimenu.Kconfig");
 		KconfigModelRoundtripTransformer rtt = new KconfigModelRoundtripTransformer();
 		FeatureModel fm = rtt.transform(model);
-		IKconfigModel rtResult = rtt.transform(fm);
+		KconfigModel rtResult = rtt.transform(fm);
 		assertThat(rtResult).usingRecursiveComparison().ignoringFields("graph.dependencies.asMapView").isEqualTo(model);
 	}
 
 	@Test
 	void optMultiChoiceTest() throws  IOException, URISyntaxException, NotSupportedVariabilityTypeException {
-		IKconfigModel model = parse("OptChoice.Kconfig");
+		KconfigModel model = parse("OptChoice.Kconfig");
 		KconfigModelRoundtripTransformer rtt = new KconfigModelRoundtripTransformer();
 		FeatureModel fm = rtt.transform(model);
-		IKconfigModel rtResult = rtt.transform(fm);
+		KconfigModel rtResult = rtt.transform(fm);
 		assertThat(rtResult).usingRecursiveComparison().ignoringFields("graph.dependencies.asMapView").isEqualTo(model);
 	}
 
 	@Test
 	void choiceMultDep() throws  IOException, URISyntaxException, NotSupportedVariabilityTypeException {
-		IKconfigModel model = parse("ChoiceMultDep.Kconfig");
+		KconfigModel model = parse("ChoiceMultDep.Kconfig");
 		KconfigModelRoundtripTransformer rtt = new KconfigModelRoundtripTransformer();
 		FeatureModel fm = rtt.transform(model);
-		IKconfigModel rtResult = rtt.transform(fm);
+		KconfigModel rtResult = rtt.transform(fm);
 		assertThat(rtResult).usingRecursiveComparison().ignoringFields("graph.dependencies.asMapView").isEqualTo(model);
 	}
 
-	private IKconfigModel parse(String fileName) throws URISyntaxException, IOException, NotSupportedVariabilityTypeException {
+	private KconfigModel parse(String fileName) throws URISyntaxException, IOException, NotSupportedVariabilityTypeException {
 		Path filePath = Paths.get(getClass().getClassLoader().getResource(fileName).toURI());
 		String content = Files.readString(filePath, StandardCharsets.UTF_8);
 		KconfigModelDeserializer reader = new KconfigModelDeserializer();
-		IKconfigModel model = reader.deserialize(content, KconfigFormat.getInstance());
+		KconfigModel model = reader.deserialize(content, KconfigFormat.getInstance());
 		model.setName(filePath.getFileName().toString());
 		model.setSourceFile(filePath.toAbsolutePath().toString());
 		return model;

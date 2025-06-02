@@ -4,7 +4,7 @@
  * with this file, You can obtain one at
  * https://mozilla.org/MPL/2.0/.
  *
- * Contributors:
+ * Contributors: 
  * 	@author Kaan Berk Yaman
  * 	@author Kevin Feichtinger
  *
@@ -15,225 +15,77 @@
 package de.kit.kastel.travart.kconfig.model;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
-import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.logicng.formulas.Formula;
-import org.logicng.formulas.FormulaFactory;
 
-public final class KconfigModel implements IKconfigModel {
+import at.jku.cps.travart.core.common.IConfigurable;
+import at.jku.cps.travart.core.common.IValidate;
 
-	public static final String DEFAULT_NAME = "Kconfig";
-	private final String factoryId;
-	private String sourceFile;
-	private String name;
+public interface KconfigModel extends IValidate, IConfigurable {
 
-	private final KconfigGraph graph;
+	/**
+	 * Returns the factoryId which created this {@link IDecisionModel}.
+	 *
+	 * @return the factoryId
+	 */
+	String getFactoryId();
 
-	// FIXME Perhaps we should initialize KconfigGraphs exclusively over models?
-	public KconfigModel(final String factoryId, final String name, final KconfigGraph existingGraph) {
-		this.factoryId = Objects.requireNonNull(factoryId);
-		this.name = Objects.requireNonNull(name);
-		this.graph = existingGraph;
-	}
+	/**
+	 * Returns the file location where the model is stored.
+	 *
+	 * @return the file location.
+	 */
+	String getSourceFile();
 
-	public KconfigModel(final String factoryId) {
-		this(factoryId, DEFAULT_NAME);
-	}
+	/**
+	 * Update the storage location of this {@link IDecisionModel}.
+	 *
+	 * @param sourceFile the location of this {@link IDecisionModel}.
+	 */
+	void setSourceFile(String sourceFile);
 
-	public KconfigModel(final String factoryId, final String name) {
-		this.factoryId = Objects.requireNonNull(factoryId);
-		this.name = Objects.requireNonNull(name);
-		this.graph = new KconfigGraph(new HashMap<>(), new ArrayListValuedHashMap<>());
-	}
-
-	@Override
-	public KconfigNode get(final String name) {
-		for (KconfigNode node : getNodes()) {
-			if (node.getName().equals(name)) {
-				return node;
-			}
-		}
-		return null;
-	}
+	void setName(String name);
 
 	@Override
-	public void add(final KconfigNode node) {
-		graph.nodes().put(node.getName(), node);
-	}
+	String getName();
 
-	@Override
-	public void addDependency(final KconfigNode source, final KconfigNode target, boolean reverse) {
-		FormulaFactory f = new FormulaFactory();
-		graph.dependencies().put(source, MutablePair.of(f.variable(target.getName()), reverse));
-	}
+	void add(KconfigNode node);
 
-	public void addDependency(final KconfigNode source, final Formula exp, boolean reverse) {
-		graph.dependencies().put(source, MutablePair.of(exp, reverse));
-	}
+	void removeDependency(KconfigNode source, KconfigNode target);
 
-	@Override
-	public void addDependencies(final KconfigNode source, final Collection<KconfigNode> target, boolean reverse) {
-		for (KconfigNode node : target) {
-			addDependency(source, node, reverse);
-		}
-	}
+	void removeDependencies(KconfigNode source);
 
-	@Override
-	public void addAll(final Collection<KconfigNode> nodes) {
-		for (KconfigNode node : nodes) {
-			this.graph.nodes().put(node.getName(), node);
-		}
-	}
+	void addAll(Collection<KconfigNode> nodes);
 
-	@Override
-	public void addAll(final KconfigGraph graph) {
-		this.graph.nodes().putAll(graph.nodes());
-		this.graph.dependencies().putAll(graph.dependencies());
-	}
+	boolean remove(KconfigNode node);
 
-	@Override
-	public boolean remove(final KconfigNode node) {
-		KconfigNode prev = graph.nodes().remove(node.getName());
-		if (Objects.nonNull(prev)) {
-			// Assuming that the graph contains no cycles
-			graph.dependencies().remove(prev);
-			// Should always return true...
-			return prev.equals(node);
-		}
-		return false;
-	}
+	void clear();
 
-	@Override
-	public void clear() {
-		graph.nodes().clear();
-		graph.dependencies().clear();
-	}
+	KconfigNode get(String name);
 
-	@Override
-	public int size() {
-		return graph.nodes().size();
-	}
+	Collection<String> getNodeNames();
 
-	@Override
-	public Collection<String> getNodeNames() {
-		return graph.nodes().keySet();
-	}
+	Collection<KconfigNode> getNodes();
 
-	@Override
-	public Collection<KconfigNode> getNodes() {
-		return graph.nodes().values();
-	}
+	Map<KconfigNode, Collection<MutablePair<Formula, Boolean>>> getDependencies();
 
-	@Override
-	public Map<KconfigNode, Collection<MutablePair<Formula, Boolean>>> getDependencies() {
-		return graph.dependencies().asMap();
-	}
+	boolean contains(KconfigNode node);
 
-	@Override
-	public boolean contains(final KconfigNode node) {
-		return graph.nodes().containsKey(node.getName());
-	}
+	boolean containsAll(Collection<KconfigNode> nodes);
 
-	@Override
-	public boolean containsAll(final Collection<KconfigNode> nodes) {
-		for (KconfigNode node : nodes) {
-			if (!this.graph.nodes().containsKey(node.getId())) {
-				return false;
-			}
-		}
-		return true;
-	}
+	boolean containsAll(Map<KconfigNode, Collection<MutablePair<Formula, Boolean>>> dependencies);
 
-	@Override
-	public boolean containsAll(final Map<KconfigNode, Collection<MutablePair<Formula, Boolean>>> dependencies) {
-		for (Map.Entry<KconfigNode, Collection<MutablePair<Formula, Boolean>>> dependency : dependencies.entrySet()) {
-			if (!this.graph.dependencies().containsMapping(dependency.getKey(), dependency.getValue())) {
-				return false;
-			}
-		}
-		return true;
-	}
+	// Should return the number of KConfigNode instances in inner graph
+	int size();
 
-	@Override
-	public String getFactoryId() {
-		return factoryId;
-	}
 
-	@Override
-	public String getName() {
-		return name;
-	}
+	void addAll(final KconfigGraph graph);
 
-	@Override
-	public String getSourceFile() {
-		return sourceFile;
-	}
+	KconfigGraph getInnerGraph();
 
-	@Override
-	public boolean isValid() {
-		return false;
-	}
+	void addDependency(KconfigNode source, KconfigNode target, boolean reverse);
 
-	@Override
-	public void setName(final String name) {
-		this.name = name;
-	}
-
-	@Override
-	public void setSourceFile(final String sourceFile) {
-		this.sourceFile = sourceFile;
-	}
-
-	@Override
-	public boolean equals(final Object o) {
-		if (this == o) {
-			return true;
-		}
-		if (!(o instanceof KconfigModel other)) {
-			return false;
-		}
-		if (!name.equals(other.name) || size() != other.size() || !containsAll(other.getNodes()) || !containsAll(other.getDependencies())) {
-			return false;
-		}
-		return true;
-	}
-
-	@Override
-	public int hashCode() {
-		int hash = 0;
-		for (KconfigNode node : getNodes()) {
-			hash += node.hashCode();
-		}
-		return hash * 14851;
-	}
-
-	@Override
-	public void removeDependency(KconfigNode source, KconfigNode target) {
-		this.graph.dependencies().removeMapping(source, target);
-
-	}
-
-	@Override
-	public void removeDependencies(KconfigNode source) {
-		this.graph.dependencies().remove(source);
-	}
-
-	@Override
-	public KconfigGraph getInnerGraph() {
-		return graph;
-	}
-
-	@Override
-	public boolean isConfigured() {
-		return graph.nodes().values().stream().allMatch(KconfigNode::isConfigured);
-	}
-
-	@Override
-	public void setConfigured(boolean selected) {
-		graph.nodes().values().stream().forEach(e -> e.setConfigured(selected));
-	}
+	void addDependencies(KconfigNode source, Collection<KconfigNode> target, boolean reverse);
 }

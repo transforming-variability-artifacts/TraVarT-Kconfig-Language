@@ -12,26 +12,26 @@
  * KASTEL - Dependability of Software-intensive Systems
  * All rights reserved
  *******************************************************************************/
-package de.kit.kastel.travart.kconfig.transformation.oneway;
+package de.kit.kastel.travart.kconfig.transformation.roundtrip;
 
-import at.jku.cps.travart.core.common.IModelTransformer;
 import at.jku.cps.travart.core.exception.NotSupportedVariabilityTypeException;
+import at.jku.cps.travart.core.transformation.AbstractBenchmarkingTransformer;
 import de.kit.kastel.travart.kconfig.model.KconfigModel;
-import de.kit.kastel.travart.kconfig.transformation.roundtrip.KconfigModelTwoWayGraphTransformer;
 import de.vill.model.FeatureModel;
 
-public class KconfigModelOneWayTransformer implements IModelTransformer<KconfigModel> {
-
+public class KconfigModelRoundtripBenchmarkingTransformer extends AbstractBenchmarkingTransformer<KconfigModel> {
+	
 	@Override
-	public FeatureModel transform(final KconfigModel model, final String modelName, final STRATEGY level)
+	public KconfigModel transformInner(FeatureModel model, String modelName, STRATEGY level)
 			throws NotSupportedVariabilityTypeException {
-		// Bootstrap partial two-way transformation, identical to one-way transformation
-		return KconfigModelTwoWayGraphTransformer.processGraph(model);
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
-	public KconfigModel transform(final FeatureModel model, final String modelName, final STRATEGY level)
+	public FeatureModel transformInner(KconfigModel model, String modelName, STRATEGY level)
 			throws NotSupportedVariabilityTypeException {
-		return KconfigModelOneWayGraphTransformer.processToGraph(model);
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

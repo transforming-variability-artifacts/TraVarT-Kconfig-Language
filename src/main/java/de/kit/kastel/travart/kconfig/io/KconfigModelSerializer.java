@@ -28,12 +28,12 @@ import de.kit.kastel.travart.kconfig.model.*;
 import de.kit.kastel.travart.kconfig.model.nodes.value.*;
 import de.kit.kastel.travart.kconfig.parser.TreeProcessor;
 
-public class KconfigModelSerializer implements ISerializer<IKconfigModel> {
+public class KconfigModelSerializer implements ISerializer<KconfigModel> {
 
 	/**
 	 * WIP
 	 */
-	public String serialize(final IKconfigModel km) throws NotSupportedVariabilityTypeException {
+	public String serialize(final KconfigModel km) throws NotSupportedVariabilityTypeException {
 		StringBuilder fileContents = new StringBuilder();
 		// throw new UnsupportedOperationException("Not implemented!");
 		// TODO Find the right order to process the nodes

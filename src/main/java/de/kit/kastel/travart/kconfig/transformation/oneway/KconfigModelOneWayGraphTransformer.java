@@ -26,9 +26,9 @@ import org.logicng.formulas.FormulaFactory;
 import org.logicng.formulas.Variable;
 
 import at.jku.cps.travart.core.helpers.TraVarTUtils;
-import de.kit.kastel.travart.kconfig.model.IKconfigModel;
-import de.kit.kastel.travart.kconfig.model.KconfigGraph;
 import de.kit.kastel.travart.kconfig.model.KconfigModel;
+import de.kit.kastel.travart.kconfig.model.KconfigGraph;
+import de.kit.kastel.travart.kconfig.model.KconfigModelImpl;
 import de.kit.kastel.travart.kconfig.model.KconfigNode;
 import de.kit.kastel.travart.kconfig.model.nodes.choice.KconfigBooleanChoice;
 import de.kit.kastel.travart.kconfig.model.nodes.menu.KconfigMenuNode;
@@ -58,12 +58,12 @@ public class KconfigModelOneWayGraphTransformer {
 		throw new UnsupportedOperationException("Dummy method, use partial two-way transformation instead!");
 	}
 
-	public static IKconfigModel processToGraph(FeatureModel model) {
+	public static KconfigModel processToGraph(FeatureModel model) {
 		// Flush submap
 		NODE_EXP_SUB_MAP.clear();
 		FormulaFactory f = new FormulaFactory();
 		Feature root = model.getRootFeature();
-		KconfigModel kmodel = new KconfigModel("0", root.getFeatureName());
+		KconfigModelImpl kmodel = new KconfigModelImpl("0", root.getFeatureName());
 		processFeature(root, null, kmodel.getInnerGraph());
 		// Attempt best-effort transformation for feature model constraints
 		for (ImplicationConstraint ccc : TraVarTUtils.getOwnConstraints(model).stream()
