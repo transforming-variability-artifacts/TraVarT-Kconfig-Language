@@ -87,7 +87,7 @@ public class KconfigModelSerializer implements ISerializer<KconfigModel> {
 		for (KconfigNode node : graph.nodes().values()) {
 			// If already processed, skip
 			if (order.contains(node)) continue;
-			order.addAll(calculateDefinitionOrder(graph, node, order, List.of()));
+			order.addAll(calculateDefinitionOrder(graph, node, order, new ArrayList<KconfigNode>()));
 		}
 		return order;
 	}
