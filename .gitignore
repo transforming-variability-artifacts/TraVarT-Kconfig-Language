@@ -4,5 +4,6 @@ target/**
 .git/**
 .settings/**
 .classpath
+.factorypath
 src-gen
 bin
