@@ -18,13 +18,17 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.tuple.MutablePair;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.logicng.formulas.Formula;
 import org.logicng.formulas.FormulaFactory;
 import org.logicng.formulas.Variable;
 
+import at.jku.cps.travart.core.FeatureModelStatistics;
 import at.jku.cps.travart.core.helpers.TraVarTUtils;
 import de.kit.kastel.travart.kconfig.model.KconfigModel;
 import de.kit.kastel.travart.kconfig.model.KconfigGraph;
@@ -41,6 +45,8 @@ import de.vill.model.constraint.ImplicationConstraint;
 
 // TODO Break up individual transformation rules and move to TransformKCtoFMUtil
 public class KconfigModelOneWayGraphTransformer {
+	
+	private static final Logger LOGGER = LogManager.getLogger();
 
 	// FIXME Should probably not be static
 	private static final  Map<Variable, Formula> NODE_EXP_SUB_MAP = new HashMap<>();
@@ -64,11 +70,14 @@ public class KconfigModelOneWayGraphTransformer {
 		FormulaFactory f = new FormulaFactory();
 		Feature root = model.getRootFeature();
 		KconfigModelImpl kmodel = new KconfigModelImpl("0", root.getFeatureName());
+		LOGGER.debug("Source model size: " + FeatureModelStatistics.getInstance().getVariabilityElementsCount(model));
 		processFeature(root, null, kmodel.getInnerGraph());
+		LOGGER.debug("State after processFeature call on innerGraph: " + kmodel.getInnerGraph().toString());
 		// Attempt best-effort transformation for feature model constraints
 		for (ImplicationConstraint ccc : TraVarTUtils.getOwnConstraints(model).stream()
 				.filter(ImplicationConstraint.class::isInstance).map(ImplicationConstraint.class::cast)
 				.collect(Collectors.toList())) {
+			LOGGER.debug("Now transforming constraint: " + ccc);
 			Formula lhs = TraVarTUtils.buildFormulaFromConstraint(ccc.getLeft(), f);
 			Formula rhs = TraVarTUtils.buildFormulaFromConstraint(ccc.getRight(), f);
 			var sourceNode = TreeProcessor.extractNodes(lhs, kmodel.getInnerGraph()).getFirst();
@@ -104,49 +113,58 @@ public class KconfigModelOneWayGraphTransformer {
 		FormulaFactory f = new FormulaFactory();
 		KconfigBooleanNode initial = new KconfigBooleanNode(current.getFeatureName(), enclosing);
 		if (TraVarTUtils.hasGroup(current, GroupType.ALTERNATIVE)) {
-			// Avoid tristate config symbols, use boolean choice block for alt groups
-			KconfigBooleanChoice node = new KconfigBooleanChoice("ALT_" + current.getFeatureName(), enclosing);
-			graph.nodes().put(node.getName(), node);
-			graph.dependencies().put(node, MutablePair.of(f.variable(initial.getName()), false));
-			for (Feature feat : TraVarTUtils.getGroup(current, GroupType.ALTERNATIVE, 0).getFeatures()) {
-				node.contents.add((KconfigBooleanNode) processFeature(feat, node, graph));
+			for (int i = 0; i < TraVarTUtils.countGroup(current, GroupType.ALTERNATIVE); i++) {
+				// Avoid tristate config symbols, use boolean choice block for alt groups
+				KconfigBooleanChoice node = new KconfigBooleanChoice("ALT_" + i + "_" + current.getFeatureName(), enclosing);
+				graph.nodes().put(node.getName(), node);
+				graph.dependencies().put(node, MutablePair.of(f.variable(initial.getName()), false));
+				for (Feature feat : TraVarTUtils.getGroup(current, GroupType.ALTERNATIVE, i).getFeatures()) {
+					node.contents.add((KconfigBooleanNode) processFeature(feat, node, graph));
+				}
 			}
-			graph.nodes().put(current.getFeatureName(), initial);
-			return initial;
 		}
 		if (TraVarTUtils.hasGroup(current, GroupType.OR)) {
-			// FIXME Unclear how node enclosures are defined for the group-specific choice blocks
-			KconfigBooleanChoice node = new KconfigBooleanChoice("CH_" + current.getFeatureName(), null);
-			graph.nodes().put(node.getName(), node);
-			// FIXME Use NODE_EXP_SUB_MAP instead of defaulting to `initial`
-			graph.dependencies().put(node, MutablePair.of(f.variable(initial.getName()), false));
-			// FIXME nodeOptions should be a menuconfig node
-			KconfigBooleanNode nodeOptions = new KconfigBooleanNode("CH_" + current.getFeatureName() + "_OPT", null);
-			graph.nodes().put(nodeOptions.getName(), nodeOptions);
-			// Abstract parent for nth selections depend on `false`, only visible after a 1st choice is met!
-			graph.dependencies().put(nodeOptions, MutablePair.of(f.falsum(), false));
-			// Create a boolean config symbol for each feature contained in the OR group
-			for (Feature feature : TraVarTUtils.getGroup(current, GroupType.OR, 0).getFeatures()) {
-				KconfigBooleanNode firstChoice = (KconfigBooleanNode) processFeature(feature, node, graph);
-				node.contents.add(firstChoice);
-				// After a first choice was met, make the parent node for nth selections visible
-				graph.dependencies().put(firstChoice, MutablePair.of(f.variable(nodeOptions.getName()), true));
-				KconfigBooleanNode optNode = new KconfigBooleanNode("OPT_" + feature.getFeatureName(), null);
-				graph.nodes().put(optNode.getName(), optNode);
-				graph.dependencies().put(optNode, MutablePair.of(f.not(f.variable(firstChoice.getName())), false));
-				graph.dependencies().put(optNode, MutablePair.of(f.variable(nodeOptions.getName()), false));
-				// For each processed feature, add a formula mapping entry
-				NODE_EXP_SUB_MAP.put(f.variable(feature.getFeatureName()),
-						f.or(List.of(f.variable(firstChoice.getName()), f.variable(optNode.getName()))));
+			// Do this per group
+			for (int i = 0; i < TraVarTUtils.countGroup(current, GroupType.OR); i++) {
+				// FIXME Unclear how node enclosures are defined for the group-specific choice blocks
+				KconfigBooleanChoice node = new KconfigBooleanChoice("CH_" + i + "_" + current.getFeatureName(), null);
+				graph.nodes().put(node.getName(), node);
+				// FIXME Use NODE_EXP_SUB_MAP instead of defaulting to `initial`
+				graph.dependencies().put(node, MutablePair.of(f.variable(initial.getName()), false));
+				// FIXME nodeOptions should be a menuconfig node
+				KconfigBooleanNode nodeOptions = new KconfigBooleanNode("CH_" + i + "_" + current.getFeatureName() + "_OPT", null);
+				graph.nodes().put(nodeOptions.getName(), nodeOptions);
+				// Abstract parent for nth selections depend on `false`, only visible after a 1st choice is met!
+				graph.dependencies().put(nodeOptions, MutablePair.of(f.falsum(), false));
+				// Create a boolean config symbol for each feature contained in the OR group
+				for (Feature feature : TraVarTUtils.getGroup(current, GroupType.OR, i).getFeatures()) {
+					KconfigBooleanNode firstChoice = (KconfigBooleanNode) processFeature(feature, node, graph);
+					node.contents.add(firstChoice);
+					// After a first choice was met, make the parent node for nth selections visible
+					graph.dependencies().put(firstChoice, MutablePair.of(f.variable(nodeOptions.getName()), true));
+					KconfigBooleanNode optNode = new KconfigBooleanNode("OPT_" + feature.getFeatureName(), null);
+					graph.nodes().put(optNode.getName(), optNode);
+					graph.dependencies().put(optNode, MutablePair.of(f.not(f.variable(firstChoice.getName())), false));
+					graph.dependencies().put(optNode, MutablePair.of(f.variable(nodeOptions.getName()), false));
+					// For each processed feature, add a formula mapping entry
+					NODE_EXP_SUB_MAP.put(f.variable(feature.getFeatureName()),
+							f.or(List.of(f.variable(firstChoice.getName()), f.variable(optNode.getName()))));
+				}
 			}
-		} else if (TraVarTUtils.hasGroup(current, GroupType.OPTIONAL)) {
-			for (Feature feature : TraVarTUtils.getGroup(current, GroupType.MANDATORY, 0).getFeatures()) {
+		}
+		if (TraVarTUtils.hasGroup(current, GroupType.OPTIONAL)) {
+			// Flatten groups
+			Set<Feature> optionalFeatures = TraVarTUtils.getChildren(current, GroupType.OPTIONAL);
+			for (Feature feature : optionalFeatures) {
 				KconfigNode child = processFeature(feature, enclosing, graph);
 				// Add B -> A forward dependency for each group member
 				graph.dependencies().put(child, MutablePair.of(f.variable(initial.getName()), false));
 			}
-		} else if (TraVarTUtils.hasGroup(current, GroupType.MANDATORY)) {
-			for (Feature feature : TraVarTUtils.getGroup(current, GroupType.MANDATORY, 0).getFeatures()) {
+		}
+		if (TraVarTUtils.hasGroup(current, GroupType.MANDATORY)) {
+			// Flatten groups
+			Set<Feature> mandatoryFeatures = TraVarTUtils.getChildren(current, GroupType.MANDATORY);
+			for (Feature feature : mandatoryFeatures) {
 				KconfigNode child = processFeature(feature, enclosing, graph);
 				// Add B <- A reverse dependency for each group member
 				graph.dependencies().put(initial, MutablePair.of(f.variable(child.getName()), true));

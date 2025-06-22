@@ -80,7 +80,6 @@ public interface KconfigModel extends IValidate, IConfigurable {
 	// Should return the number of KConfigNode instances in inner graph
 	int size();
 
-
 	void addAll(final KconfigGraph graph);
 
 	KconfigGraph getInnerGraph();

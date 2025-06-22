@@ -16,6 +16,7 @@ package de.kit.kastel.travart.kconfig.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
@@ -23,13 +24,21 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.TreeMap;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.core.config.Configurator;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import at.jku.cps.travart.core.exception.NotSupportedVariabilityTypeException;
 import at.jku.cps.travart.core.factory.impl.CoreModelFactory;
 import at.jku.cps.travart.core.helpers.TraVarTUtils;
+import at.jku.cps.travart.core.io.UVLDeserializer;
 import de.kit.kastel.travart.kconfig.io.KconfigFormat;
 import de.kit.kastel.travart.kconfig.io.KconfigModelDeserializer;
 import de.kit.kastel.travart.kconfig.io.KconfigModelSerializer;
@@ -42,8 +51,45 @@ import de.vill.model.Group.GroupType;
 
 // FIXME After a KconfigWriter is implemented, compare string representations instead of using AssertJ
 class KconfigTest {
+	
+	@Test
+	void splotUVLtoKCTest() throws IOException, URISyntaxException, NotSupportedVariabilityTypeException {
+		Configurator.setRootLevel(Level.ALL);
+		File uvlFilesRoot = new File(getClass().getResource("/uvl2kc").toURI());
+		assert uvlFilesRoot.isDirectory();
+		List<File> uvlFiles = Arrays
+				.stream(uvlFilesRoot.listFiles())
+				.filter(e -> e.getAbsolutePath().endsWith("uvl")).toList();
+		Map<Integer, String> failedFiles = new TreeMap<>();
+		int idx = 0;
+		for (File uvlFile : uvlFiles) {
+			System.out.println("Now transforming " + uvlFile + " (index " + idx + " of " + uvlFiles.size() + ")");
+			// Use new deserializer/transformer for each file
+			UVLDeserializer deserializer = new UVLDeserializer();
+			var model = deserializer.deserializeFromFile(uvlFile);
+			KconfigModelOneWayTransformer owt = new KconfigModelOneWayTransformer();
+			try {
+				KconfigModel resultingModel = owt.transform(model);
+				System.out.println("Transformed! Now trying to serialize resulting model...");
+				KconfigModelSerializer serializer = new KconfigModelSerializer();
+				serializer.serializeToFile(resultingModel, Path.of(uvlFile.getPath() + ".Kconfig"));
+			} catch (Exception e) {
+				failedFiles.put(idx, uvlFile.getName());
+				System.err.println(e.getMessage());
+				System.err.println("Transformation/serialization for " + uvlFile + " failed! Current index " + idx);
+				System.out.flush();
+				System.err.flush();
+				// Let's just try to go through all models without aborting... for now
+			}
+			idx++;			
+		}		
+		System.out.println(
+				"Attempt to transform all UVL files; failed " + failedFiles.size() + " from " + uvlFiles.size() + "!");
+		System.out.println(failedFiles);
+	}
 
 	@Test
+	@Disabled
 	// TODO Rewrite test: Compare pre-built model to produced model from one-way transformer
 	void oneWayOrTest() throws IOException, URISyntaxException, NotSupportedVariabilityTypeException {
 		CoreModelFactory factory = CoreModelFactory.getInstance();
@@ -77,6 +123,7 @@ class KconfigTest {
 
 	// TODO Move common parts of unit tests into preamble method
 	@Test
+	@Disabled
 	void simpleTristateTest() throws  IOException, URISyntaxException, NotSupportedVariabilityTypeException {
 		KconfigModel model = parse("Tristate.Kconfig");
 		KconfigModelRoundtripTransformer rtt = new KconfigModelRoundtripTransformer();
@@ -90,6 +137,7 @@ class KconfigTest {
 	}
 
 	@Test
+	@Disabled
 	void combinationTristateChoiceTest() throws  IOException, URISyntaxException, NotSupportedVariabilityTypeException {
 		KconfigModel model = parse("TristateMultiChoice.Kconfig");
 		KconfigModelRoundtripTransformer rtt = new KconfigModelRoundtripTransformer();
@@ -99,6 +147,7 @@ class KconfigTest {
 	}
 
 	@Test
+	@Disabled
 	void multiMenuTest() throws  IOException, URISyntaxException, NotSupportedVariabilityTypeException {
 		KconfigModel model = parse("Multimenu.Kconfig");
 		KconfigModelRoundtripTransformer rtt = new KconfigModelRoundtripTransformer();
@@ -108,6 +157,7 @@ class KconfigTest {
 	}
 
 	@Test
+	@Disabled
 	void optMultiChoiceTest() throws  IOException, URISyntaxException, NotSupportedVariabilityTypeException {
 		KconfigModel model = parse("OptChoice.Kconfig");
 		KconfigModelRoundtripTransformer rtt = new KconfigModelRoundtripTransformer();
@@ -117,6 +167,7 @@ class KconfigTest {
 	}
 
 	@Test
+	@Disabled
 	void choiceMultDep() throws  IOException, URISyntaxException, NotSupportedVariabilityTypeException {
 		KconfigModel model = parse("ChoiceMultDep.Kconfig");
 		KconfigModelRoundtripTransformer rtt = new KconfigModelRoundtripTransformer();

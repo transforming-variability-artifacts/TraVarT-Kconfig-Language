@@ -15,6 +15,8 @@
 package de.kit.kastel.travart.kconfig.io;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
 
@@ -56,6 +58,20 @@ public class KconfigModelDeserializer implements IDeserializer<KconfigModel> {
 		} catch(IOException e) {
 			throw new NotSupportedVariabilityTypeException(e);
 		}
+	}
+	
+	// TODO Find across-the-board for correctly setting modelName/modelPath etc.
+	@Override
+	public KconfigModel deserializeFromFile(Path filePath) throws IOException, NotSupportedVariabilityTypeException {
+		for (Format format : this.supportedFormats()) {
+			if (filePath.toString().endsWith(format.extension()) && format.isText()) {
+				String content = Files.readString(filePath);
+				var kmod = deserialize(content, format);
+				kmod.setSourceFile(filePath.toString());
+				return kmod;
+			}
+		}
+		throw new NotSupportedVariabilityTypeException("No supported text format found that matches the given file's extension.");
 	}
 
 	@Override

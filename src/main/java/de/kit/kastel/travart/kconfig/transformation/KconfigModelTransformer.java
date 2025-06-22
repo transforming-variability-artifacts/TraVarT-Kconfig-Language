@@ -15,7 +15,9 @@
 package de.kit.kastel.travart.kconfig.transformation;
 
 import at.jku.cps.travart.core.transformation.*;
+import at.jku.cps.travart.core.common.IStatistics;
 import at.jku.cps.travart.core.exception.NotSupportedVariabilityTypeException;
+import de.kit.kastel.travart.kconfig.KconfigModelStatistics;
 import de.kit.kastel.travart.kconfig.model.KconfigModel;
 import de.kit.kastel.travart.kconfig.transformation.oneway.KconfigModelOneWayTransformer;
 import de.kit.kastel.travart.kconfig.transformation.roundtrip.KconfigModelRoundtripTransformer;
@@ -42,6 +44,11 @@ public class KconfigModelTransformer extends AbstractBenchmarkingTransformer<Kco
 			kconfigModelRoundtripTransformer.transform(model, modelName);
 		}
 		return kconfigModelOneWayTransformer.transform(model, modelName);
+	}
+
+	@Override
+	public IStatistics<KconfigModel> getTargetStatistics() {
+		return KconfigModelStatistics.getInstance();
 	}
 	
 }

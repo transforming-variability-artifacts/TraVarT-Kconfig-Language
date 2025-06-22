@@ -32,7 +32,7 @@ import de.kit.kastel.travart.kconfig.transformation.KconfigModelTransformer;
 
 @Extension
 @SuppressWarnings("rawtypes")
-public class KconfigPluginImpl implements IPlugin {
+public class KconfigPluginImpl implements IPlugin<KconfigModel> {
 
 	public static final String ID = "kconfig-plugin";
 

@@ -16,8 +16,10 @@ package de.kit.kastel.travart.kconfig.model.nodes.menu;
 
 import org.logicng.formulas.Formula;
 
+import de.kit.kastel.travart.kconfig.model.KconfigNode;
+
 @SuppressWarnings("rawtypes")
-public class KconfigIfNode extends KconfigMenuNode {
+public class KconfigIfNode extends KconfigMenuNode<KconfigNode> {
 	
 	final Formula condition;
 

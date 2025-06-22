@@ -88,7 +88,11 @@ package de.kit.kastel.travart.kconfig.parser;
     msg = getSourceName() + ": " + msg;
     return msg;
    }
-
+   
+  @Override
+  public void reportError(RecognitionException e) {
+	// Suppress lexer errors, i.e., "no viable alternative"
+  }
 }
 
 input: stmts+;
