@@ -14,10 +14,12 @@
  *******************************************************************************/
 package de.kit.kastel.travart.kconfig.transformation.oneway;
 
+import java.time.Instant;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -27,8 +29,14 @@ import org.apache.logging.log4j.Logger;
 import org.logicng.formulas.Formula;
 import org.logicng.formulas.FormulaFactory;
 import org.logicng.formulas.Variable;
+import org.slf4j.event.Level;
+
+import com.google.common.eventbus.EventBus;
 
 import at.jku.cps.travart.core.FeatureModelStatistics;
+import at.jku.cps.travart.core.benchmarking.IBenchmarkingEvent;
+import at.jku.cps.travart.core.benchmarking.NewFeatureEvent;
+import at.jku.cps.travart.core.benchmarking.OneToNTransformationEvent;
 import at.jku.cps.travart.core.helpers.TraVarTUtils;
 import de.kit.kastel.travart.kconfig.model.KconfigModel;
 import de.kit.kastel.travart.kconfig.model.KconfigGraph;
@@ -46,25 +54,47 @@ import de.vill.model.constraint.ImplicationConstraint;
 // TODO Break up individual transformation rules and move to TransformKCtoFMUtil
 public class KconfigModelOneWayGraphTransformer {
 	
+	private final EventBus emitTo;
+	private final Level verbosity;
+	
 	private static final Logger LOGGER = LogManager.getLogger();
 
 	// FIXME Should probably not be static
-	private static final  Map<Variable, Formula> NODE_EXP_SUB_MAP = new HashMap<>();
+	private static final Map<Variable, Formula> NODE_EXP_SUB_MAP = new HashMap<>();
 
-	private KconfigModelOneWayGraphTransformer() {}
+	// FIXME Use some wrapper class with bus+verbosity instead of explicitly giving access to the bus?
+	protected KconfigModelOneWayGraphTransformer(EventBus bus, Level verbosity) {
+		emitTo = bus;
+		this.verbosity = verbosity;
+	}
+
+	// FIXME Maybe use some mock bus class?
+	// Because we use the wrapper method "post", it's not an issue if the bus is set to `null`
+	// This is required for the non-benchmarking KconfigOneWayTransformer
+	protected KconfigModelOneWayGraphTransformer() {
+		emitTo = null;
+		this.verbosity = null;
+	}
 
 	/***
 	 * This method is unused, for the one-way Kconfig transformation, we utilize the
 	 * partial two-way transformation in KconfigTwoWayGraphTransformer.
-	 *
-	 * TODO Clean up code
 	 */
 	// Build a feature model using the data contained in a finalised TreeProcessor
 	public static FeatureModel processGraph(KconfigGraph graph) {
 		throw new UnsupportedOperationException("Dummy method, use partial two-way transformation instead!");
 	}
 
-	public static KconfigModel processToGraph(FeatureModel model) {
+	/***
+	 * Transforms given FeatureModel `model` into a respective KconfigModel.
+	 * 
+	 * This is a one-way transformation, the resulting model might be difficult to transform back from,
+	 * for example, due to expansion of nested choice blocks.
+	 *  
+	 * @param model Some UVL feature model
+	 * @return The respective KconfigModel
+	 */
+	public KconfigModel processToGraph(FeatureModel model) {
 		// Flush submap
 		NODE_EXP_SUB_MAP.clear();
 		FormulaFactory f = new FormulaFactory();
@@ -109,13 +139,16 @@ public class KconfigModelOneWayGraphTransformer {
 	}
 
 	// TODO Support feature models with multi-group features
-	private static KconfigNode processFeature(Feature current, KconfigMenuNode enclosing, KconfigGraph graph) {
+	private KconfigNode processFeature(Feature current, KconfigMenuNode enclosing, KconfigGraph graph) {
 		FormulaFactory f = new FormulaFactory();
 		KconfigBooleanNode initial = new KconfigBooleanNode(current.getFeatureName(), enclosing);
+		post(new NewFeatureEvent(Instant.now(), initial.getName(), this.hashCode()), Level.INFO);
 		if (TraVarTUtils.hasGroup(current, GroupType.ALTERNATIVE)) {
 			for (int i = 0; i < TraVarTUtils.countGroup(current, GroupType.ALTERNATIVE); i++) {
 				// Avoid tristate config symbols, use boolean choice block for alt groups
 				KconfigBooleanChoice node = new KconfigBooleanChoice("ALT_" + i + "_" + current.getFeatureName(), enclosing);
+				post(new NewFeatureEvent(Instant.now(), node.getName(), this.hashCode()), Level.INFO);
+				post(new OneToNTransformationEvent(Instant.now(), current.getFeatureName(), this.hashCode()), Level.DEBUG);
 				graph.nodes().put(node.getName(), node);
 				graph.dependencies().put(node, MutablePair.of(f.variable(initial.getName()), false));
 				for (Feature feat : TraVarTUtils.getGroup(current, GroupType.ALTERNATIVE, i).getFeatures()) {
@@ -128,26 +161,32 @@ public class KconfigModelOneWayGraphTransformer {
 			for (int i = 0; i < TraVarTUtils.countGroup(current, GroupType.OR); i++) {
 				// FIXME Unclear how node enclosures are defined for the group-specific choice blocks
 				KconfigBooleanChoice node = new KconfigBooleanChoice("CH_" + i + "_" + current.getFeatureName(), null);
+				post(new NewFeatureEvent(Instant.now(), node.getName(), this.hashCode()), Level.INFO);
+				post(new OneToNTransformationEvent(Instant.now(), current.getFeatureName(), this.hashCode()), Level.DEBUG);
 				graph.nodes().put(node.getName(), node);
 				// FIXME Use NODE_EXP_SUB_MAP instead of defaulting to `initial`
 				graph.dependencies().put(node, MutablePair.of(f.variable(initial.getName()), false));
 				// FIXME nodeOptions should be a menuconfig node
 				KconfigBooleanNode nodeOptions = new KconfigBooleanNode("CH_" + i + "_" + current.getFeatureName() + "_OPT", null);
+				post(new NewFeatureEvent(Instant.now(), nodeOptions.getName(), this.hashCode()), Level.INFO);
 				graph.nodes().put(nodeOptions.getName(), nodeOptions);
 				// Abstract parent for nth selections depend on `false`, only visible after a 1st choice is met!
 				graph.dependencies().put(nodeOptions, MutablePair.of(f.falsum(), false));
 				// Create a boolean config symbol for each feature contained in the OR group
-				for (Feature feature : TraVarTUtils.getGroup(current, GroupType.OR, i).getFeatures()) {
-					KconfigBooleanNode firstChoice = (KconfigBooleanNode) processFeature(feature, node, graph);
+				for (Feature childFeature : TraVarTUtils.getGroup(current, GroupType.OR, i).getFeatures()) {
+					post(new OneToNTransformationEvent(Instant.now(), childFeature.getFeatureName(), this.hashCode()), Level.DEBUG);
+					KconfigBooleanNode firstChoice = (KconfigBooleanNode) processFeature(childFeature, node, graph);
+					post(new NewFeatureEvent(Instant.now(), firstChoice.getName(), this.hashCode()), Level.INFO);
 					node.contents.add(firstChoice);
 					// After a first choice was met, make the parent node for nth selections visible
 					graph.dependencies().put(firstChoice, MutablePair.of(f.variable(nodeOptions.getName()), true));
-					KconfigBooleanNode optNode = new KconfigBooleanNode("OPT_" + feature.getFeatureName(), null);
+					KconfigBooleanNode optNode = new KconfigBooleanNode("OPT_" + childFeature.getFeatureName(), null);
+					post(new NewFeatureEvent(Instant.now(), optNode.getName(), this.hashCode()), Level.INFO);
 					graph.nodes().put(optNode.getName(), optNode);
 					graph.dependencies().put(optNode, MutablePair.of(f.not(f.variable(firstChoice.getName())), false));
 					graph.dependencies().put(optNode, MutablePair.of(f.variable(nodeOptions.getName()), false));
 					// For each processed feature, add a formula mapping entry
-					NODE_EXP_SUB_MAP.put(f.variable(feature.getFeatureName()),
+					NODE_EXP_SUB_MAP.put(f.variable(childFeature.getFeatureName()),
 							f.or(List.of(f.variable(firstChoice.getName()), f.variable(optNode.getName()))));
 				}
 			}
@@ -175,5 +214,12 @@ public class KconfigModelOneWayGraphTransformer {
 		}
 		graph.nodes().put(current.getFeatureName(), initial);
 		return initial;
+	}
+	
+	// FIXME How to move this to an abstract superclass?
+	private void post(IBenchmarkingEvent<?> event, Level visibility) {
+		if (Objects.nonNull(emitTo) && (this.verbosity.compareTo(visibility) >= 0)) {
+			emitTo.post(event);
+		}
 	}
 }

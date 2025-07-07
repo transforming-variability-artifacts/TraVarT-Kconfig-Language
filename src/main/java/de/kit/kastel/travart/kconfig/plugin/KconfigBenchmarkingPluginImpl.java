@@ -25,6 +25,7 @@ import at.jku.cps.travart.core.common.IModelTransformer;
 import at.jku.cps.travart.core.common.ISerializer;
 import at.jku.cps.travart.core.common.IStatistics;
 import at.jku.cps.travart.core.transformation.AbstractBenchmarkingTransformer;
+import de.kit.kastel.travart.kconfig.KconfigModelStatistics;
 import de.kit.kastel.travart.kconfig.io.KconfigFormat;
 import de.kit.kastel.travart.kconfig.io.KconfigModelDeserializer;
 import de.kit.kastel.travart.kconfig.io.KconfigModelSerializer;
@@ -32,15 +33,16 @@ import de.kit.kastel.travart.kconfig.model.KconfigModel;
 import de.kit.kastel.travart.kconfig.transformation.KconfigModelTransformer;
 
 @Extension
-@SuppressWarnings("rawtypes")
-public class KconfigBenchmarkingPluginImpl implements IBenchmarkingPlugin {
+public class KconfigBenchmarkingPluginImpl implements IBenchmarkingPlugin<KconfigModel> {
 
 	public static final String ID = "kconfig-benchmarking-plugin";
 
+	/*
 	@Override
-	public IModelTransformer getTransformer() {
+	public IModelTransformer<KconfigModel> getTransformer() {
 		return new KconfigModelTransformer();
 	}
+	*/
 
 	@Override
 	public IDeserializer<KconfigModel> getDeserializer() {
@@ -48,8 +50,9 @@ public class KconfigBenchmarkingPluginImpl implements IBenchmarkingPlugin {
 	}
 
 	@Override
-	public IStatistics getStatistics() {
-		return null;
+	public IStatistics<KconfigModel> getStatistics() {
+		// Proxy to singleton
+		return KconfigModelStatistics.getInstance();
 	}
 
 	@Override
@@ -73,7 +76,7 @@ public class KconfigBenchmarkingPluginImpl implements IBenchmarkingPlugin {
 	}
 
 	@Override
-	public List getSupportedFileExtensions() {
+	public List<String> getSupportedFileExtensions() {
 		return Collections.unmodifiableList(List.of(KconfigFormat.FILE_EXTENSION));
 	}
 
@@ -83,8 +86,7 @@ public class KconfigBenchmarkingPluginImpl implements IBenchmarkingPlugin {
 	}
 
 	@Override
-	public AbstractBenchmarkingTransformer getBenchmarkingTransformer() {
+	public AbstractBenchmarkingTransformer<KconfigModel> getBenchmarkingTransformer() {
 		return new KconfigModelTransformer();
-
 	}
 }

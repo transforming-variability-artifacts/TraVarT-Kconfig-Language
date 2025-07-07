@@ -57,11 +57,13 @@ public class KconfigModelTwoWayGraphTransformer {
 
 	private static final String ROOT_NODE_NAME = "Kconfig";
 
-	private KconfigModelTwoWayGraphTransformer() {}
+	private KconfigModelTwoWayGraphTransformer() {
+	}
 
 	/***
-	 * Transform given IKconfigModel into a FeatureModel. Transformation done with underlying KconfigGraph.
-	 * Model metadata copied into root feature of the generated feature model.
+	 * Transform given IKconfigModel into a FeatureModel. Transformation done with
+	 * underlying KconfigGraph. Model metadata copied into root feature of the
+	 * generated feature model.
 	 */
 	// Build a feature model using the data contained in a finalised TreeProcessor
 	public static FeatureModel processGraph(KconfigModel model) {
@@ -87,20 +89,23 @@ public class KconfigModelTwoWayGraphTransformer {
 
 		// TODO Refactor to make process* methods to directly add the generated constraints instead of returning them
 		for (Entry<KconfigNode, Collection<MutablePair<Formula, Boolean>>> dependenciesPerNode : graph.dependencies()
-				.asMap()
-				.entrySet()) {
+				.asMap().entrySet()) {
 			KconfigNode sourceNode = dependenciesPerNode.getKey();
 			for (Pair<Formula, Boolean> dependency : dependenciesPerNode.getValue()) {
 				// Model as implication if dependency expression composite or `select` switch active
 				if (dependency.getRight() || !dependency.getLeft().isAtomicFormula()) {
-					Constraint impl = TraVarTUtils.buildConstraintFromFormula(
-							ffactory.implication(ffactory.variable(sourceNode.getName()), ffactory.importFormula(dependency.getLeft())));
+					Constraint impl = TraVarTUtils.buildConstraintFromFormula(ffactory.implication(
+							ffactory.variable(sourceNode.getName()), ffactory.importFormula(dependency.getLeft())));
 					TraVarTUtils.addOwnConstraint(fm, impl);
 					if (dependency.getRight()) {
 						// When ran as partial two-way transformation (= one-way Kconfig -> FM), SELECT_MARKER attribute redundant
 						// FIXME Probably breaks for nodes with multiple select dependencies
-						TraVarTUtils.addAttribute(TraVarTUtils.getFeature(fm, sourceNode.getName()), SELECT_MARKER, fm.getOwnConstraints().indexOf(impl));
+						TraVarTUtils.addAttribute(TraVarTUtils.getFeature(fm, sourceNode.getName()), SELECT_MARKER,
+								fm.getOwnConstraints().indexOf(impl));
 					}
+				} else if (dependency.getLeft().isConstantFormula()) {
+					// dependency to `true` should not occur -> this if-block should only match for `depends on false`
+					TraVarTUtils.setHidden(TraVarTUtils.getFeature(fm, sourceNode.getName()), dependency.getLeft().evaluate(null));
 				} else {
 					for (KconfigNode targetNode : TreeProcessor.extractNodes(dependency.getLeft(), graph)) {
 						// If the dependency expression is an atomic formula, extractNodes should return only one node
@@ -110,12 +115,10 @@ public class KconfigModelTwoWayGraphTransformer {
 				}
 			}
 			switch (sourceNode) {
-			case KconfigIfNode node -> TraVarTUtils.addOwnConstraints(fm, processChoiceBlock(sourceNode, fm));
-			case KconfigBooleanChoice node ->
-			TraVarTUtils.addOwnConstraints(fm, processChoiceBlock(sourceNode, fm));
-			case KconfigTristateChoice node ->
-			TraVarTUtils.addOwnConstraints(fm, processChoiceBlock(sourceNode, fm));
-			default -> {}
+				case KconfigIfNode node -> TraVarTUtils.addOwnConstraints(fm, processChoiceBlock(sourceNode, fm));
+				case KconfigBooleanChoice node -> TraVarTUtils.addOwnConstraints(fm, processChoiceBlock(sourceNode, fm));
+				case KconfigTristateChoice node -> TraVarTUtils.addOwnConstraints(fm, processChoiceBlock(sourceNode, fm));
+				default -> {}
 			}
 		}
 		return fm;
@@ -140,10 +143,12 @@ public class KconfigModelTwoWayGraphTransformer {
 			}
 			Formula atMostOne = ffactory.amo(pseudoConjVars);
 			// Sum of all "active" tristate symbols in a choice block can at most be 1 (amo = at-most-one)
-			//Formula exactlyOne = ffactory.equivalence(ffactory.variable(respFeature.getFeatureName() + "." + TRISTATE_ATTRIBUTE_NAME), ffactory.exo(pseudoConjVars));
+			// Formula exactlyOne = ffactory.equivalence(ffactory.variable(respFeature.getFeatureName() + "." + TRISTATE_ATTRIBUTE_NAME), ffactory.exo(pseudoConjVars));
 			// Due to a uvl-metamodel bug, the exo variable cannot be parsed correctly!
 			// Use slightly relaxed condition instead...
-			Formula exactlyOne = ffactory.equivalence(ffactory.variable(respFeature.getFeatureName() + "." + TRISTATE_ATTRIBUTE_NAME), ffactory.or(pseudoConjVars));
+			Formula exactlyOne = ffactory.equivalence(
+					ffactory.variable(respFeature.getFeatureName() + "." + TRISTATE_ATTRIBUTE_NAME),
+					ffactory.or(pseudoConjVars));
 			// Iff the parent is set to "active", one of the children must be set to active
 			Constraint atMostOneConstraint = TraVarTUtils.buildConstraintFromFormula(atMostOne);
 			Constraint exactlyOneConstraint = TraVarTUtils.buildConstraintFromFormula(exactlyOne);
@@ -225,19 +230,20 @@ public class KconfigModelTwoWayGraphTransformer {
 	}
 
 	/**
-	 * Process a dependency between the config symbols `source` and `target`.
-	 * This method only processes one-to-one dependencies, dependencies with composite target expression should be handled in processGraph.
+	 * Process a dependency between the config symbols `source` and `target`. This
+	 * method only processes one-to-one dependencies, dependencies with composite
+	 * target expression should be handled in processGraph.
 	 *
-	 * This method manipulates the structure of the feature model `fm`.
-	 * Some dependencies cannot be transformed merely through
-	 * structural changes. If cross-tree constraints are required to transform a
-	 * dependency, this method will output cross-tree constraints (possibly multiple
-	 * of them, hence the Collection output). These Constraint instances should be added to
-	 * the respective ConstraintsType instance by the caller.
+	 * This method manipulates the structure of the feature model `fm`. Some
+	 * dependencies cannot be transformed merely through structural changes. If
+	 * cross-tree constraints are required to transform a dependency, this method
+	 * will output cross-tree constraints (possibly multiple of them, hence the
+	 * Collection output). These Constraint instances should be added to the
+	 * respective ConstraintsType instance by the caller.
 	 *
-	 * @param source  The left-hand side of the dependency (depender)
-	 * @param target  The right-hand side of the dependency (dependee)
-	 * @param fm      Underlying feature model
+	 * @param source The left-hand side of the dependency (depender)
+	 * @param target The right-hand side of the dependency (dependee)
+	 * @param fm     Underlying feature model
 	 * @return List containing Constraint instances representing cross-tree
 	 *         constraints to be added to the respective feature model
 	 */
@@ -278,13 +284,13 @@ public class KconfigModelTwoWayGraphTransformer {
 				throw new UnsupportedOperationException(
 						"Cannot process constaint: Constaint has menu node on right-hand side");
 			}
-			throw new UnsupportedOperationException(
-					"Cannot process constraint: Unknown node type (right-hand side).");
+			throw new UnsupportedOperationException("Cannot process constraint: Unknown node type (right-hand side) = " + target);
 		}
-		if (!(source instanceof KconfigBooleanNode) && !(source instanceof KconfigBooleanChoice) && !(source instanceof KconfigMenuNode)) {
-			throw new UnsupportedOperationException("Cannot process constraint: Unknown node type (left-hand side).");
+		if (!(source instanceof KconfigBooleanNode) && !(source instanceof KconfigBooleanChoice)
+				&& !(source instanceof KconfigMenuNode)) {
+			throw new UnsupportedOperationException("Cannot process constraint: Unknown node type (left-hand side) = " + source);
 		}
-		//return null;
+		// return null;
 		if (target instanceof KconfigBooleanNode) { // TODO Do not ignore menuconfig nodes
 			if (source.getEnclosingNode() == null || sourceFeature.getParentFeature().equals(fm.getRootFeature())) {
 				TraVarTUtils.setGroup(fm, sourceFeature, targetFeature, GroupType.MANDATORY);
@@ -297,7 +303,8 @@ public class KconfigModelTwoWayGraphTransformer {
 					factory.createLiteralConstraint(targetFeature.getFeatureName()));
 			return List.of(dependencyRuleExpression);
 		}
-		if (target instanceof KconfigChoice || target instanceof KconfigTristateNode || target instanceof KconfigTristateChoice) {
+		if (target instanceof KconfigChoice || target instanceof KconfigTristateNode
+				|| target instanceof KconfigTristateChoice) {
 			Constraint dependencyRuleExpression = factory.createImplicationConstraint(
 					factory.createLiteralConstraint(sourceFeature.getFeatureName()),
 					factory.createLiteralConstraint(targetFeature.getFeatureName()));
@@ -308,16 +315,14 @@ public class KconfigModelTwoWayGraphTransformer {
 			throw new UnsupportedOperationException(
 					"Cannot process constaint: Constaint has menu node on right-hand side");
 		} else {
-			throw new UnsupportedOperationException(
-					"Cannot process constraint: Unknown node type (right-hand side).");
+			throw new UnsupportedOperationException("Cannot process constraint: Unknown node type (right-hand side) = " + target);
 		}
 	}
 
 	public static KconfigModel processToGraph(FeatureModel model) {
 		FormulaFactory f = new FormulaFactory();
 		Feature root = model.getRootFeature();
-		KconfigModelImpl kmodel = new KconfigModelImpl(
-				(String) TraVarTUtils.getAttributeValue(root, "factoryId"),
+		KconfigModelImpl kmodel = new KconfigModelImpl((String) TraVarTUtils.getAttributeValue(root, "factoryId"),
 				(String) TraVarTUtils.getAttributeValue(root, "name"));
 		kmodel.setSourceFile((String) TraVarTUtils.getAttributeValue(root, "sourceFile"));
 		processFeature(root, null, kmodel.getInnerGraph());
@@ -330,16 +335,18 @@ public class KconfigModelTwoWayGraphTransformer {
 			Formula sourceExp = TraVarTUtils.buildFormulaFromConstraint(ccc.getLeft(), f);
 			Formula targetExp = TraVarTUtils.buildFormulaFromConstraint(ccc.getRight(), f);
 			var sourceNodes = TreeProcessor.extractNodes(sourceExp, kmodel.getInnerGraph());
-			if (sourceNodes.isEmpty())
-			{
+			if (sourceNodes.isEmpty()) {
 				continue; // Probably an implication with attributes, ignore it
 			}
 			if (sourceNodes.size() > 1) {
-				throw new IllegalStateException("While processing dependencies: Dependency contains illegal source expression!");
+				throw new IllegalStateException(
+						"While processing dependencies: Dependency contains illegal source expression!");
 			}
 			// Is the currently processed implication marked as a select dependency? Compare attributes
-			int selectMarker = (int) ObjectUtils.defaultIfNull(TraVarTUtils.getAttributeValue(TraVarTUtils.getFeature(model, sourceNodes.getFirst().getName()), SELECT_MARKER), -99);
-			kmodel.getInnerGraph().dependencies().put(sourceNodes.getFirst(), MutablePair.of(targetExp, selectMarker == model.getOwnConstraints().indexOf(ccc)));
+			int selectMarker = (int) ObjectUtils.defaultIfNull(TraVarTUtils.getAttributeValue(
+					TraVarTUtils.getFeature(model, sourceNodes.getFirst().getName()), SELECT_MARKER), -99);
+			kmodel.getInnerGraph().dependencies().put(sourceNodes.getFirst(),
+					MutablePair.of(targetExp, selectMarker == model.getOwnConstraints().indexOf(ccc)));
 		}
 		return kmodel;
 	}
@@ -358,14 +365,16 @@ public class KconfigModelTwoWayGraphTransformer {
 			// Has to be a boolean choice
 			node = new KconfigBooleanChoice(current.getFeatureName(), enclosing);
 			for (Feature feat : TraVarTUtils.getGroup(current, GroupType.ALTERNATIVE, 0).getFeatures()) {
-				((KconfigBooleanChoice) node).contents.add((KconfigBooleanNode) processFeature(feat, (KconfigBooleanChoice) node, graph));
+				((KconfigBooleanChoice) node).contents
+						.add((KconfigBooleanNode) processFeature(feat, (KconfigBooleanChoice) node, graph));
 			}
 		} else if (TraVarTUtils.hasGroup(current, GroupType.OR)) {
 			// Has to be a tristate choice
 			node = new KconfigTristateChoice(current.getFeatureName(), enclosing);
 			for (Feature feat : TraVarTUtils.getGroup(current, GroupType.OR, 0).getFeatures()) {
 				// FIXME With this business logic, OR groups may not contain children that have children in alt groups!
-				((KconfigTristateChoice) node).contents.add((KconfigTristateNode) processFeature(feat, (KconfigTristateChoice) node, graph));
+				((KconfigTristateChoice) node).contents
+						.add((KconfigTristateNode) processFeature(feat, (KconfigTristateChoice) node, graph));
 			}
 		} else if (TraVarTUtils.hasGroup(current, GroupType.OPTIONAL)) {
 			if (TraVarTUtils.isAbstract(current)) {
@@ -393,14 +402,15 @@ public class KconfigModelTwoWayGraphTransformer {
 			}
 			for (Feature feat : TraVarTUtils.getGroup(current, GroupType.MANDATORY, 0).getFeatures()) {
 				// Add B -> A forward dependency for each group member
-				graph.dependencies().put(processFeature(feat, enclosing, graph), MutablePair.of(f.variable(node.getName()), false));
+				graph.dependencies().put(processFeature(feat, enclosing, graph),
+						MutablePair.of(f.variable(node.getName()), false));
 			}
 		} else // Current feature has no children!
-			if (TraVarTUtils.containsAttribute(current, TRISTATE_ATTRIBUTE_NAME)) {
-				node = new KconfigTristateNode(current.getFeatureName(), enclosing);
-			} else {
-				node = new KconfigBooleanNode(current.getFeatureName(), enclosing);
-			}
+		if (TraVarTUtils.containsAttribute(current, TRISTATE_ATTRIBUTE_NAME)) {
+			node = new KconfigTristateNode(current.getFeatureName(), enclosing);
+		} else {
+			node = new KconfigBooleanNode(current.getFeatureName(), enclosing);
+		}
 		// The if block above should initialize `node` in all cases
 		// If `current` was root, this code isn't reachable
 		assert Objects.nonNull(node);

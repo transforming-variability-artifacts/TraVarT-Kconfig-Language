@@ -29,21 +29,21 @@ public class KconfigModelTransformer extends AbstractBenchmarkingTransformer<Kco
 	private final KconfigModelRoundtripTransformer kconfigModelRoundtripTransformer = new KconfigModelRoundtripTransformer();
 
 	@Override
-	public FeatureModel transformInner(final KconfigModel model, final String modelName, final STRATEGY level)
+	public FeatureModel transformInner(final KconfigModel model, final String modelName, final STRATEGY strategy)
 			throws NotSupportedVariabilityTypeException {
-		if (level == STRATEGY.ROUNDTRIP) {
+		if (strategy == STRATEGY.ROUNDTRIP) {
 			kconfigModelRoundtripTransformer.transform(model, modelName);			
 		}
 		return kconfigModelOneWayTransformer.transform(model, modelName);
 	}
 
 	@Override
-	public KconfigModel transformInner(final FeatureModel model, final String modelName, final STRATEGY level)
+	public KconfigModel transformInner(final FeatureModel model, final String modelName, final STRATEGY strategy)
 			throws NotSupportedVariabilityTypeException {
-		if (level == STRATEGY.ROUNDTRIP) {
+		if (strategy == STRATEGY.ROUNDTRIP) {
 			kconfigModelRoundtripTransformer.transform(model, modelName);
 		}
-		return kconfigModelOneWayTransformer.transform(model, modelName);
+		return kconfigModelOneWayTransformer.transform(model, modelName, bus, verbosity);
 	}
 
 	@Override

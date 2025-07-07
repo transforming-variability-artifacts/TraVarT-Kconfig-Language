@@ -69,7 +69,7 @@ public class KconfigModelSerializer implements ISerializer<KconfigModel> {
 					writer.append("\t".repeat(tabulation) + "endchoice\n\n");
 					break;
 				case KconfigIfNode cond:
-					writer.append("\t".repeat(tabulation) + "if " + detoxDependencyExpression(cond.getCondition().toString()) + "\n\r");
+					writer.append("\t".repeat(tabulation) + "if " + detoxDependencyExpression(cond.getCondition().toString()) + "\n");
 					for (KconfigNode child : getDefinitionOrder(cond.getSubgraph(km))) {
 						LOGGER.info("Calculated subgraph for " + cond.getName() + ", now serializing " + child.getName() + " from subgraph!");
 						serialize(km, writer, child, tabulation+1);
@@ -84,7 +84,7 @@ public class KconfigModelSerializer implements ISerializer<KconfigModel> {
 				}
 			} else if (node instanceof KconfigValueNode) {
 				// TODO Ensure that the order in which config symbols occur is valid
-				writer.append("\t".repeat(tabulation) + "config " + node.getName() + "\n\r");
+				writer.append("\t".repeat(tabulation) + "config " + node.getName() + "\n");
 				switch (node) {
 				case KconfigBooleanNode b:
 					writer.append("\t".repeat(tabulation+1) + "bool\n");
@@ -114,12 +114,12 @@ public class KconfigModelSerializer implements ISerializer<KconfigModel> {
 			if (km.getDependencies().keySet().contains(node)) {
 				for (MutablePair<Formula, Boolean> dep : km.getDependencies().get(node)) {
 					if (dep.right) {
-						writer.append("\t".repeat(tabulation) + "select " + detoxDependencyExpression(dep.left.toString()) + "\n\r");
+						writer.append("\t".repeat(tabulation) + "select " + detoxDependencyExpression(dep.left.toString()) + "\n");
 					} else {
-						writer.append("\t".repeat(tabulation) + "depends on " + detoxDependencyExpression(dep.left.toString()) + "\n\r");
+						writer.append("\t".repeat(tabulation) + "depends on " + detoxDependencyExpression(dep.left.toString()) + "\n");
 					}
 				}
-				writer.append("\n\r");
+				writer.append("\n");
 			}
 		}
 

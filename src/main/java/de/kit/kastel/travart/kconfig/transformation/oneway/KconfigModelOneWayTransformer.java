@@ -14,6 +14,10 @@
  *******************************************************************************/
 package de.kit.kastel.travart.kconfig.transformation.oneway;
 
+import org.slf4j.event.Level;
+
+import com.google.common.eventbus.EventBus;
+
 import at.jku.cps.travart.core.common.IModelTransformer;
 import at.jku.cps.travart.core.exception.NotSupportedVariabilityTypeException;
 import de.kit.kastel.travart.kconfig.model.KconfigModel;
@@ -32,6 +36,13 @@ public class KconfigModelOneWayTransformer implements IModelTransformer<KconfigM
 	@Override
 	public KconfigModel transform(final FeatureModel model, final String modelName, final STRATEGY level)
 			throws NotSupportedVariabilityTypeException {
-		return KconfigModelOneWayGraphTransformer.processToGraph(model);
+		var transformer = new KconfigModelOneWayGraphTransformer();
+		return transformer.processToGraph(model);
+	}
+	
+	public KconfigModel transform(final FeatureModel model, final String modelName, EventBus emitTo, Level verbosity)
+			throws NotSupportedVariabilityTypeException {
+		var transformer = new KconfigModelOneWayGraphTransformer(emitTo, verbosity);
+		return transformer.processToGraph(model);
 	}
 }

@@ -15,16 +15,10 @@
  *******************************************************************************/
 package de.kit.kastel.travart.kconfig;
 
-import java.util.Objects;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import at.jku.cps.travart.core.common.IStatistics;
-import at.jku.cps.travart.core.helpers.TraVarTUtils;
 import de.kit.kastel.travart.kconfig.model.KconfigModel;
-import de.vill.model.Feature;
-import de.vill.model.FeatureModel;
-import de.vill.model.Group;
 
 public final class KconfigModelStatistics implements IStatistics<KconfigModel> {
 
@@ -47,12 +41,16 @@ public final class KconfigModelStatistics implements IStatistics<KconfigModel> {
 
 	@Override
 	public int getConstraintsCount(KconfigModel model) {
-		return model.getDependencies().size();
-
+		// Sum of size of all lists across all nodes
+		return model.getInnerGraph().dependencies().size();
 	}
 
 	@Override
 	public void logModelStatistics(Logger logger, KconfigModel model) {
-		// TODO Provide information on dependency structure etc.
+		logger.info("Statistics for " + model.getName() + ":");
+		logger.info("Number of nodes: " + model.getInnerGraph().nodes().size());
+		logger.info("Number of dependencies: " + model.getInnerGraph().dependencies().size());
+		logger.info("select-type reverse dependencies from above: " +
+				model.getInnerGraph().dependencies().values().stream().filter(e -> e.getRight().booleanValue()).count());		
 	}
 }
