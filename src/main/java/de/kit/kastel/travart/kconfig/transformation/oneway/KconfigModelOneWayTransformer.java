@@ -27,14 +27,14 @@ import de.vill.model.FeatureModel;
 public class KconfigModelOneWayTransformer implements IModelTransformer<KconfigModel> {
 
 	@Override
-	public FeatureModel transform(final KconfigModel model, final String modelName, final STRATEGY level)
+	public FeatureModel transform(final KconfigModel model, final String modelName, final STRATEGY level, boolean intermediate)
 			throws NotSupportedVariabilityTypeException {
 		// Bootstrap partial two-way transformation, identical to one-way transformation
 		return KconfigModelTwoWayGraphTransformer.processGraph(model);
 	}
 
 	@Override
-	public KconfigModel transform(final FeatureModel model, final String modelName, final STRATEGY level)
+	public KconfigModel transform(final FeatureModel model, final String modelName, final STRATEGY level, boolean intermediate)
 			throws NotSupportedVariabilityTypeException {
 		var transformer = new KconfigModelOneWayGraphTransformer();
 		return transformer.processToGraph(model);

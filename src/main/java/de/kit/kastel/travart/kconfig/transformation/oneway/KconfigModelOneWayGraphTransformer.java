@@ -37,6 +37,7 @@ import at.jku.cps.travart.core.FeatureModelStatistics;
 import at.jku.cps.travart.core.benchmarking.IBenchmarkingEvent;
 import at.jku.cps.travart.core.benchmarking.NewFeatureEvent;
 import at.jku.cps.travart.core.benchmarking.OneToNTransformationEvent;
+import at.jku.cps.travart.core.benchmarking.AdditionalConstraintEvent;
 import at.jku.cps.travart.core.helpers.TraVarTUtils;
 import de.kit.kastel.travart.kconfig.model.KconfigModel;
 import de.kit.kastel.travart.kconfig.model.KconfigGraph;
@@ -172,19 +173,22 @@ public class KconfigModelOneWayGraphTransformer {
 				graph.nodes().put(nodeOptions.getName(), nodeOptions);
 				// Abstract parent for nth selections depend on `false`, only visible after a 1st choice is met!
 				graph.dependencies().put(nodeOptions, MutablePair.of(f.falsum(), false));
+				post(new AdditionalConstraintEvent(Instant.now(), nodeOptions.getName(), this.hashCode(), 1), Level.DEBUG);
 				// Create a boolean config symbol for each feature contained in the OR group
 				for (Feature childFeature : TraVarTUtils.getGroup(current, GroupType.OR, i).getFeatures()) {
 					post(new OneToNTransformationEvent(Instant.now(), childFeature.getFeatureName(), this.hashCode()), Level.DEBUG);
 					KconfigBooleanNode firstChoice = (KconfigBooleanNode) processFeature(childFeature, node, graph);
-					post(new NewFeatureEvent(Instant.now(), firstChoice.getName(), this.hashCode()), Level.INFO);
+					//post(new NewFeatureEvent(Instant.now(), firstChoice.getName(), this.hashCode()), Level.INFO);
 					node.contents.add(firstChoice);
 					// After a first choice was met, make the parent node for nth selections visible
 					graph.dependencies().put(firstChoice, MutablePair.of(f.variable(nodeOptions.getName()), true));
+					post(new AdditionalConstraintEvent(Instant.now(), firstChoice.getName(), this.hashCode(), 1), Level.DEBUG);
 					KconfigBooleanNode optNode = new KconfigBooleanNode("OPT_" + childFeature.getFeatureName(), null);
 					post(new NewFeatureEvent(Instant.now(), optNode.getName(), this.hashCode()), Level.INFO);
 					graph.nodes().put(optNode.getName(), optNode);
 					graph.dependencies().put(optNode, MutablePair.of(f.not(f.variable(firstChoice.getName())), false));
 					graph.dependencies().put(optNode, MutablePair.of(f.variable(nodeOptions.getName()), false));
+					post(new AdditionalConstraintEvent(Instant.now(), optNode.getName(), this.hashCode(), 2), Level.DEBUG);
 					// For each processed feature, add a formula mapping entry
 					NODE_EXP_SUB_MAP.put(f.variable(childFeature.getFeatureName()),
 							f.or(List.of(f.variable(firstChoice.getName()), f.variable(optNode.getName()))));
@@ -209,6 +213,7 @@ public class KconfigModelOneWayGraphTransformer {
 				graph.dependencies().put(initial, MutablePair.of(f.variable(child.getName()), true));
 				// Mandatory nodes visible only when selected through parent
 				graph.dependencies().put(child, MutablePair.of(f.falsum(), false));
+				post(new AdditionalConstraintEvent(Instant.now(), child.getName(), this.hashCode(), 1), Level.DEBUG);
 				// FIXME Does `select` recursively enable an entire chain of mandatory features?
 			}
 		}

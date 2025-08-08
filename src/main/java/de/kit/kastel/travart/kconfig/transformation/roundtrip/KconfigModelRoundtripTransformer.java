@@ -22,13 +22,13 @@ import de.vill.model.FeatureModel;
 public class KconfigModelRoundtripTransformer implements IModelTransformer<KconfigModel> {
 
 	@Override
-	public FeatureModel transform(KconfigModel model, String modelName, STRATEGY level)
+	public FeatureModel transform(KconfigModel model, String modelName, STRATEGY level, boolean intermediate)
 			throws NotSupportedVariabilityTypeException {
 		return KconfigModelTwoWayGraphTransformer.processGraph(model);
 	}
 
 	@Override
-	public KconfigModel transform(FeatureModel model, String modelName, STRATEGY level)
+	public KconfigModel transform(FeatureModel model, String modelName, STRATEGY level, boolean intermediate)
 			throws NotSupportedVariabilityTypeException {
 		return KconfigModelTwoWayGraphTransformer.processToGraph(model);
 	}

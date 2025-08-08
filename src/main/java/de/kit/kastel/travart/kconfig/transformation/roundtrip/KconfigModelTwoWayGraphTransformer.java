@@ -76,8 +76,14 @@ public class KconfigModelTwoWayGraphTransformer {
 		// Create the root node
 		Feature root = factory.createFeature(ROOT_NODE_NAME);
 		TraVarTUtils.addAttribute(root, "name", model.getName());
-		TraVarTUtils.addAttribute(root, "sourceFile", model.getSourceFile());
-		TraVarTUtils.addAttribute(root, "factoryId", model.getFactoryId());
+		// These might be set to null if working with an in-place roundtrip transformation, etc.
+		// FIXME Find less smelly solution to prevent crashes due to null attributes
+		if (Objects.nonNull(model.getSourceFile())) {
+			TraVarTUtils.addAttribute(root, "sourceFile", model.getSourceFile());
+		}
+		if (Objects.nonNull(model.getFactoryId())) {
+			TraVarTUtils.addAttribute(root, "factoryId", model.getFactoryId());
+		}
 		TraVarTUtils.setAbstract(root, true);
 		TraVarTUtils.addFeature(fm, root);
 		TraVarTUtils.setRoot(fm, root);
@@ -251,6 +257,9 @@ public class KconfigModelTwoWayGraphTransformer {
 		CoreModelFactory factory = CoreModelFactory.getInstance();
 		Feature sourceFeature = TraVarTUtils.getFeature(fm, source.getName());
 		Feature targetFeature = TraVarTUtils.getFeature(fm, target.getName());
+		// Quick and dirty debugging; somehow getFeatureMap and getFeature don't match...
+		System.out.println("Source feature name: " + source.getName() + " matched feature? " + Objects.nonNull(sourceFeature));
+		System.out.println("Target feature name: " + target.getName() + " matched feature? " + Objects.nonNull(targetFeature));
 		if (source instanceof KconfigTristateNode || source instanceof KconfigTristateChoice) {
 			// TODO Do not ignore menuconfig nodes
 			if (target instanceof KconfigBooleanNode || target instanceof KconfigBooleanChoice) {
