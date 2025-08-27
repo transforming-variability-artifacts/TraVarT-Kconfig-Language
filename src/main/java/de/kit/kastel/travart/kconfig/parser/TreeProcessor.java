@@ -14,6 +14,7 @@
  *******************************************************************************/
 package de.kit.kastel.travart.kconfig.parser;
 
+import java.awt.GraphicsConfigTemplate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -71,7 +72,18 @@ public class TreeProcessor {
 				processAST((CommonTree) child, null, false);
 			}
 			// Close all nodes once we are done traversing
-			graph.nodes().values().forEach((e) -> e.close());
+			graph.nodes().values().removeIf(Objects::isNull);
+			/* 
+			 * Heads up: If there are null entries in the value map,
+			 * the Kconfig file might contain int/hex/string configuration symbols,
+			 * which are not yet supported!
+			 */
+			graph.nodes().values().forEach((e) -> {
+				e.close();
+				if (e instanceof KconfigUnknownNode) {
+					System.err.println("Final graph contains node of unknown type, check " + e.getName());
+				}
+			});			
 			// Sort dependencies according to heuristic (see rule 1)
 			sortDependencies();
 			return;
@@ -153,10 +165,16 @@ public class TreeProcessor {
 	private void processChoice(CommonTree ast, KconfigMenuNode enclosingNode, boolean immediateEnclosure) {
 		String nodeName = ast.getChild(0).getText();
 		KconfigMenuNode cs = null;
-		// Because we know that we are parsing a choice block, we can explicitly type cs
-		// as KconfigMenuNode
+		// Because we know that we are parsing a choice block, we can explicitly type cs as KconfigMenuNode
 		KconfigUnknownNode placeholder;
-		placeholder = (KconfigUnknownNode) graph.nodes().get(nodeName);
+		// This try block is duplicated across methods...
+		try {
+			// FIXME Smelly code
+			placeholder = (KconfigUnknownNode) graph.nodes().get(nodeName);
+		} catch (ClassCastException e) {
+			// Rethrow exception
+			throw new IllegalStateException("Tried to reprocess configuration symbol! Check " + nodeName);
+		}
 		for (Object child : ast.getChildren()) {
 			/*
 			 * We have to iterate over Objects because the CommonTree class does not have a
@@ -206,7 +224,13 @@ public class TreeProcessor {
 		String nodeName = ast.getChild(0).getText();
 		KconfigNode cs = null;
 		KconfigUnknownNode placeholder;
-		placeholder = (KconfigUnknownNode) graph.nodes().get(nodeName);
+		try {
+			// FIXME Smelly code
+			placeholder = (KconfigUnknownNode) graph.nodes().get(nodeName);
+		} catch (ClassCastException e) {
+			// Rethrow exception
+			throw new IllegalStateException("Tried to reprocess configuration symbol! Check " + nodeName);
+		}
 		for (Object child : ast.getChildren()) {
 			/*
 			 * We have to iterate over Objects because the CommonTree class does not have a
@@ -236,7 +260,14 @@ public class TreeProcessor {
 		}
 		if (!Objects.isNull(placeholder))
 			redirectDependencies(placeholder, cs);
-		if (immediateEnclosure) enclosingNode.contents.add(cs);
+		if (immediateEnclosure) {
+			if (Objects.isNull(enclosingNode)) {
+				System.err.println("Illegal state: immediateEnclosure is true but enclosingNode is null! Check " + nodeName);
+			}
+			// This call will NPE if enclosingNode is null
+			// TODO Rethrow as parse exception?
+			enclosingNode.contents.add(cs);
+		}
 		graph.nodes().put(nodeName, cs);
 	}
 
@@ -263,7 +294,7 @@ public class TreeProcessor {
 			parsedTarget = f.parse(targetExpressionContent);
 		} catch (ParserException e) {
 			e.printStackTrace();
-			throw new IllegalStateException("Invalid dependency expression in syntax tree!");
+			throw new IllegalStateException("Invalid dependency expression in syntax tree! Check node " + cs.getName());
 		}
 		// var targetName = option.getChild(0).getText();
 		// Check if the target node is already present

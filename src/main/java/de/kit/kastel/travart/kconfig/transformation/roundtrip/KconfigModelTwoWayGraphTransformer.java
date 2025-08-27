@@ -24,8 +24,12 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.logicng.formulas.Formula;
 import org.logicng.formulas.FormulaFactory;
+import org.logicng.formulas.Literal;
 import org.logicng.formulas.Variable;
 
 import at.jku.cps.travart.core.factory.impl.CoreModelFactory;
@@ -56,7 +60,9 @@ public class KconfigModelTwoWayGraphTransformer {
 	private static final String SELECT_MARKER = "hasSelectDep";
 
 	private static final String ROOT_NODE_NAME = "Kconfig";
-
+	
+	private static final Logger LOGGER = LogManager.getLogger();
+	
 	private KconfigModelTwoWayGraphTransformer() {
 	}
 
@@ -79,9 +85,11 @@ public class KconfigModelTwoWayGraphTransformer {
 		// These might be set to null if working with an in-place roundtrip transformation, etc.
 		// FIXME Find less smelly solution to prevent crashes due to null attributes
 		if (Objects.nonNull(model.getSourceFile())) {
+			LOGGER.log(Level.DEBUG, "Setting source file attribute for root feature...");
 			TraVarTUtils.addAttribute(root, "sourceFile", model.getSourceFile());
 		}
 		if (Objects.nonNull(model.getFactoryId())) {
+			LOGGER.log(Level.DEBUG, "Setting factory ID attribute for root feature...");
 			TraVarTUtils.addAttribute(root, "factoryId", model.getFactoryId());
 		}
 		TraVarTUtils.setAbstract(root, true);
@@ -97,12 +105,27 @@ public class KconfigModelTwoWayGraphTransformer {
 		for (Entry<KconfigNode, Collection<MutablePair<Formula, Boolean>>> dependenciesPerNode : graph.dependencies()
 				.asMap().entrySet()) {
 			KconfigNode sourceNode = dependenciesPerNode.getKey();
+			if (Objects.isNull(sourceNode)) {
+				System.err.println("Dependency map for null node, check symbol with expression "
+			+ dependenciesPerNode.getValue().stream().findFirst().get().getLeft());
+				System.err.println("Transformer very likely to crash due to illegal state!");
+			}
 			for (Pair<Formula, Boolean> dependency : dependenciesPerNode.getValue()) {
 				// Model as implication if dependency expression composite or `select` switch active
-				if (dependency.getRight() || !dependency.getLeft().isAtomicFormula()) {
-					Constraint impl = TraVarTUtils.buildConstraintFromFormula(ffactory.implication(
-							ffactory.variable(sourceNode.getName()), ffactory.importFormula(dependency.getLeft())));
-					TraVarTUtils.addOwnConstraint(fm, impl);
+				// Last term in or predicate is to check if any negated literals occur
+				if (dependency.getRight() || 
+						!dependency.getLeft().isAtomicFormula() || 
+						!dependency.getLeft().literals().stream().allMatch(Literal::phase)) {
+					Formula fImpl = ffactory.implication(ffactory.variable(sourceNode.getName()), ffactory.importFormula(dependency.getLeft()));
+					Constraint impl = null;
+					try {
+						// Might fail if formula is in subset of LogicNG not supported by UVL?
+						impl = TraVarTUtils.buildConstraintFromFormula(fImpl);
+						TraVarTUtils.addOwnConstraint(fm, impl);
+					} catch (Exception e) {
+						System.err.println("UVL constraint formula parser failed! Check " + sourceNode.getName());
+						throw e;
+					}
 					if (dependency.getRight()) {
 						// When ran as partial two-way transformation (= one-way Kconfig -> FM), SELECT_MARKER attribute redundant
 						// FIXME Probably breaks for nodes with multiple select dependencies
@@ -111,7 +134,8 @@ public class KconfigModelTwoWayGraphTransformer {
 					}
 				} else if (dependency.getLeft().isConstantFormula()) {
 					// dependency to `true` should not occur -> this if-block should only match for `depends on false`
-					TraVarTUtils.setHidden(TraVarTUtils.getFeature(fm, sourceNode.getName()), dependency.getLeft().evaluate(null));
+					assert !dependency.getLeft().evaluate(null);
+					TraVarTUtils.setHidden(TraVarTUtils.getFeature(fm, sourceNode.getName()), true);
 				} else {
 					for (KconfigNode targetNode : TreeProcessor.extractNodes(dependency.getLeft(), graph)) {
 						// If the dependency expression is an atomic formula, extractNodes should return only one node
@@ -293,11 +317,11 @@ public class KconfigModelTwoWayGraphTransformer {
 				throw new UnsupportedOperationException(
 						"Cannot process constaint: Constaint has menu node on right-hand side");
 			}
-			throw new UnsupportedOperationException("Cannot process constraint: Unknown node type (right-hand side) = " + target);
+			throw new UnsupportedOperationException("Cannot process constraint: Unknown node type (right-hand side), check " + target.getName());
 		}
 		if (!(source instanceof KconfigBooleanNode) && !(source instanceof KconfigBooleanChoice)
 				&& !(source instanceof KconfigMenuNode)) {
-			throw new UnsupportedOperationException("Cannot process constraint: Unknown node type (left-hand side) = " + source);
+			throw new UnsupportedOperationException("Cannot process constraint: Unknown node type (left-hand side), check " + source.getName());
 		}
 		// return null;
 		if (target instanceof KconfigBooleanNode) { // TODO Do not ignore menuconfig nodes
@@ -324,15 +348,19 @@ public class KconfigModelTwoWayGraphTransformer {
 			throw new UnsupportedOperationException(
 					"Cannot process constaint: Constaint has menu node on right-hand side");
 		} else {
-			throw new UnsupportedOperationException("Cannot process constraint: Unknown node type (right-hand side) = " + target);
+			throw new UnsupportedOperationException("Cannot process constraint: Unknown node type (right-hand side), check " + target.getName());
 		}
 	}
 
 	public static KconfigModel processToGraph(FeatureModel model) {
 		FormulaFactory f = new FormulaFactory();
 		Feature root = model.getRootFeature();
-		KconfigModelImpl kmodel = new KconfigModelImpl((String) TraVarTUtils.getAttributeValue(root, "factoryId"),
-				(String) TraVarTUtils.getAttributeValue(root, "name"));
+		String factoryId = (String) TraVarTUtils.getAttributeValue(root, "factoryId");
+		String modelName = (String) TraVarTUtils.getAttributeValue(root, "name");
+		// Use self as factory if original factory unknown
+		factoryId = Objects.nonNull(factoryId) ? factoryId : KconfigModelTwoWayGraphTransformer.class.getCanonicalName();
+		modelName = Objects.nonNull(modelName) ? modelName : "Kconfig";
+		KconfigModelImpl kmodel = new KconfigModelImpl(factoryId, modelName);
 		kmodel.setSourceFile((String) TraVarTUtils.getAttributeValue(root, "sourceFile"));
 		processFeature(root, null, kmodel.getInnerGraph());
 		// Finalize model
@@ -349,7 +377,7 @@ public class KconfigModelTwoWayGraphTransformer {
 			}
 			if (sourceNodes.size() > 1) {
 				throw new IllegalStateException(
-						"While processing dependencies: Dependency contains illegal source expression!");
+						"While processing dependencies: Dependency contains illegal source expression, cannot process ");
 			}
 			// Is the currently processed implication marked as a select dependency? Compare attributes
 			int selectMarker = (int) ObjectUtils.defaultIfNull(TraVarTUtils.getAttributeValue(
@@ -419,6 +447,10 @@ public class KconfigModelTwoWayGraphTransformer {
 			node = new KconfigTristateNode(current.getFeatureName(), enclosing);
 		} else {
 			node = new KconfigBooleanNode(current.getFeatureName(), enclosing);
+		}
+		// Hidden feature has `depends on $false`
+		if (TraVarTUtils.isHidden(current)) {
+			graph.dependencies().put(node, MutablePair.of(f.falsum(), false));
 		}
 		// The if block above should initialize `node` in all cases
 		// If `current` was root, this code isn't reachable

@@ -186,7 +186,7 @@ config_option
     : type^      (WORD | WORD_QUOTE)? ';'!?
     | DEPENDS^  ON! expr
     | PROMPT^   (WORD | WORD_QUOTE)
-    | SELECT^   WORD
+    | SELECT^   expr
     | DEFAULT^  expr
     | RANGE^    WORD WORD
     | OPTION^   misc_option
