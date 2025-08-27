@@ -1,0 +1,174 @@
+choice NET_SCH_CLK
+	bool "Packet scheduler clock source"
+	depends on NET_SCHED
+	default NET_SCH_CLK_JIFFIES
+
+config NET_SCH_CLK_JIFFIES
+	bool "Timer interrupt"
+
+config NET_SCH_CLK_GETTIMEOFDAY
+	bool "gettimeofday"
+
+config NET_SCH_CLK_CPU
+	bool "CPU cycle counter"
+	depends on X86_TSC | X86_64 | ALPHA | SPARC64 | PPC64 | IA64
+
+endchoice
+
+config NET_SCH_CBQ
+	tristate "CBQ packet scheduler"
+	depends on NET_SCHED
+
+config NET_SCH_HTB
+	tristate "HTB packet scheduler"
+	depends on NET_SCHED
+
+config NET_SCH_HFSC
+	tristate "HFSC packet scheduler"
+	depends on NET_SCHED
+
+config NET_SCH_ATM
+	tristate "ATM pseudo-scheduler"
+	depends on NET_SCHED & ATM
+
+config NET_SCH_PRIO
+	tristate "The simplest PRIO pseudoscheduler"
+	depends on NET_SCHED
+
+config NET_SCH_RED
+	tristate "RED queue"
+	depends on NET_SCHED
+
+config NET_SCH_SFQ
+	tristate "SFQ queue"
+	depends on NET_SCHED
+
+config NET_SCH_TEQL
+	tristate "TEQL queue"
+	depends on NET_SCHED
+
+config NET_SCH_TBF
+	tristate "TBF queue"
+	depends on NET_SCHED
+
+config NET_SCH_GRED
+	tristate "GRED queue"
+	depends on NET_SCHED
+
+config NET_SCH_DSMARK
+	tristate "Diffserv field marker"
+	depends on NET_SCHED
+
+config NET_SCH_NETEM
+	tristate "Network emulator"
+	depends on NET_SCHED
+
+config NET_SCH_INGRESS
+	tristate "Ingress Qdisc"
+	depends on NET_SCHED 
+
+config NET_QOS
+	bool "QoS support"
+	depends on NET_SCHED
+
+config NET_ESTIMATOR
+	bool "Rate estimator"
+	depends on NET_QOS
+
+config NET_CLS
+	bool "Packet classifier API"
+	depends on NET_SCHED
+
+config NET_CLS_TCINDEX
+	tristate "TC index classifier"
+	depends on NET_CLS
+
+config NET_CLS_ROUTE4
+	tristate "Routing table based classifier"
+	depends on NET_CLS
+	select NET_CLS_ROUTE
+
+config NET_CLS_ROUTE
+	bool
+	default n
+
+config NET_CLS_FW
+	tristate "Firewall based classifier"
+	depends on NET_CLS
+
+config NET_CLS_U32
+	tristate "U32 classifier"
+	depends on NET_CLS
+
+config CLS_U32_PERF
+	bool "U32 classifier performance counters"
+	depends on NET_CLS_U32
+
+config NET_CLS_IND
+	bool "classify input device (slows things u32/fw) "
+	depends on NET_CLS_U32 | NET_CLS_FW
+
+config NET_CLS_RSVP
+	tristate "Special RSVP classifier"
+	depends on NET_CLS & NET_QOS
+
+config NET_CLS_RSVP6
+	tristate "Special RSVP classifier for IPv6"
+	depends on NET_CLS & NET_QOS
+
+config NET_CLS_ACT
+	bool "Packet ACTION"
+	depends on EXPERIMENTAL & NET_CLS & NET_QOS
+
+config NET_ACT_POLICE
+	tristate "Policing Actions"
+	depends on NET_CLS_ACT 
+
+config NET_CLS_POLICE
+	bool "Traffic policing (needed for in/egress)"
+	depends on NET_CLS & NET_QOS & ~NET_ACT_POLICE
+
+config NET_ACT_GACT
+	tristate "generic Actions"
+	depends on NET_CLS_ACT
+
+config GACT_PROB
+	bool "generic Actions probability"
+	depends on NET_ACT_GACT
+
+config ALPHA
+	bool
+	default n
+
+config ATM
+	bool
+	default n
+
+config EXPERIMENTAL
+	bool
+	default n
+
+config IA64
+	bool
+	default n
+
+config NET_SCHED
+	bool
+	default n
+
+config PPC64
+	bool
+	default n
+
+config SPARC64
+	bool
+	default n
+
+config X86_64
+	bool
+	default n
+
+config X86_TSC
+	bool
+	default n
+

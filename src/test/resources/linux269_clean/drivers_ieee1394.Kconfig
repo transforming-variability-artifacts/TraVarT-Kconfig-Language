@@ -1,0 +1,94 @@
+menu MENU_IEEE1394
+
+config IEEE1394
+	tristate "IEEE 1394 (FireWire) support"
+	depends on PCI | BROKEN
+
+config IEEE1394_VERBOSEDEBUG
+	bool "Excessive debugging output"
+	depends on IEEE1394
+
+config IEEE1394_OUI_DB
+	bool "OUI Database built-in"
+	depends on IEEE1394
+
+config IEEE1394_EXTRA_CONFIG_ROMS
+	bool "Build in extra config rom entries for certain functionality"
+	depends on IEEE1394
+
+config IEEE1394_CONFIG_ROM_IP1394
+	bool "IP-1394 Entry"
+	depends on IEEE1394_EXTRA_CONFIG_ROMS & IEEE1394
+
+config IEEE1394_PCILYNX
+	tristate "Texas Instruments PCILynx support"
+	depends on PCI & IEEE1394 & I2C
+	select I2C_ALGOBIT
+
+config IEEE1394_OHCI1394
+	tristate "OHCI-1394 support"
+	depends on PCI & IEEE1394
+
+config IEEE1394_VIDEO1394
+	tristate "OHCI-1394 Video support"
+	depends on IEEE1394 & IEEE1394_OHCI1394
+
+config IEEE1394_SBP2
+	tristate "SBP-2 support (Harddisks etc.)"
+	depends on IEEE1394 & SCSI & (PCI | BROKEN)
+
+config IEEE1394_SBP2_PHYS_DMA
+	bool "Enable Phys DMA support for SBP2 (Debug)"
+	depends on IEEE1394 & IEEE1394_SBP2
+
+config IEEE1394_ETH1394
+	tristate "Ethernet over 1394"
+	depends on IEEE1394 & EXPERIMENTAL & INET
+	select IEEE1394_CONFIG_ROM_IP1394 & IEEE1394_EXTRA_CONFIG_ROMS
+
+config IEEE1394_DV1394
+	tristate "OHCI-DV I/O support"
+	depends on IEEE1394 & IEEE1394_OHCI1394
+
+config IEEE1394_RAWIO
+	tristate "Raw IEEE1394 I/O support"
+	depends on IEEE1394
+
+config IEEE1394_CMP
+	tristate "IEC61883-1 Plug support"
+	depends on IEEE1394
+
+config IEEE1394_AMDTP
+	tristate "IEC61883-6 (Audio transmission) support"
+	depends on IEEE1394 & IEEE1394_OHCI1394 & IEEE1394_CMP
+
+endmenu
+
+config BROKEN
+	bool
+	default n
+
+config EXPERIMENTAL
+	bool
+	default n
+
+config I2C
+	bool
+	default n
+
+config I2C_ALGOBIT
+	bool
+	default n
+
+config INET
+	bool
+	default n
+
+config PCI
+	bool
+	default n
+
+config SCSI
+	bool
+	default n
+

@@ -1,0 +1,695 @@
+menu MENU_SCSI
+
+config SCSI
+	tristate "SCSI device support"
+
+config SCSI_PROC_FS
+	bool "legacy /proc/scsi/ support"
+	depends on SCSI & PROC_FS
+	default y
+
+comment "SCSI support type (disk, tape, CD-ROM)"
+	depends on SCSI
+
+config BLK_DEV_SD
+	tristate "SCSI disk support"
+	depends on SCSI
+
+config CHR_DEV_ST
+	tristate "SCSI tape support"
+	depends on SCSI
+
+config CHR_DEV_OSST
+	tristate "SCSI OnStream SC-x0 tape support"
+	depends on SCSI
+
+config BLK_DEV_SR
+	tristate "SCSI CDROM support"
+	depends on SCSI
+
+config BLK_DEV_SR_VENDOR
+	bool "Enable vendor-specific extensions (for SCSI CDROM)"
+	depends on BLK_DEV_SR
+
+config CHR_DEV_SG
+	tristate "SCSI generic support"
+	depends on SCSI
+
+comment "Some SCSI devices (e.g. CD jukebox) support multiple LUNs"
+	depends on SCSI
+
+config SCSI_MULTI_LUN
+	bool "Probe all LUNs on each SCSI device"
+	depends on SCSI
+
+config SCSI_CONSTANTS
+	bool "Verbose SCSI error reporting (kernel size +=12K)"
+	depends on SCSI
+
+config SCSI_LOGGING
+	bool "SCSI logging facility"
+	depends on SCSI
+
+menu "SCSI Transport Attributes"
+	depends on SCSI
+
+config SCSI_SPI_ATTRS
+	tristate "Parallel SCSI (SPI) Transport Attributes"
+	depends on SCSI
+
+config SCSI_FC_ATTRS
+	tristate "FiberChannel Transport Attributes"
+	depends on SCSI
+
+endmenu
+
+menu "SCSI low-level drivers"
+	depends on SCSI
+
+config SGIWD93_SCSI
+	tristate "SGI WD93C93 SCSI Driver"
+	depends on SGI_IP22 & SCSI
+
+config SCSI_DECNCR
+	tristate "DEC NCR53C94 Scsi Driver"
+	depends on DECSTATION & TC & SCSI
+
+config SCSI_DECSII
+	tristate "DEC SII Scsi Driver"
+	depends on DECSTATION & SCSI
+
+config BLK_DEV_3W_XXXX_RAID
+	tristate "3ware 5/6/7/8xxx ATA-RAID support"
+	depends on PCI & SCSI
+
+config SCSI_3W_9XXX
+	tristate "3ware 9xxx SATA-RAID support"
+	depends on PCI & SCSI
+
+config SCSI_7000FASST
+	tristate "7000FASST SCSI support"
+	depends on ISA & SCSI
+
+config SCSI_ACARD
+	tristate "ACARD SCSI support"
+	depends on PCI & SCSI
+
+config SCSI_AHA152X
+	tristate "Adaptec AHA152X/2825 support"
+	depends on ISA & SCSI & ~ARCH_64BIT
+
+config SCSI_AHA1542
+	tristate "Adaptec AHA1542 support"
+	depends on ISA & SCSI
+
+config SCSI_AHA1740
+	tristate "Adaptec AHA1740 support"
+	depends on EISA & SCSI
+
+config SCSI_AACRAID
+	tristate "Adaptec AACRAID support (EXPERIMENTAL)"
+	depends on EXPERIMENTAL & SCSI & PCI
+
+config SCSI_AIC7XXX_OLD
+	tristate "Adaptec AIC7xxx support (old driver)"
+	depends on (ISA | EISA | PCI ) & SCSI
+
+config SCSI_DPT_I2O
+	tristate "Adaptec I2O RAID support "
+	depends on ~ARCH_64BIT & SCSI & PCI
+
+config SCSI_ADVANSYS
+	tristate "AdvanSys SCSI support"
+	depends on (ISA | EISA | PCI) & SCSI & BROKEN
+
+config SCSI_IN2000
+	tristate "Always IN2000 SCSI support"
+	depends on ISA & SCSI
+
+config SCSI_SATA
+	bool "Serial ATA (SATA) support"
+	depends on SCSI & EXPERIMENTAL
+
+config SCSI_SATA_SVW
+	tristate "ServerWorks Frodo / Apple K2 SATA support (EXPERIMENTAL)"
+	depends on SCSI_SATA & PCI & EXPERIMENTAL
+
+config SCSI_ATA_PIIX
+	tristate "Intel PIIX/ICH SATA support"
+	depends on SCSI_SATA & PCI
+
+config SCSI_SATA_NV
+	tristate "NVIDIA SATA support"
+	depends on SCSI_SATA & PCI & EXPERIMENTAL
+
+config SCSI_SATA_PROMISE
+	tristate "Promise SATA TX2/TX4 support"
+	depends on SCSI_SATA & PCI
+
+config SCSI_SATA_SX4
+	tristate "Promise SATA SX4 support"
+	depends on SCSI_SATA & PCI & EXPERIMENTAL
+
+config SCSI_SATA_SIL
+	tristate "Silicon Image SATA support"
+	depends on SCSI_SATA & PCI & EXPERIMENTAL
+
+config SCSI_SATA_SIS
+	tristate "SiS 964/180 SATA support"
+	depends on SCSI_SATA & PCI
+
+config SCSI_SATA_VIA
+	tristate "VIA SATA support"
+	depends on SCSI_SATA & PCI & EXPERIMENTAL
+
+config SCSI_SATA_VITESSE
+	tristate "VITESSE VSC-7174 SATA support"
+	depends on SCSI_SATA & PCI & EXPERIMENTAL
+
+config SCSI_BUSLOGIC
+	tristate "BusLogic SCSI support"
+	depends on (PCI | ISA | MCA) & SCSI & (BROKEN | ~SPARC64)
+
+config SCSI_OMIT_FLASHPOINT
+	bool "Omit FlashPoint support"
+	depends on SCSI_BUSLOGIC
+
+config SCSI_CPQFCTS
+	tristate "Compaq Fibre Channel 64-bit/66Mhz HBA support"
+	depends on PCI & SCSI & BROKEN
+
+config SCSI_DMX3191D
+	tristate "DMX3191D SCSI support"
+	depends on PCI & SCSI
+
+config SCSI_DTC3280
+	tristate "DTC3180/3280 SCSI support"
+	depends on ISA & SCSI
+
+config SCSI_EATA
+	tristate "EATA ISA/EISA/PCI (DPT and generic EATA/DMA-compliant boards) support"
+	depends on (ISA | EISA | PCI) & SCSI & (BROKEN | ~SPARC64)
+
+config SCSI_EATA_TAGGED_QUEUE
+	bool "enable tagged command queueing"
+	depends on SCSI_EATA
+
+config SCSI_EATA_LINKED_COMMANDS
+	bool "enable elevator sorting"
+	depends on SCSI_EATA
+
+config SCSI_EATA_PIO
+	tristate "EATA-PIO (old DPT PM2001, PM2012A) support"
+	depends on (ISA | EISA | PCI) & SCSI
+
+config SCSI_FUTURE_DOMAIN
+	tristate "Future Domain 16xx SCSI/AHA-2920A support"
+	depends on (ISA | PCI) & SCSI
+
+config SCSI_FD_MCS
+	tristate "Future Domain MCS-600/700 SCSI support"
+	depends on MCA_LEGACY & SCSI
+
+config SCSI_GDTH
+	tristate "Intel/ICP (former GDT SCSI Disk Array) RAID Controller support"
+	depends on (ISA | EISA | PCI) & SCSI & (BROKEN | ~SPARC64)
+
+config SCSI_GENERIC_NCR5380
+	tristate "Generic NCR5380/53c400 SCSI PIO support"
+	depends on ISA & SCSI
+
+config SCSI_GENERIC_NCR5380_MMIO
+	tristate "Generic NCR5380/53c400 SCSI MMIO support"
+	depends on ISA & SCSI
+
+config SCSI_GENERIC_NCR53C400
+	bool "Enable NCR53c400 extensions"
+	depends on SCSI_GENERIC_NCR5380
+
+config SCSI_IBMMCA
+	tristate "IBMMCA SCSI support"
+	depends on MCA_LEGACY & SCSI
+
+config IBMMCA_SCSI_ORDER_STANDARD
+	bool "Standard SCSI-order"
+	depends on SCSI_IBMMCA
+
+config IBMMCA_SCSI_DEV_RESET
+	bool "Reset SCSI-devices at boottime"
+	depends on SCSI_IBMMCA
+
+config SCSI_IPS
+	tristate "IBM ServeRAID support"
+	depends on PCI & SCSI
+
+config SCSI_IBMVSCSI
+	tristate "IBM Virtual SCSI support"
+	depends on PPC_PSERIES | PPC_ISERIES
+
+config SCSI_INITIO
+	tristate "Initio 9100U(W) support"
+	depends on PCI & SCSI & BROKEN
+
+config SCSI_INIA100
+	tristate "Initio INI-A100U2W support"
+	depends on PCI & SCSI
+
+config SCSI_PPA
+	tristate "IOMEGA parallel port (ppa - older drives)"
+	depends on SCSI & PARPORT
+
+config SCSI_IMM
+	tristate "IOMEGA parallel port (imm - newer drives)"
+	depends on SCSI & PARPORT
+
+config SCSI_IZIP_EPP16
+	bool "ppa/imm option - Use slow (but safe) EPP-16"
+	depends on PARPORT & (SCSI_PPA | SCSI_IMM)
+
+config SCSI_IZIP_SLOW_CTR
+	bool "ppa/imm option - Assume slow parport control register"
+	depends on PARPORT & (SCSI_PPA | SCSI_IMM)
+
+config SCSI_NCR53C406A
+	tristate "NCR53c406a SCSI support"
+	depends on ISA & SCSI
+
+config SCSI_NCR_D700
+	tristate "NCR Dual 700 MCA SCSI support"
+	depends on MCA & SCSI
+	select SCSI_SPI_ATTRS
+
+# Renamed
+config SCSI_53C700_IO_MAPPED
+	bool
+	depends on SCSI_NCR_D700
+	default y
+
+config SCSI_LASI700
+	tristate "HP Lasi SCSI support for 53c700/710"
+	depends on GSC & SCSI
+	select SCSI_SPI_ATTRS
+
+# Renamed
+config SCSI_53C700_MEM_MAPPED
+	bool
+	depends on SCSI_LASI700
+	default y
+
+config 53C700_LE_ON_BE
+	bool
+	depends on SCSI_LASI700
+	default y
+
+config SCSI_SYM53C8XX_2
+	tristate "SYM53C8XX Version 2 SCSI support"
+	depends on PCI & SCSI
+	select SCSI_SPI_ATTRS
+
+config SCSI_SYM53C8XX_IOMAPPED
+	bool "use port IO"
+	depends on SCSI_SYM53C8XX_2
+
+config SCSI_IPR
+	tristate "IBM Power Linux RAID adapter support"
+	depends on PCI & SCSI
+	select FW_LOADER
+
+config SCSI_IPR_TRACE
+	bool "enable driver internal trace"
+	depends on SCSI_IPR
+
+config SCSI_IPR_DUMP
+	bool "enable adapter dump support"
+	depends on SCSI_IPR
+
+config SCSI_ZALON
+	tristate "Zalon SCSI support"
+	depends on GSC & SCSI
+
+config SCSI_NCR_Q720
+	tristate "NCR Quad 720 MCA SCSI support"
+	depends on MCA & SCSI
+
+config SCSI_NCR53C8XX_PROFILE
+	bool "  enable profiling"
+	depends on SCSI_ZALON | SCSI_NCR_Q720
+
+# int symbol removed from dependency expression
+config SCSI_NCR53C8XX_NO_DISCONNECT
+	bool "  not allow targets to disconnect"
+	depends on (SCSI_ZALON | SCSI_NCR_Q720)
+
+config SCSI_MCA_53C9X
+	tristate "NCR MCA 53C9x SCSI support"
+	depends on MCA_LEGACY & SCSI & BROKEN_ON_SMP
+
+config SCSI_PAS16
+	tristate "PAS16 SCSI support"
+	depends on ISA & SCSI
+
+config SCSI_PCI2000
+	tristate "PCI2000 support"
+	depends on PCI & SCSI & BROKEN
+
+config SCSI_PCI2220I
+	tristate "PCI2220i support"
+	depends on PCI & SCSI & BROKEN
+
+config SCSI_PSI240I
+	tristate "PSI240i support"
+	depends on ISA & SCSI
+
+config SCSI_QLOGIC_FAS
+	tristate "Qlogic FAS SCSI support"
+	depends on ISA & SCSI
+
+config SCSI_QLOGIC_ISP
+	tristate "Qlogic ISP SCSI support"
+	depends on PCI & SCSI
+
+config SCSI_QLOGIC_FC
+	tristate "Qlogic ISP FC SCSI support"
+	depends on PCI & SCSI
+
+config SCSI_QLOGIC_FC_FIRMWARE
+	bool "Include loadable firmware in driver"
+	depends on SCSI_QLOGIC_FC
+
+config SCSI_QLOGIC_1280
+	tristate "Qlogic QLA 1280 SCSI support"
+	depends on PCI & SCSI
+
+config SCSI_QLOGICPTI
+	tristate "PTI Qlogic, ISP Driver"
+	depends on SBUS & SCSI
+
+config SCSI_SEAGATE
+	tristate "Seagate ST-02 and Future Domain TMC-8xx SCSI support"
+	depends on X86 & ISA & SCSI & BROKEN
+
+config SCSI_SIM710
+	tristate "Simple 53c710 SCSI support (Compaq, NCR machines)"
+	depends on (EISA | MCA) & SCSI
+	select SCSI_SPI_ATTRS
+
+config 53C700_IO_MAPPED
+	bool
+	depends on SCSI_SIM710
+	default y
+
+config SCSI_SYM53C416
+	tristate "Symbios 53c416 SCSI support"
+	depends on ISA & SCSI
+
+config SCSI_DC395x
+	tristate "Tekram DC395(U/UW/F) and DC315(U) SCSI support (EXPERIMENTAL)"
+	depends on PCI & SCSI & EXPERIMENTAL
+
+config SCSI_DC390T
+	tristate "Tekram DC390(T) and Am53/79C974 SCSI support"
+	depends on PCI & SCSI
+
+config SCSI_T128
+	tristate "Trantor T128/T128F/T228 SCSI support"
+	depends on ISA & SCSI
+
+config SCSI_U14_34F
+	tristate "UltraStor 14F/34F support"
+	depends on ISA & SCSI
+
+config SCSI_U14_34F_TAGGED_QUEUE
+	bool "enable tagged command queueing"
+	depends on SCSI_U14_34F
+
+config SCSI_U14_34F_LINKED_COMMANDS
+	bool "enable elevator sorting"
+	depends on SCSI_U14_34F
+
+
+config SCSI_ULTRASTOR
+	tristate "UltraStor SCSI support"
+	depends on X86 & ISA & SCSI
+
+config SCSI_NSP32
+	tristate "Workbit NinjaSCSI-32Bi/UDE support"
+	depends on PCI & SCSI & ~ARCH_64BIT
+
+config SCSI_DEBUG
+	tristate "SCSI debugging host simulator"
+	depends on SCSI
+
+config SCSI_MESH
+	tristate "MESH (Power Mac internal SCSI) support"
+	depends on PPC32 & PPC_PMAC & SCSI
+
+config SCSI_MAC53C94
+	tristate "53C94 (Power Mac external SCSI) support"
+	depends on PPC_PMAC & SCSI
+
+config JAZZ_ESP
+	bool "MIPS JAZZ FAS216 SCSI support"
+	depends on MACH_JAZZ & SCSI
+
+config A3000_SCSI
+	tristate "A3000 WD33C93A support"
+	depends on AMIGA & SCSI
+
+config A2091_SCSI
+	tristate "A2091/A590 WD33C93A support"
+	depends on ZORRO & SCSI
+
+config GVP11_SCSI
+	tristate "GVP Series II WD33C93A support"
+	depends on ZORRO & SCSI
+
+config CYBERSTORM_SCSI
+	tristate "CyberStorm SCSI support"
+	depends on ZORRO & SCSI
+
+config CYBERSTORMII_SCSI
+	tristate "CyberStorm Mk II SCSI support"
+	depends on ZORRO & SCSI
+
+config BLZ2060_SCSI
+	tristate "Blizzard 2060 SCSI support"
+	depends on ZORRO & SCSI
+
+config BLZ1230_SCSI
+	tristate "Blizzard 1230IV/1260 SCSI support"
+	depends on ZORRO & SCSI
+
+config FASTLANE_SCSI
+	tristate "Fastlane SCSI support"
+	depends on ZORRO & SCSI
+
+config SCSI_AMIGA7XX
+	bool "Amiga NCR53c710 SCSI support (EXPERIMENTAL)"
+	depends on AMIGA & SCSI & EXPERIMENTAL & BROKEN
+
+config OKTAGON_SCSI
+	tristate "BSC Oktagon SCSI support (EXPERIMENTAL)"
+	depends on ZORRO & SCSI & EXPERIMENTAL
+
+config ATARI_SCSI
+	tristate "Atari native SCSI support"
+	depends on ATARI & SCSI & BROKEN
+
+config ATARI_SCSI_TOSHIBA_DELAY
+	bool "Long delays for Toshiba CD-ROMs"
+	depends on ATARI_SCSI
+
+config ATARI_SCSI_RESET_BOOT
+	bool "Reset SCSI-devices at boottime"
+	depends on ATARI_SCSI
+
+config TT_DMA_EMUL
+	bool "Hades SCSI DMA emulator"
+	depends on ATARI_SCSI & HADES
+
+config MAC_SCSI
+	bool "Macintosh NCR5380 SCSI"
+	depends on MAC & SCSI
+
+config SCSI_MAC_ESP
+	tristate "Macintosh NCR53c9[46] SCSI"
+	depends on MAC & SCSI
+
+config MVME147_SCSI
+	bool "WD33C93 SCSI driver for MVME147"
+	depends on MVME147 & SCSI
+
+config MVME16x_SCSI
+	bool "NCR53C710 SCSI driver for MVME16x"
+	depends on MVME16x & SCSI & BROKEN
+
+config BVME6000_SCSI
+	bool "NCR53C710 SCSI driver for BVME6000"
+	depends on BVME6000 & SCSI & BROKEN
+
+config SCSI_NCR53C7xx_FAST
+	bool "allow FAST-SCSI [10MHz]"
+	depends on SCSI_AMIGA7XX | MVME16x_SCSI | BVME6000_SCSI
+
+config SUN3_SCSI
+	tristate "Sun3 NCR5380 SCSI"
+	depends on SUN3 & SCSI
+
+config SUN3X_ESP
+	bool "Sun3x ESP SCSI"
+	depends on SUN3X & SCSI
+
+config SCSI_SUNESP
+	tristate "Sparc ESP Scsi Driver"
+	depends on SBUS & SCSI
+
+config ZFCP
+	tristate "FCP host bus adapter driver for IBM eServer zSeries"
+	depends on ARCH_S390 & SCSI
+	select SCSI_FC_ATTRS
+
+endmenu
+
+endmenu
+
+config AMIGA
+	bool
+	default n
+
+config ARCH_S390
+	bool
+	default n
+
+# Stub added manually
+config ARCH_64BIT
+	bool
+	default n
+
+config ATARI
+	bool
+	default n
+
+config BROKEN
+	bool
+	default n
+
+config BROKEN_ON_SMP
+	bool
+	default n
+
+config BVME6000
+	bool
+	default n
+
+config DECSTATION
+	bool
+	default n
+
+config EISA
+	bool
+	default n
+
+config EXPERIMENTAL
+	bool
+	default n
+
+config FW_LOADER
+	bool
+	default n
+
+config GSC
+	bool
+	default n
+
+config HADES
+	bool
+	default n
+
+config ISA
+	bool
+	default n
+
+config MAC
+	bool
+	default n
+
+config MACH_JAZZ
+	bool
+	default n
+
+config MCA
+	bool
+	default n
+
+config MCA_LEGACY
+	bool
+	default n
+
+config MVME147
+	bool
+	default n
+
+config MVME16x
+	bool
+	default n
+
+config PARPORT
+	bool
+	default n
+
+config PCI
+	bool
+	default n
+
+config PPC32
+	bool
+	default n
+
+config PPC_ISERIES
+	bool
+	default n
+
+config PPC_PMAC
+	bool
+	default n
+
+config PPC_PSERIES
+	bool
+	default n
+
+config PROC_FS
+	bool
+	default n
+
+config SBUS
+	bool
+	default n
+
+config SGI_IP22
+	bool
+	default n
+
+config SPARC64
+	bool
+	default n
+
+config SUN3
+	bool
+	default n
+
+config SUN3X
+	bool
+	default n
+
+config TC
+	bool
+	default n
+
+config X86
+	bool
+	default n
+
+config ZORRO
+	bool
+	default n
+

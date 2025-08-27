@@ -1,0 +1,421 @@
+config ETRAX_ETHERNET
+	bool "Ethernet support"
+	depends on ETRAX_ARCH_V10
+
+config NET_ETHERNET
+	bool
+	depends on ETRAX_ETHERNET
+	default y
+
+choice ETRAX_NETWORK_LED
+	bool "Network LED behavior"
+	depends on ETRAX_ETHERNET
+	default ETRAX_NETWORK_LED_ON_WHEN_ACTIVITY
+
+config ETRAX_NETWORK_LED_ON_WHEN_LINK
+	bool "LED_on_when_link"
+
+config ETRAX_NETWORK_LED_ON_WHEN_ACTIVITY
+	bool "LED_on_when_activity"
+
+endchoice
+
+config ETRAX_SERIAL
+	bool "Serial-port support"
+	depends on ETRAX_ARCH_V10
+
+config ETRAX_SERIAL_FAST_TIMER
+	bool "Use fast timers for serial DMA flush (experimental)"
+	depends on ETRAX_SERIAL
+
+config ETRAX_SERIAL_FLUSH_DMA_FAST
+	bool "Fast serial port DMA flush"
+	depends on ETRAX_SERIAL & ~ETRAX_SERIAL_FAST_TIMER
+
+config ETRAX_SERIAL_PORT0
+	bool "Serial port 0 enabled"
+	depends on ETRAX_SERIAL
+
+choice ETRAX_SERIAL_PORT0_OUT
+	bool "Ser0 DMA out assignment"
+	depends on ETRAX_SERIAL_PORT0
+	default ETRAX_SERIAL_PORT0_DMA6_OUT
+
+config CONFIG_ETRAX_SERIAL_PORT0_NO_DMA_OUT
+	bool "No DMA out"
+
+config CONFIG_ETRAX_SERIAL_PORT0_DMA6_OUT
+	bool "DMA 6"
+
+endchoice
+
+choice ETRAX_SERIAL_PORT0_IN
+	bool "Ser0 DMA in assignment"
+	depends on ETRAX_SERIAL_PORT0
+	default ETRAX_SERIAL_PORT0_DMA7_IN
+
+config CONFIG_ETRAX_SERIAL_PORT0_NO_DMA_IN
+	bool "No DMA in"
+
+config CONFIG_ETRAX_SERIAL_PORT0_DMA7_IN
+	bool "DMA 7"
+
+endchoice
+
+choice ETRAX_SER0_DTR_RI_DSR_CD
+	bool "Ser0 DTR, RI, DSR and CD assignment"
+	depends on ETRAX_SERIAL_PORT0
+	default ETRAX_SER0_DTR_RI_DSR_CD_ON_NONE
+
+config ETRAX_SER0_DTR_RI_DSR_CD_ON_NONE
+	bool "No_DTR_RI_DSR_CD"
+
+config ETRAX_SER0_DTR_RI_DSR_CD_ON_PA
+	bool "DTR_RI_DSR_CD_on_PA"
+
+config ETRAX_SER0_DTR_RI_DSR_CD_ON_PB
+	bool "DTR_RI_DSR_CD_on_PB"
+
+config ETRAX_SER0_DTR_RI_DSR_CD_MIXED
+	bool "DTR_RI_DSR_CD_mixed_on_PA_and_PB"
+
+endchoice
+
+config ETRAX_SERIAL_PORT1
+	bool "Serial port 1 enabled"
+	depends on ETRAX_SERIAL
+
+choice ETRAX_SERIAL_PORT1_OUT
+	bool "Ser1 DMA out assignment"
+	depends on ETRAX_SERIAL_PORT1
+	default ETRAX_SERIAL_PORT1_DMA8_OUT
+
+config CONFIG_ETRAX_SERIAL_PORT1_NO_DMA_OUT
+	bool "No DMA out"
+
+config CONFIG_ETRAX_SERIAL_PORT1_DMA8_OUT
+	bool "DMA 8"
+
+endchoice
+
+choice ETRAX_SERIAL_PORT1_IN
+	bool "Ser1 DMA in assignment"
+	depends on ETRAX_SERIAL_PORT1
+	default ETRAX_SERIAL_PORT1_DMA9_IN
+
+config CONFIG_ETRAX_SERIAL_PORT1_NO_DMA_IN
+	bool "No DMA in"
+
+config CONFIG_ETRAX_SERIAL_PORT1_DMA9_IN
+	bool "DMA 9"
+
+endchoice
+
+choice ETRAX_SER1_DTR_RI_CD
+	bool "Ser1 DTR, RI, DSR and CD assignment"
+	depends on ETRAX_SERIAL_PORT1
+	default ETRAX_SER1_DTR_RI_DSR_CD_ON_NONE
+
+config ETRAX_SER1_DTR_RI_DSR_CD_ON_NONE
+	bool "No_DTR_RI_DSR_CD"
+
+config ETRAX_SER1_DTR_RI_DSR_CD_ON_PA
+	bool "DTR_RI_DSR_CD_on_PA"
+
+config ETRAX_SER1_DTR_RI_DSR_CD_ON_PB
+	bool "DTR_RI_DSR_CD_on_PB"
+
+config ETRAX_SER1_DTR_RI_DSR_CD_MIXED
+	bool "DTR_RI_DSR_CD_mixed_on_PA_and_PB"
+
+endchoice
+
+config ETRAX_SERIAL_PORT2
+	bool "Serial port 2 enabled"
+	depends on ETRAX_SERIAL
+
+choice ETRAX_SERIAL_PORT2_OUT
+	bool "Ser2 DMA out assignment"
+	depends on ETRAX_SERIAL_PORT2
+	default ETRAX_SERIAL_PORT2_DMA2_OUT
+
+config CONFIG_ETRAX_SERIAL_PORT2_NO_DMA_OUT
+	bool "No DMA out"
+
+config CONFIG_ETRAX_SERIAL_PORT2_DMA2_OUT
+	bool "DMA 2"
+
+endchoice
+
+choice ETRAX_SERIAL_PORT2_IN
+	bool "Ser2 DMA in assignment"
+	depends on ETRAX_SERIAL_PORT2
+	default ETRAX_SERIAL_PORT2_DMA3_IN
+
+config CONFIG_ETRAX_SERIAL_PORT2_NO_DMA_IN
+	bool "No DMA in"
+
+config CONFIG_ETRAX_SERIAL_PORT2_DMA3_IN
+	bool "DMA 3"
+
+endchoice
+
+choice ETRAX_SER2_DTR_RI_DSR_CD
+	bool "Ser2 DTR, RI, DSR and CD assignment"
+	depends on ETRAX_SERIAL_PORT2
+	default ETRAX_SER2_DTR_RI_DSR_CD_ON_NONE
+
+config ETRAX_SER2_DTR_RI_DSR_CD_ON_NONE
+	bool "No_DTR_RI_DSR_CD"
+
+config ETRAX_SER2_DTR_RI_DSR_CD_ON_PA
+	bool "DTR_RI_DSR_CD_on_PA"
+
+config ETRAX_SER2_DTR_RI_DSR_CD_ON_PB
+	bool "DTR_RI_DSR_CD_on_PB"
+
+config ETRAX_SER2_DTR_RI_DSR_CD_MIXED
+	bool "DTR_RI_DSR_CD_mixed_on_PA_and_PB"
+
+endchoice
+
+config ETRAX_SERIAL_PORT3
+	bool "Serial port 3 enabled"
+	depends on ETRAX_SERIAL
+
+choice ETRAX_SERIAL_PORT3_OUT
+	bool "Ser3 DMA out assignment"
+	depends on ETRAX_SERIAL_PORT3
+	default ETRAX_SERIAL_PORT3_DMA4_OUT
+
+config CONFIG_ETRAX_SERIAL_PORT3_NO_DMA_OUT
+	bool "No DMA out"
+
+config CONFIG_ETRAX_SERIAL_PORT3_DMA4_OUT
+	bool "DMA 4"
+
+endchoice
+
+choice ETRAX_SERIAL_PORT3_IN
+	bool "Ser3 DMA in assignment"
+	depends on ETRAX_SERIAL_PORT3
+	default ETRAX_SERIAL_PORT3_DMA5_IN
+
+config CONFIG_ETRAX_SERIAL_PORT3_NO_DMA_IN
+	bool "No DMA in"
+
+config CONFIG_ETRAX_SERIAL_PORT3_DMA5_IN
+	bool "DMA 5"
+
+endchoice
+
+choice ETRAX_SER3_DTR_RI_DSR_CD
+	bool "Ser3 DTR, RI, DSR and CD assignment"
+	depends on ETRAX_SERIAL_PORT3
+	default ETRAX_SER3_DTR_RI_DSR_CD_ON_NONE
+
+config ETRAX_SER3_DTR_RI_DSR_CD_ON_NONE
+	bool "No_DTR_RI_DSR_CD"
+
+config ETRAX_SER3_DTR_RI_DSR_CD_ON_PA
+	bool "DTR_RI_DSR_CD_on_PA"
+
+config ETRAX_SER3_DTR_RI_DSR_CD_ON_PB
+	bool "DTR_RI_DSR_CD_on_PB"
+
+config ETRAX_SER3_DTR_RI_DSR_CD_MIXED
+	bool "DTR_RI_DSR_CD_mixed_on_PA_and_PB"
+
+endchoice
+
+config ETRAX_RS485
+	bool "RS-485 support"
+	depends on ETRAX_SERIAL
+
+config ETRAX_RS485_ON_PA
+	bool "RS-485 mode on PA"
+	depends on ETRAX_RS485
+
+config ETRAX_RS485_DISABLE_RECEIVER
+	bool "Disable serial receiver"
+	depends on ETRAX_RS485
+
+config ETRAX_IDE
+	bool "ATA/IDE support"
+
+config IDE
+	tristate
+	depends on ETRAX_IDE
+	default y
+
+config BLK_DEV_IDE
+	tristate
+	depends on ETRAX_IDE
+	default y
+
+config BLK_DEV_IDEDISK
+	tristate
+	depends on ETRAX_IDE
+	default y
+
+config BLK_DEV_IDECD
+	tristate
+	depends on ETRAX_IDE
+	default y
+
+config BLK_DEV_IDEDMA
+	bool
+	depends on ETRAX_IDE
+	default y
+
+config DMA_NONPCI
+	bool
+	depends on ETRAX_IDE
+	default y
+
+choice ETRAX_IDE_RESET
+	bool "IDE reset pin"
+	depends on ETRAX_IDE
+	default ETRAX_IDE_PB7_RESET
+
+config ETRAX_IDE_PB7_RESET
+	bool "Port_PB_Bit_7"
+
+config ETRAX_IDE_G27_RESET
+	bool "Port_G_Bit_27"
+
+endchoice
+
+config ETRAX_USB_HOST
+	bool "USB host"
+
+config USB
+	tristate
+	depends on ETRAX_USB_HOST
+	default y
+
+config ETRAX_USB_HOST_PORT1
+	bool "  USB port 1 enabled"
+	depends on ETRAX_USB_HOST
+	default n
+
+config ETRAX_USB_HOST_PORT2
+	bool "  USB port 2 enabled"
+	depends on ETRAX_USB_HOST
+	default n
+
+config ETRAX_AXISFLASHMAP
+	bool "Axis flash-map support"
+	depends on ETRAX_ARCH_V10
+
+config MTD
+	tristate
+	depends on ETRAX_AXISFLASHMAP
+	default y
+
+config MTD_CFI
+	tristate
+	depends on ETRAX_AXISFLASHMAP
+	default y
+
+config MTD_CFI_AMDSTD
+	tristate
+	depends on ETRAX_AXISFLASHMAP
+	default y
+
+config MTD_OBSOLETE_CHIPS
+	bool
+	depends on ETRAX_AXISFLASHMAP
+	default y
+
+config MTD_AMDSTD
+	tristate
+	depends on ETRAX_AXISFLASHMAP
+	default y
+
+config MTD_CHAR
+	tristate
+	depends on ETRAX_AXISFLASHMAP
+	default y
+
+config MTD_BLOCK
+	tristate
+	depends on ETRAX_AXISFLASHMAP
+	default y
+
+config MTD_PARTITIONS
+	tristate
+	depends on ETRAX_AXISFLASHMAP
+	default y
+
+config MTD_CONCAT
+	tristate
+	depends on ETRAX_AXISFLASHMAP
+	default y
+
+config ETRAX_I2C
+	bool "I2C support"
+	depends on ETRAX_ARCH_V10
+
+config ETRAX_I2C_USES_PB_NOT_PB_I2C
+	bool "I2C uses PB not PB-I2C"
+	depends on ETRAX_I2C
+
+config ETRAX_I2C_EEPROM
+	bool "I2C EEPROM (non-volatile RAM) support"
+	depends on ETRAX_I2C
+
+choice ETRAX_EEPROM
+	bool "EEPROM size"
+	depends on ETRAX_I2C_EEPROM
+	default ETRAX_I2C_EEPROM_PROBE
+
+config ETRAX_I2C_EEPROM_PROBE
+	bool "Probed"
+
+config ETRAX_I2C_EEPROM_2KB
+	bool "2kB"
+
+config ETRAX_I2C_EEPROM_8KB
+	bool "8kB"
+
+config ETRAX_I2C_EEPROM_16KB
+	bool "16kB"
+
+endchoice
+
+config ETRAX_GPIO
+	bool "GPIO support"
+	depends on ETRAX_ARCH_V10
+
+config ETRAX_RTC
+	bool "Real Time Clock support"
+	depends on ETRAX_ARCH_V10
+
+choice ETRAX_RTC_CHIP
+	bool "RTC chip"
+	depends on ETRAX_RTC
+	default ETRAX_DS1302
+
+config ETRAX_DS1302
+	bool "DS1302"
+
+config ETRAX_PCF8563
+	bool "PCF8563"
+
+endchoice
+
+# Dummy symbol to avoid enclosure bug
+
+config ETRAX_DS1302_RST_ON_GENERIC_PORT_DUMMY
+	bool
+	default y
+
+config ETRAX_DS1302_RST_ON_GENERIC_PORT
+	bool "DS1302 RST on Generic Port"
+	depends on ETRAX_DS1302 & ETRAX_DS1302_RST_ON_GENERIC_PORT_DUMMY
+
+config ETRAX_ARCH_V10
+	bool
+	default n
+

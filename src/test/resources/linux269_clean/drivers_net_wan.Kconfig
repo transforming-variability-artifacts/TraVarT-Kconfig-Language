@@ -1,0 +1,208 @@
+menu MENU_WAN
+	depends on NETDEVICES
+
+config WAN
+	bool "Wan interfaces support"
+
+config HOSTESS_SV11
+	tristate "Comtrol Hostess SV-11 support"
+	depends on WAN & ISA
+
+config COSA
+	tristate "COSA/SRP sync serial boards support"
+	depends on WAN & ISA
+
+config DSCC4
+	tristate "Etinc PCISYNC serial board support"
+	depends on WAN & PCI
+
+config DSCC4_PCISYNC
+	bool "Etinc PCISYNC features"
+	depends on DSCC4
+
+config DSCC4_PCI_RST
+	bool "Hard reset support"
+	depends on DSCC4
+
+config LANMEDIA
+	tristate "LanMedia Corp. SSI/V.35, T1/E1, HSSI, T3 boards"
+	depends on WAN & PCI
+
+config SEALEVEL_4021
+	tristate "Sealevel Systems 4021 support"
+	depends on WAN & ISA
+
+config SYNCLINK_SYNCPPP
+	tristate "SyncLink HDLC/SYNCPPP support"
+	depends on WAN
+
+config HDLC
+	tristate "Generic HDLC layer"
+	depends on WAN
+
+config HDLC_RAW
+	bool "Raw HDLC support"
+	depends on HDLC
+
+config HDLC_RAW_ETH
+	bool "Raw HDLC Ethernet device support"
+	depends on HDLC
+
+config HDLC_CISCO
+	bool "Cisco HDLC support"
+	depends on HDLC
+
+config HDLC_FR
+	bool "Frame Relay support"
+	depends on HDLC
+
+config HDLC_PPP
+	bool "Synchronous Point-to-Point Protocol (PPP) support"
+	depends on HDLC
+
+config HDLC_X25
+	bool "X.25 protocol support"
+	depends on HDLC & (LAPB & HDLC | LAPB)
+
+config PCI200SYN
+	tristate "Goramo PCI200SYN support"
+	depends on HDLC & PCI
+
+config WANXL
+	tristate "SBE Inc. wanXL support"
+	depends on HDLC & PCI
+
+config WANXL_BUILD_FIRMWARE
+	bool "rebuild wanXL firmware"
+	depends on WANXL & ~PREVENT_FIRMWARE_BUILD
+
+config PC300
+	tristate "Cyclades-PC300 support (RS-232/V.35, X.21, T1/E1 boards)"
+	depends on HDLC & PCI
+
+config PC300_MLPPP
+	bool "Cyclades-PC300 MLPPP support"
+	depends on PC300 & PPP_MULTILINK & PPP_SYNC_TTY & HDLC_PPP
+
+config N2
+	tristate "SDL RISCom/N2 support"
+	depends on HDLC & ISA
+
+config C101
+	tristate "Moxa C101 support"
+	depends on HDLC & ISA
+
+config FARSYNC
+	tristate "FarSync T-Series support"
+	depends on HDLC & PCI
+
+config DLCI
+	tristate "Frame Relay DLCI support"
+	depends on WAN
+
+config SDLA
+	tristate "SDLA (Sangoma S502/S508) support"
+	depends on DLCI & ISA
+
+config WAN_ROUTER_DRIVERS
+	bool "WAN router drivers"
+	depends on WAN & WAN_ROUTER
+
+config VENDOR_SANGOMA
+	tristate "Sangoma WANPIPE(tm) multiprotocol cards"
+	depends on WAN_ROUTER_DRIVERS & WAN_ROUTER & (PCI | ISA) & BROKEN
+
+config WANPIPE_CHDLC
+	bool "WANPIPE Cisco HDLC support"
+	depends on VENDOR_SANGOMA
+
+config WANPIPE_FR
+	bool "WANPIPE Frame Relay support"
+	depends on VENDOR_SANGOMA
+
+config WANPIPE_X25
+	bool "WANPIPE X.25 support"
+	depends on VENDOR_SANGOMA
+
+config WANPIPE_PPP
+	bool "WANPIPE PPP support"
+	depends on VENDOR_SANGOMA
+
+config WANPIPE_MULTPPP
+	bool "WANPIPE Multi-Port PPP support"
+	depends on VENDOR_SANGOMA
+
+config CYCLADES_SYNC
+	tristate "Cyclom 2X(tm) cards (EXPERIMENTAL)"
+	depends on WAN_ROUTER_DRIVERS & (PCI | ISA)
+
+config CYCLOMX_X25
+	bool "Cyclom 2X X.25 support (EXPERIMENTAL)"
+	depends on CYCLADES_SYNC
+
+config LAPBETHER
+	tristate "LAPB over Ethernet driver (EXPERIMENTAL)"
+	depends on WAN & LAPB & X25
+
+config X25_ASY
+	tristate "X.25 async driver (EXPERIMENTAL)"
+	depends on WAN & LAPB & X25
+
+config SBNI
+	tristate "Granch SBNI12 Leased Line adapter support"
+	depends on WAN & X86
+
+config SBNI_MULTILINE
+	bool "Multiple line feature support"
+	depends on SBNI
+
+endmenu
+
+config BROKEN
+	bool
+	default n
+
+config ISA
+	bool
+	default n
+
+config LAPB
+	bool
+	default n
+
+config NETDEVICES
+	bool
+	default n
+
+config PCI
+	bool
+	default n
+
+config PPP
+	bool
+	default n
+
+config PPP_MULTILINK
+	bool
+	default n
+
+config PPP_SYNC_TTY
+	bool
+	default n
+
+config PREVENT_FIRMWARE_BUILD
+	bool
+	default n
+
+config WAN_ROUTER
+	bool
+	default n
+
+config X25
+	bool
+	default n
+
+config X86
+	bool
+	default n
+

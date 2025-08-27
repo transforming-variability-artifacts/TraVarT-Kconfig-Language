@@ -1,0 +1,100 @@
+
+menu MENU_TOKENRING
+	depends on NETDEVICES
+
+config TR
+	bool "Token Ring driver support"
+	depends on (PCI | ISA | MCA | CCW)
+	select LLC
+
+config IBMTR
+	tristate "IBM Tropic chipset based adapter support"
+	depends on TR & (ISA | MCA)
+
+config IBMOL
+	tristate "IBM Olympic chipset PCI adapter support"
+	depends on TR & PCI
+
+config IBMLS
+	tristate "IBM Lanstreamer chipset PCI adapter support"
+	depends on TR & PCI & ~ARCH_64BIT
+
+config DEV_3C359
+	tristate "3Com 3C359 Token Link Velocity XL adapter support"
+	depends on TR & PCI
+
+config TMS380TR
+	tristate "Generic TMS380 Token Ring ISA/PCI adapter support"
+	depends on TR & (PCI | ISA) & HOTPLUG
+	select FW_LOADER
+
+config TMSPCI
+	tristate "Generic TMS380 PCI support"
+	depends on TR & TMS380TR & PCI
+
+config SKISA
+	tristate "SysKonnect TR4/16 ISA support"
+	depends on TR & TMS380TR & ISA
+
+config PROTEON
+	tristate "Proteon ISA support"
+	depends on TR & TMS380TR & ISA
+
+config ABYSS
+	tristate "Madge Smart 16/4 PCI Mk2 support"
+	depends on TR & TMS380TR & PCI
+
+config MADGEMC
+	tristate "Madge Smart 16/4 Ringnode MicroChannel"
+	depends on TR & TMS380TR & MCA_LEGACY
+
+config SMCTR
+	tristate "SMC ISA/MCA adapter support"
+	depends on TR & (ISA | MCA_LEGACY) & (BROKEN | ~ARCH_64BIT)
+
+endmenu
+
+config ARCH_64BIT
+	bool
+	default n
+
+config BROKEN
+	bool
+	default n
+
+config CCW
+	bool
+	default n
+
+config FW_LOADER
+	bool
+	default n
+
+config HOTPLUG
+	bool
+	default n
+
+config ISA
+	bool
+	default n
+
+config LLC
+	bool
+	default n
+
+config MCA
+	bool
+	default n
+
+config MCA_LEGACY
+	bool
+	default n
+
+config NETDEVICES
+	bool
+	default n
+
+config PCI
+	bool
+	default n
+

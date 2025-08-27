@@ -1,0 +1,221 @@
+
+mainmenu MENU_LKC
+
+# Select to ARCH_64BIT added manually
+config X86_64
+	bool
+	default y
+	select ARCH_64BIT
+
+# Confsym renamed
+config ARCH_64BIT
+	bool
+
+config X86
+	bool
+	default y
+
+config MMU
+	bool
+	default y
+
+config ISA
+	bool
+
+config SBUS
+	bool
+
+config RWSEM_GENERIC_SPINLOCK
+	bool
+	default y
+
+config RWSEM_XCHGADD_ALGORITHM
+	bool
+
+config X86_CMPXCHG
+	bool
+	default y
+
+config EARLY_PRINTK
+	bool
+	default y
+
+config HPET_TIMER
+	bool
+	default y
+
+config GENERIC_ISA_DMA
+	bool
+	default y
+
+config GENERIC_IOMAP
+	bool
+	default y
+
+menu MENU_PROC
+
+choice PROCESSOR_FAMILY
+	bool "Processor family"
+	default MK8
+
+config MK8
+	bool "AMD-Opteron/Athlon64"
+
+config MPSC
+	bool "Intel x86-64"
+
+config GENERIC_CPU
+	bool "Generic-x86-64"
+
+endchoice
+
+config X86_TSC
+	bool
+	default y
+
+config X86_GOOD_APIC
+	bool
+	default y
+
+config MICROCODE
+	tristate "/dev/cpu/microcode - Intel CPU microcode support"
+
+config X86_MSR
+	tristate "/dev/cpu/*/msr - Model-specific register support"
+
+config X86_CPUID
+	tristate "/dev/cpu/*/cpuid - CPU information support"
+
+config X86_HT
+	bool
+	depends on SMP & ~MK8
+	default y
+
+config MATH_EMULATION
+	bool
+
+config MCA
+	bool
+
+config EISA
+	bool
+
+config X86_IO_APIC
+	bool
+	default y
+
+config X86_LOCAL_APIC
+	bool
+	default y
+
+config MTRR
+	bool "MTRR (Memory Type Range Register) support"
+
+config SMP
+	bool "Symmetric multi-processing support"
+
+config PREEMPT
+	bool "Preemptible Kernel"
+
+config SCHED_SMT
+	bool "SMT (Hyperthreading) scheduler support"
+	depends on SMP
+	default off
+
+config K8_NUMA
+	bool "K8 NUMA support"
+	depends on SMP
+
+config DISCONTIGMEM
+	bool
+	depends on K8_NUMA
+	default y
+
+config NUMA
+	bool
+	depends on K8_NUMA
+	default y
+
+config HAVE_DEC_LOCK
+	bool
+	depends on SMP
+	default y
+
+config GART_IOMMU
+	bool "IOMMU support"
+
+config SWIOTLB
+	bool
+	depends on GART_IOMMU
+	default y
+
+config DUMMY_IOMMU
+	bool
+	depends on ~GART_IOMMU & ~SWIOTLB
+	default y
+
+config X86_MCE
+	bool "Machine check support" if EMBEDDED
+	default y
+
+endmenu
+
+menu MENU_BUS
+
+config PCI
+	bool "PCI support"
+
+config PCI_DIRECT
+	bool
+	depends on PCI
+	default y
+
+config PCI_MMCONFIG
+	bool "Support mmconfig PCI config space access"
+	depends on PCI
+	select ACPI_BOOT
+
+config UNORDERED_IO
+	bool "Unordered IO mapping access"
+	depends on EXPERIMENTAL
+
+endmenu
+
+menu MENU_EXE_EMU
+
+config IA32_EMULATION
+	bool "IA32 Emulation"
+
+config IA32_AOUT
+	bool "IA32 a.out support"
+	depends on IA32_EMULATION
+
+config COMPAT
+	bool
+	depends on IA32_EMULATION
+	default y
+
+config SYSVIPC_COMPAT
+	bool
+	depends on COMPAT & SYSVIPC
+	default y
+
+config UID16
+	bool
+	depends on IA32_EMULATION
+	default y
+
+endmenu
+
+config ACPI_BOOT
+	bool
+	default n
+
+config EXPERIMENTAL
+	bool
+	default n
+
+config SYSVIPC
+	bool
+	default n
+

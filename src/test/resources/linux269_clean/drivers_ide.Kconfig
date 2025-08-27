@@ -1,0 +1,453 @@
+
+menu "ATA/ATAPI/MFM/RLL support"
+
+config IDE
+	tristate "ATA/ATAPI/MFM/RLL support"
+
+if IDE
+
+
+config BLK_DEV_IDE
+	tristate "Enhanced IDE/MFM/RLL disk/cdrom/tape/floppy support"
+
+if BLK_DEV_IDE
+
+comment "Please see Documentation/ide.txt for help/info on IDE drives"
+
+config BLK_DEV_IDE_SATA
+	bool "Support for SATA (deprecated; conflicts with libata SATA driver)"
+	default n
+
+config BLK_DEV_HD_IDE
+	bool "Use old disk-only driver on primary interface"
+	depends on (X86 | SH_MPC1211)
+
+config BLK_DEV_IDEDISK
+	tristate "Include IDE/ATA-2 DISK support"
+
+config IDEDISK_MULTI_MODE
+	bool "Use multi-mode by default"
+	depends on BLK_DEV_IDEDISK
+
+config BLK_DEV_IDECS
+	tristate "PCMCIA IDE support"
+	depends on PCMCIA
+
+config BLK_DEV_IDECD
+	tristate "Include IDE/ATAPI CDROM support"
+
+config BLK_DEV_IDETAPE
+	tristate "Include IDE/ATAPI TAPE support (EXPERIMENTAL)"
+	depends on EXPERIMENTAL
+
+config BLK_DEV_IDEFLOPPY
+	tristate "Include IDE/ATAPI FLOPPY support"
+
+config BLK_DEV_IDESCSI
+	tristate "SCSI emulation support"
+	depends on SCSI
+
+config IDE_TASK_IOCTL
+	bool "IDE Taskfile Access"
+
+config IDE_TASKFILE_IO
+	bool 'IDE Taskfile IO (EXPERIMENTAL)'
+	depends on EXPERIMENTAL
+	default n
+
+comment "IDE chipset support/bugfixes"
+
+config IDE_GENERIC
+	tristate "generic/default IDE chipset support"
+	default y
+
+config BLK_DEV_CMD640
+	bool "CMD640 chipset bugfix/support"
+	depends on X86
+
+config BLK_DEV_CMD640_ENHANCED
+	bool "CMD640 enhanced support"
+	depends on BLK_DEV_CMD640
+
+config BLK_DEV_IDEPNP
+	bool "PNP EIDE support"
+	depends on PNP
+
+config BLK_DEV_IDEPCI
+	bool "PCI IDE chipset support" if PCI
+	default BLK_DEV_IDEDMA_PMAC if PPC_PMAC && BLK_DEV_IDEDMA_PMAC
+
+config IDEPCI_SHARE_IRQ
+	bool "Sharing PCI IDE interrupts support"
+	depends on PCI & BLK_DEV_IDEPCI
+
+config BLK_DEV_OFFBOARD
+	bool "Boot off-board chipsets first support"
+	depends on PCI & BLK_DEV_IDEPCI
+
+config BLK_DEV_GENERIC
+	tristate "Generic PCI IDE Chipset Support"
+	depends on BLK_DEV_IDEPCI
+
+config BLK_DEV_OPTI621
+	tristate "OPTi 82C621 chipset enhanced support (EXPERIMENTAL)"
+	depends on PCI & BLK_DEV_IDEPCI & EXPERIMENTAL
+
+config BLK_DEV_RZ1000
+	tristate "RZ1000 chipset bugfix/support"
+	depends on PCI & BLK_DEV_IDEPCI & X86
+
+config BLK_DEV_SL82C105
+	tristate "Winbond SL82c105 support"
+	depends on PCI & (PPC | ARM) & BLK_DEV_IDEPCI
+
+config BLK_DEV_IDEDMA_PCI
+	bool "Generic PCI bus-master DMA support"
+	depends on PCI & BLK_DEV_IDEPCI
+
+if BLK_DEV_IDEDMA_PCI
+
+config BLK_DEV_IDEDMA_FORCED
+	bool "Force enable legacy 2.0.X HOSTS to use DMA"
+
+config IDEDMA_PCI_AUTO
+	bool "Use PCI DMA by default when available"
+
+config IDEDMA_ONLYDISK
+	bool "Enable DMA only for disks "
+	depends on IDEDMA_PCI_AUTO
+
+config BLK_DEV_AEC62XX
+	tristate "AEC62XX chipset support"
+
+config BLK_DEV_ALI15X3
+	tristate "ALI M15x3 chipset support"
+
+config WDC_ALI15X3
+	bool "ALI M15x3 WDC support (DANGEROUS)"
+	depends on BLK_DEV_ALI15X3
+
+config BLK_DEV_AMD74XX
+	tristate "AMD and nVidia IDE support"
+
+config BLK_DEV_ATIIXP
+	tristate "ATI IXP chipset IDE support"
+	depends on X86
+
+config BLK_DEV_CMD64X
+	tristate "CMD64{3|6|8|9} chipset support"
+
+config BLK_DEV_TRIFLEX
+	tristate "Compaq Triflex IDE support"
+
+config BLK_DEV_CY82C693
+	tristate "CY82C693 chipset support"
+
+config BLK_DEV_CS5520
+	tristate "Cyrix CS5510/20 MediaGX chipset support (VERY EXPERIMENTAL)"
+	depends on EXPERIMENTAL
+
+config BLK_DEV_CS5530
+	tristate "Cyrix/National Semiconductor CS5530 MediaGX chipset support"
+
+config BLK_DEV_HPT34X
+	tristate "HPT34X chipset support"
+
+config HPT34X_AUTODMA
+	bool "HPT34X AUTODMA support (EXPERIMENTAL)"
+	depends on BLK_DEV_HPT34X & EXPERIMENTAL
+
+config BLK_DEV_HPT366
+	tristate "HPT36X/37X chipset support"
+
+config BLK_DEV_SC1200
+	tristate "National SCx200 chipset support"
+
+config BLK_DEV_PIIX
+	tristate "Intel PIIXn chipsets support"
+
+config BLK_DEV_IT8172
+	bool "IT8172 IDE support"
+	depends on (MIPS_ITE8172 | MIPS_IVR)
+
+config BLK_DEV_NS87415
+	tristate "NS87415 chipset support"
+
+config BLK_DEV_PDC202XX_OLD
+	tristate "PROMISE PDC202{46|62|65|67} support"
+
+config PDC202XX_BURST
+	bool "Special UDMA Feature"
+	depends on BLK_DEV_PDC202XX_OLD
+
+config BLK_DEV_PDC202XX_NEW
+	tristate "PROMISE PDC202{68|69|70|71|75|76|77} support"
+
+config PDC202XX_FORCE
+	bool "Enable controller even if disabled by BIOS"
+	depends on BLK_DEV_PDC202XX_NEW
+
+config BLK_DEV_SVWKS
+	tristate "ServerWorks OSB4/CSB5/CSB6 chipsets support"
+
+config BLK_DEV_SGIIOC4
+	tristate "Silicon Graphics IOC4 chipset support"
+	depends on IA64_SGI_SN2 | IA64_GENERIC
+
+config BLK_DEV_SIIMAGE
+	tristate "Silicon Image chipset support"
+
+config BLK_DEV_SIS5513
+	tristate "SiS5513 chipset support"
+	depends on X86
+
+config BLK_DEV_SLC90E66
+	tristate "SLC90E66 chipset support"
+
+config BLK_DEV_TRM290
+	tristate "Tekram TRM290 chipset support"
+
+config BLK_DEV_VIA82CXXX
+	tristate "VIA82CXXX chipset support"
+
+endif
+
+config BLK_DEV_IDE_PMAC
+	bool "Builtin PowerMac IDE support"
+	depends on PPC_PMAC & IDE=y
+
+config BLK_DEV_IDE_PMAC_ATA100FIRST
+	bool "Probe internal ATA/100 (Kauai) first"
+	depends on BLK_DEV_IDE_PMAC
+
+config BLK_DEV_IDEDMA_PMAC
+	bool "PowerMac IDE DMA support"
+	depends on BLK_DEV_IDE_PMAC
+
+config BLK_DEV_IDE_PMAC_BLINK
+	bool "Blink laptop LED on drive activity"
+	depends on BLK_DEV_IDE_PMAC & ADB_PMU
+
+config BLK_DEV_IDEDMA_PMAC_AUTO
+	bool "Use DMA by default"
+	depends on BLK_DEV_IDEDMA_PMAC
+
+
+config BLK_DEV_IDE_ICSIDE
+	tristate "ICS IDE interface support"
+	depends on ARM & ARCH_ACORN
+
+config BLK_DEV_IDEDMA_ICS
+	bool "ICS DMA support"
+	depends on BLK_DEV_IDE_ICSIDE
+
+config IDEDMA_ICS_AUTO
+	bool "Use ICS DMA by default"
+	depends on BLK_DEV_IDEDMA_ICS
+
+config BLK_DEV_IDE_RAPIDE
+	tristate "RapIDE interface support"
+	depends on ARM & ARCH_ACORN
+
+config BLK_DEV_IDE_BAST
+	tristate "Simtec BAST / Thorcom VR1000 IDE support"
+	depends on ARM & (ARCH_BAST | MACH_VR100)
+
+config BLK_DEV_GAYLE
+	bool "Amiga Gayle IDE interface support"
+	depends on AMIGA
+
+config BLK_DEV_IDEDOUBLER
+	bool "Amiga IDE Doubler support (EXPERIMENTAL)"
+	depends on BLK_DEV_GAYLE & EXPERIMENTAL
+
+config BLK_DEV_BUDDHA
+	bool "Buddha/Catweasel/X-Surf IDE interface support (EXPERIMENTAL)"
+	depends on ZORRO & EXPERIMENTAL
+
+config BLK_DEV_FALCON_IDE
+	bool "Falcon IDE interface support"
+	depends on ATARI
+
+config BLK_DEV_MAC_IDE
+	bool "Macintosh Quadra/Powerbook IDE interface support"
+	depends on MAC
+
+config BLK_DEV_Q40IDE
+	bool "Q40/Q60 IDE interface support"
+	depends on Q40
+
+config BLK_DEV_MPC8xx_IDE
+	bool "MPC8xx IDE support"
+	depends on 8xx
+
+choice
+	prompt "Type of MPC8xx IDE interface"
+	depends on BLK_DEV_MPC8xx_IDE
+	default IDE_8xx_PCCARD
+
+config IDE_8xx_PCCARD
+	bool "8xx_PCCARD"
+
+config IDE_8xx_DIRECT
+	bool "8xx_DIRECT"
+
+config IDE_EXT_DIRECT
+	bool "EXT_DIRECT"
+
+endchoice
+
+config IDE_CHIPSETS
+	bool "Other IDE chipset support"
+	depends on ISA
+
+if IDE_CHIPSETS
+
+comment "Note: most of these also require special kernel boot parameters"
+
+config BLK_DEV_4DRIVES
+	bool "Generic 4 drives/port support"
+
+config BLK_DEV_ALI14XX
+	tristate "ALI M14xx support"
+
+config BLK_DEV_DTC2278
+	tristate "DTC-2278 support"
+
+config BLK_DEV_HT6560B
+	tristate "Holtek HT6560B support"
+
+config BLK_DEV_PDC4030
+	tristate "PROMISE DC4030 support (EXPERIMENTAL)"
+	depends on BLK_DEV_IDEDISK & EXPERIMENTAL
+
+config BLK_DEV_QD65XX
+	tristate "QDI QD65xx support"
+
+config BLK_DEV_UMC8672
+	tristate "UMC-8672 support"
+
+endif
+
+
+config IDEDMA_IVB
+	bool "IGNORE word93 Validation BITS"
+	depends on BLK_DEV_IDEDMA_PCI | BLK_DEV_IDEDMA_PMAC | BLK_DEV_IDEDMA_ICS
+
+
+endif
+
+config BLK_DEV_HD_ONLY
+	bool "Old hard disk (MFM/RLL/IDE) driver"
+	depends on BLK_DEV_IDE=n
+
+
+endif
+
+endmenu
+
+# --- autogenerated stubs for missing symbols ---
+config ADB_PMU
+	bool
+	default n
+
+config ALPHA
+	bool
+	default n
+
+config AMIGA
+	bool
+	default n
+
+config ARCH_ACORN
+	bool
+	default n
+
+config ARCH_BAST
+	bool
+	default n
+
+config ARM
+	bool
+	default n
+
+config ATARI
+	bool
+	default n
+
+config EXPERIMENTAL
+	bool
+	default n
+
+config IA64_GENERIC
+	bool
+	default n
+
+config IA64_SGI_SN2
+	bool
+	default n
+
+config ISA
+	bool
+	default n
+
+config MAC
+	bool
+	default n
+
+config MACH_VR100
+	bool
+	default n
+
+config MIPS_ITE8172
+	bool
+	default n
+
+config MIPS_IVR
+	bool
+	default n
+
+config PCI
+	bool
+	default n
+
+config PCMCIA
+	bool
+	default n
+
+config PNP
+	bool
+	default n
+
+config PPC
+	bool
+	default n
+
+config PPC_PMAC
+	bool
+	default n
+
+config Q40
+	bool
+	default n
+
+config SCSI
+	bool
+	default n
+
+config SH_MPC1211
+	bool
+	default n
+
+config SUPERH
+	bool
+	default n
+
+config X86
+	bool
+	default n
+
+config ZORRO
+	bool
+	default n
+

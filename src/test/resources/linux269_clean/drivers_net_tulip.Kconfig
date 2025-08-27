@@ -1,0 +1,91 @@
+
+menu MENU_NET_TULIP
+	depends on NET_ETHERNET & (PCI | EISA | CARDBUS)
+
+config NET_TULIP
+	bool "\"Tulip\" family network device support"
+
+config DE2104X
+	tristate "Early DECchip Tulip (dc2104x) PCI support (EXPERIMENTAL)"
+	depends on NET_TULIP & PCI & EXPERIMENTAL
+	select CRC32
+
+config TULIP
+	tristate "DECchip Tulip (dc2114x) PCI support"
+	depends on NET_TULIP & PCI
+	select CRC32
+
+config TULIP_MWI
+	bool "New bus configuration (EXPERIMENTAL)"
+	depends on TULIP & EXPERIMENTAL
+
+config TULIP_MMIO
+	bool "Use PCI shared mem for NIC registers"
+	depends on TULIP
+
+config TULIP_NAPI
+	bool "Use NAPI RX polling "
+	depends on TULIP
+
+config TULIP_NAPI_HW_MITIGATION
+	bool "Use Interrupt Mitigation "
+	depends on TULIP_NAPI
+
+config DE4X5
+	tristate "Generic DECchip & DIGITAL EtherWORKS PCI/EISA"
+	depends on NET_TULIP & (PCI | EISA)
+	select CRC32
+
+config WINBOND_840
+	tristate "Winbond W89c840 Ethernet support"
+	depends on NET_TULIP & PCI
+	select CRC32 & MII
+
+config DM9102
+	tristate "Davicom DM910x/DM980x support"
+	depends on NET_TULIP & PCI
+	select CRC32
+
+config PCMCIA_XIRCOM
+	tristate "Xircom CardBus support (new driver)"
+	depends on NET_TULIP & CARDBUS
+
+config PCMCIA_XIRTULIP
+	tristate "Xircom Tulip-like CardBus support (old driver)"
+	depends on NET_TULIP & CARDBUS & BROKEN_ON_SMP
+	select CRC32
+
+endmenu
+
+config BROKEN_ON_SMP
+	bool
+	default n
+
+config CARDBUS
+	bool
+	default n
+
+config CRC32
+	bool
+	default n
+
+config EISA
+	bool
+	default n
+
+config EXPERIMENTAL
+	bool
+	default n
+
+config MII
+	bool
+	default n
+
+config NET_ETHERNET
+	bool
+	default n
+
+config PCI
+	bool
+	default n
+

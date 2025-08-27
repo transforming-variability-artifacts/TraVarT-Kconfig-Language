@@ -1,0 +1,153 @@
+menu MENU_WLAN
+	depends on NETDEVICES
+
+config NET_RADIO
+	bool "Wireless LAN drivers (non-hamradio) & Wireless Extensions"
+
+comment "Obsolete Wireless cards support (pre-802.11)"
+	depends on NET_RADIO & (INET | ISA | PCMCIA)
+
+config STRIP
+	tristate "STRIP (Metricom starmode radio IP)"
+	depends on NET_RADIO & INET
+
+config ARLAN
+	tristate "Aironet Arlan 655 & IC2200 DS support"
+	depends on NET_RADIO & ISA & ~ARCH_64BIT
+
+config WAVELAN
+	tristate "AT&T/Lucent old WaveLAN & DEC RoamAbout DS ISA support"
+	depends on NET_RADIO & ISA
+
+config PCMCIA_WAVELAN
+	tristate "AT&T/Lucent old WaveLAN Pcmcia wireless support"
+	depends on NET_RADIO & PCMCIA
+
+config PCMCIA_NETWAVE
+	tristate "Xircom Netwave AirSurfer Pcmcia wireless support"
+	depends on NET_RADIO & PCMCIA
+
+comment "Wireless 802.11 Frequency Hopping cards support"
+	depends on NET_RADIO & PCMCIA
+
+config PCMCIA_RAYCS
+	tristate "Aviator/Raytheon 2.4MHz wireless support"
+	depends on NET_RADIO & PCMCIA
+
+comment "Wireless 802.11b ISA/PCI cards support"
+	depends on NET_RADIO & (ISA | PCI | PPC_PMAC | PCMCIA)
+
+config AIRO
+	tristate "Cisco/Aironet 34X/35X/4500/4800 ISA and PCI cards"
+	depends on NET_RADIO & ISA & (PCI | BROKEN)
+
+config HERMES
+	tristate "Hermes chipset 802.11b support (Orinoco/Prism2/Symbol)"
+	depends on NET_RADIO & (PPC_PMAC | PCI | PCMCIA)
+
+config APPLE_AIRPORT
+	tristate "Apple Airport support (built-in)"
+	depends on PPC_PMAC & HERMES
+
+config PLX_HERMES
+	tristate "Hermes in PLX9052 based PCI adaptor support (Netgear MA301 etc.) (EXPERIMENTAL)"
+	depends on PCI & HERMES & EXPERIMENTAL
+
+config TMD_HERMES
+	tristate "Hermes in TMD7160 based PCI adaptor support (EXPERIMENTAL)"
+	depends on PCI & HERMES & EXPERIMENTAL
+
+config PCI_HERMES
+	tristate "Prism 2.5 PCI 802.11b adaptor support (EXPERIMENTAL)"
+	depends on PCI & HERMES & EXPERIMENTAL
+
+config ATMEL
+	tristate "Atmel at76c50x chipset  802.11b support"
+	depends on NET_RADIO & EXPERIMENTAL
+	select FW_LOADER & CRC32
+
+config PCI_ATMEL
+	tristate "Atmel at76c506 PCI cards"
+	depends on ATMEL & PCI
+
+comment "Wireless 802.11b Pcmcia/Cardbus cards support"
+	depends on NET_RADIO & PCMCIA
+
+config PCMCIA_HERMES
+	tristate "Hermes PCMCIA card support"
+	depends on NET_RADIO & PCMCIA & HERMES
+
+config AIRO_CS
+	tristate "Cisco/Aironet 34X/35X/4500/4800 PCMCIA cards"
+	depends on NET_RADIO & PCMCIA
+
+config PCMCIA_ATMEL
+	tristate "Atmel at76c502/at76c504 PCMCIA cards"
+	depends on NET_RADIO & ATMEL & PCMCIA
+	select FW_LOADER & CRC32
+
+config PCMCIA_WL3501
+	tristate "Planet WL3501 PCMCIA cards"
+	depends on NET_RADIO & EXPERIMENTAL & PCMCIA
+
+config PRISM54
+	tristate 'Intersil Prism GT/Duette/Indigo PCI/Cardbus' 
+	depends on PCI & NET_RADIO & EXPERIMENTAL & HOTPLUG
+	select FW_LOADER
+
+config NET_WIRELESS
+	bool
+	depends on NET_RADIO & (ISA | PCI | PPC_PMAC | PCMCIA)
+	default y
+
+endmenu
+
+# Stub added manually
+config ARCH_64BIT
+	bool
+	default n
+
+config BROKEN
+	bool
+	default n
+
+config CRC32
+	bool
+	default n
+
+config EXPERIMENTAL
+	bool
+	default n
+
+config FW_LOADER
+	bool
+	default n
+
+config HOTPLUG
+	bool
+	default n
+
+config INET
+	bool
+	default n
+
+config ISA
+	bool
+	default n
+
+config NETDEVICES
+	bool
+	default n
+
+config PCI
+	bool
+	default n
+
+config PCMCIA
+	bool
+	default n
+
+config PPC_PMAC
+	bool
+	default n
+

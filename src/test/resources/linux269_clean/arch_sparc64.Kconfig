@@ -1,0 +1,222 @@
+mainmenu USPARC
+
+config ARCH_64BIT
+	def_bool y
+
+config MMU
+	bool
+	default y
+
+config TIME_INTERPOLATION
+	bool
+	default y
+
+menu MACHINE
+
+config BBC_I2C
+	tristate "UltraSPARC-III bootbus i2c controller driver"
+	depends on PCI
+
+config VT
+	bool "Virtual terminal" if EMBEDDED
+	select INPUT
+	default y
+
+config VT_CONSOLE
+	bool "Support for console on virtual terminal" if EMBEDDED
+	depends on VT
+	default y
+
+config HW_CONSOLE
+	bool
+	default y
+
+config SMP
+	bool "Symmetric multi-processing support"
+
+config PREEMPT
+	bool "Preemptible Kernel"
+
+
+config CPU_FREQ
+	bool "CPU Frequency scaling"
+
+config CPU_FREQ_TABLE
+	tristate "CPU frequency table helpers"
+	depends on CPU_FREQ
+	default y
+
+config US3_FREQ
+	tristate "UltraSPARC-III CPU Frequency driver"
+	depends on CPU_FREQ_TABLE
+
+config US2E_FREQ
+	tristate "UltraSPARC-IIe CPU Frequency driver"
+	depends on CPU_FREQ_TABLE
+
+config SPARC64
+	bool
+	default y
+
+config RWSEM_GENERIC_SPINLOCK
+	bool
+
+config RWSEM_XCHGADD_ALGORITHM
+	bool
+	default y
+
+choice HUGETLB_PAGE_SIZE
+	bool "SPARC64 Huge TLB Page Size"
+	depends on HUGETLB_PAGE
+	default HUGETLB_PAGE_SIZE_4MB
+
+config HUGETLB_PAGE_SIZE_4MB
+	bool "4MB"
+
+config HUGETLB_PAGE_SIZE_512K
+	bool "512K"
+
+config HUGETLB_PAGE_SIZE_64K
+	bool "64K"
+
+endchoice
+
+config GENERIC_ISA_DMA
+	bool
+	default y
+
+config ISA
+	bool
+
+config ISAPNP
+	bool
+
+config EISA
+	bool
+
+config MCA
+	bool
+
+config PCMCIA
+	tristate
+
+config SBUS
+	bool
+	default y
+
+config SBUSCHAR
+	bool
+	default y
+
+config SUN_AUXIO
+	bool
+	default y
+
+config SUN_IO
+	bool
+	default y
+
+config PCI
+	bool "PCI support"
+
+config PCI_DOMAINS
+	bool
+	default PCI
+
+config RTC
+	tristate
+	depends on PCI
+	default y
+
+config SUN_OPENPROMFS
+	tristate "Openprom tree appears in /proc/openprom"
+
+config SPARC32_COMPAT
+	bool "Kernel support for Linux/Sparc 32bit binary compatibility"
+
+config COMPAT
+	bool
+	depends on SPARC32_COMPAT
+	default y
+
+config UID16
+	bool
+	depends on SPARC32_COMPAT
+	default y
+
+config BINFMT_ELF32
+	tristate "Kernel support for 32-bit ELF binaries"
+	depends on SPARC32_COMPAT
+
+config BINFMT_AOUT32
+	bool "Kernel support for 32-bit (ie. SunOS) a.out binaries"
+	depends on SPARC32_COMPAT
+
+config SUNOS_EMUL
+	bool "SunOS binary emulation"
+	depends on BINFMT_AOUT32
+
+config SOLARIS_EMUL
+	tristate "Solaris binary emulation (EXPERIMENTAL)"
+	depends on SPARC32_COMPAT & EXPERIMENTAL
+
+config PRINTER
+	tristate "Parallel printer support"
+	depends on PARPORT
+
+config ENVCTRL
+	tristate "SUNW, envctrl support"
+	depends on PCI
+
+config DISPLAY7SEG
+	tristate "7-Segment Display support"
+	depends on PCI
+
+config CMDLINE_BOOL
+	bool "Default bootloader kernel arguments"
+
+
+endmenu
+
+menu MENU_UNIX98_PTYS
+
+config UNIX98_PTYS
+	bool "Unix98 PTY support"
+
+endmenu
+
+menu MENU_XF86_DRI
+
+config DRM
+	bool "Direct Rendering Manager (XFree86 DRI support)"
+
+config DRM_FFB
+	tristate "Creator/Creator3D"
+	depends on DRM
+
+config DRM_TDFX
+	tristate "3dfx Banshee/Voodoo3+"
+	depends on DRM
+
+config DRM_R128
+	tristate "ATI Rage 128"
+	depends on DRM
+
+endmenu
+
+config EXPERIMENTAL
+	bool
+	default n
+
+config HUGETLB_PAGE
+	bool
+	default n
+
+config INPUT
+	bool
+	default n
+
+config PARPORT
+	bool
+	default n
+

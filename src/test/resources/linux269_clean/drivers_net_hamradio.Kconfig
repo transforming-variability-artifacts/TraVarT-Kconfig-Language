@@ -1,0 +1,78 @@
+config MKISS
+	tristate "Serial port KISS driver"
+	depends on AX25 & BROKEN_ON_SMP
+
+# Renamed to DRV_*
+config DRV_6PACK
+	tristate "Serial port 6PACK driver"
+	depends on AX25 & BROKEN_ON_SMP
+
+config BPQETHER
+	tristate "BPQ Ethernet driver"
+	depends on AX25
+
+config DMASCC
+	tristate "High-speed (DMA) SCC driver for AX.25"
+	depends on ISA & AX25 & BROKEN_ON_SMP
+
+config SCC
+	tristate "Z8530 SCC driver"
+	depends on ISA & AX25
+
+config SCC_DELAY
+	bool "additional delay for PA0HZP OptoSCC compatible boards"
+	depends on SCC
+
+config SCC_TRXECHO
+	bool "support for TRX that feedback the tx signal to rx"
+	depends on SCC
+
+config BAYCOM_SER_FDX
+	tristate "BAYCOM ser12 fullduplex driver for AX.25"
+	depends on AX25
+	select CRC_CCITT
+
+config BAYCOM_SER_HDX
+	tristate "BAYCOM ser12 halfduplex driver for AX.25"
+	depends on AX25
+	select CRC_CCITT
+
+config BAYCOM_PAR
+	tristate "BAYCOM picpar and par96 driver for AX.25"
+	depends on PARPORT & AX25
+	select CRC_CCITT
+
+config BAYCOM_EPP
+	tristate "BAYCOM epp driver for AX.25"
+	depends on PARPORT & AX25 & ~ARCH_64BIT
+	select CRC_CCITT
+
+config YAM
+	tristate "YAM driver for AX.25"
+	depends on AX25
+
+config AX25
+	bool
+	default n
+
+config BROKEN_ON_SMP
+	bool
+	default n
+
+config CRC_CCITT
+	bool
+	default n
+
+config ISA
+	bool
+	default n
+
+config PARPORT
+	bool
+	default n
+
+# Stub added manually
+config ARCH_64BIT
+	bool
+	default n
+

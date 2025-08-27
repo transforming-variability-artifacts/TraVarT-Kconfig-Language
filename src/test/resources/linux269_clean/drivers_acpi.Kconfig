@@ -1,0 +1,186 @@
+
+menu MENU_ACPI
+	depends on ~X86_VISWS
+	depends on ~IA64_HP_SIM
+	depends on IA64 | X86
+
+config ACPI
+	bool "ACPI Support"
+	depends on IA64 | X86
+	default y
+
+config ACPI_BOOT
+	bool
+	depends on ACPI | X86_HT
+	default y
+
+config ACPI_INTERPRETER
+	bool
+	depends on ACPI
+	depends on ~IA64_SGI_SN
+	default y
+
+config ACPI_SLEEP
+	bool "Sleep States (EXPERIMENTAL)"
+	depends on X86 & ACPI
+	depends on ACPI_INTERPRETER
+	depends on EXPERIMENTAL & PM
+	default y
+
+config ACPI_SLEEP_PROC_FS
+	bool
+	depends on ACPI_SLEEP & PROC_FS
+	default y
+
+config ACPI_AC
+	tristate "AC Adapter"
+	depends on X86
+	depends on ACPI_INTERPRETER
+	default m
+
+config ACPI_BATTERY
+	tristate "Battery"
+	depends on X86
+	depends on ACPI_INTERPRETER
+	default m
+
+config ACPI_BUTTON
+	tristate "Button"
+	depends on ACPI_INTERPRETER
+	depends on ~IA64_SGI_SN
+	default m
+
+config ACPI_FAN
+	tristate "Fan"
+	depends on ACPI_INTERPRETER
+	depends on ~IA64_SGI_SN
+	default m
+
+config ACPI_PROCESSOR
+	tristate "Processor"
+	depends on ACPI_INTERPRETER
+	depends on ~IA64_SGI_SN
+	default m
+
+config ACPI_THERMAL
+	tristate "Thermal Zone"
+	depends on ACPI_PROCESSOR
+	default m
+
+config ACPI_NUMA
+	bool "NUMA support"
+	depends on ACPI_INTERPRETER
+	depends on NUMA
+	depends on IA64
+	default y
+
+config ACPI_ASUS
+	tristate "ASUS/Medion Laptop Extras"
+	depends on X86
+	depends on ACPI_INTERPRETER
+	default m
+
+config ACPI_TOSHIBA
+	tristate "Toshiba Laptop Extras"
+	depends on X86
+	depends on ACPI_INTERPRETER
+	default m
+
+config ACPI_CUSTOM_DSDT
+	bool "Include Custom DSDT"
+	depends on X86 & ACPI_INTERPRETER & ~STANDALONE
+	default n
+
+config ACPI_DEBUG
+	bool "Debug Statements"
+	depends on ACPI_INTERPRETER
+	depends on ~IA64_SGI_SN
+	default n
+
+config ACPI_BUS
+	bool
+	depends on ACPI_INTERPRETER
+	depends on ~IA64_SGI_SN
+	default y
+
+config ACPI_EC
+	bool
+	depends on X86
+	depends on ACPI_INTERPRETER
+	default y
+
+config ACPI_POWER
+	bool
+	depends on ACPI_INTERPRETER
+	depends on ~IA64_SGI_SN
+	default y
+
+config ACPI_PCI
+	bool
+	depends on ACPI_INTERPRETER
+	depends on ~IA64_SGI_SN
+	default PCI
+
+config ACPI_SYSTEM
+	bool
+	depends on ACPI_INTERPRETER
+	depends on ~IA64_SGI_SN
+	default y
+
+config X86_PM_TIMER
+	bool "Power Management Timer Support"
+	depends on X86 & ACPI
+	depends on ACPI_BOOT & EXPERIMENTAL
+	depends on ~X86_64
+	default n
+
+endmenu
+
+config EXPERIMENTAL
+	bool
+	default n
+
+config IA64
+	bool
+	default n
+
+config IA64_HP_SIM
+	bool
+	default n
+
+config IA64_SGI_SN
+	bool
+	default n
+
+config NUMA
+	bool
+	default n
+
+config PM
+	bool
+	default n
+
+config PROC_FS
+	bool
+	default n
+
+config STANDALONE
+	bool
+	default n
+
+config X86
+	bool
+	default n
+
+config X86_64
+	bool
+	default n
+
+config X86_HT
+	bool
+	default n
+
+config X86_VISWS
+	bool
+	default n
+

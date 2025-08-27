@@ -1,0 +1,61 @@
+config DVB_AV7110
+	tristate "AV7110 cards"
+	depends on DVB_CORE & PCI
+	select FW_LOADER & VIDEO_DEV & VIDEO_SAA7146_VV
+
+config DVB_AV7110_FIRMWARE
+	bool "Compile AV7110 firmware into the driver"
+	depends on DVB_AV7110 & ~STANDALONE
+
+config DVB_AV7110_OSD
+	bool "AV7110 OSD support"
+	depends on DVB_AV7110
+
+config DVB_BUDGET
+	tristate "Budget cards"
+	depends on DVB_CORE & PCI
+	select VIDEO_SAA7146
+
+config DVB_BUDGET_CI
+	tristate "Budget cards with onboard CI connector"
+	depends on DVB_CORE & PCI
+	select VIDEO_SAA7146
+
+config DVB_BUDGET_AV
+	tristate "Budget cards with analog video inputs"
+	depends on DVB_CORE & PCI
+	select VIDEO_DEV & VIDEO_SAA7146_VV
+
+config DVB_BUDGET_PATCH
+	tristate "AV7110 cards with Budget Patch"
+	depends on DVB_BUDGET
+	select DVB_AV7110
+
+config DVB_CORE
+	bool
+	default n
+
+config FW_LOADER
+	bool
+	default n
+
+config PCI
+	bool
+	default n
+
+config STANDALONE
+	bool
+	default n
+
+config VIDEO_DEV
+	bool
+	default n
+
+config VIDEO_SAA7146
+	bool
+	default n
+
+config VIDEO_SAA7146_VV
+	bool
+	default n
+

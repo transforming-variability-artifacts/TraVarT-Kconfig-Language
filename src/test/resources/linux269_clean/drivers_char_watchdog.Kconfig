@@ -1,0 +1,213 @@
+# Symbols renamed in this file
+# DEV_*, ARCH_* etc.
+menu MENU_WATCHDOG
+
+config WATCHDOG
+	bool "Watchdog Timer Support"
+
+config WATCHDOG_NOWAYOUT
+	bool "Disable watchdog shutdown on close"
+	depends on WATCHDOG
+
+config SOFT_WATCHDOG
+	tristate "Software watchdog"
+	depends on WATCHDOG
+
+config DC21285_WATCHDOG
+	tristate "DC21285 watchdog"
+	depends on WATCHDOG & FOOTBRIDGE
+
+config NW977_WATCHDOG
+	tristate "NetWinder WB83C977 watchdog"
+	depends on WATCHDOG & FOOTBRIDGE & ARCH_NETWINDER
+
+config IXP4XX_WATCHDOG
+	tristate "IXP4xx Watchdog"
+	depends on WATCHDOG & ARCH_IXP4XX
+
+config IXP2000_WATCHDOG
+	tristate "IXP2000 Watchdog"
+	depends on WATCHDOG & ARCH_IXP2000
+
+config SA1100_WATCHDOG
+	tristate "SA1100/PXA2xx watchdog"
+	depends on WATCHDOG & ( ARCH_SA1100 | ARCH_PXA )
+
+config ACQUIRE_WDT
+	tristate "Acquire SBC Watchdog Timer"
+	depends on WATCHDOG & X86
+
+config ADVANTECH_WDT
+	tristate "Advantech SBC Watchdog Timer"
+	depends on WATCHDOG & X86
+
+config ALIM1535_WDT
+	tristate "ALi M1535 PMU Watchdog Timer"
+	depends on WATCHDOG & X86 & PCI
+
+config ALIM7101_WDT
+	tristate "ALi M7101 PMU Computer Watchdog"
+	depends on WATCHDOG & X86 & PCI
+
+config SC520_WDT
+	tristate "AMD Elan SC520 processor Watchdog"
+	depends on WATCHDOG & X86
+
+config EUROTECH_WDT
+	tristate "Eurotech CPU-1220/1410 Watchdog Timer"
+	depends on WATCHDOG & X86
+
+config IB700_WDT
+	tristate "IB700 SBC Watchdog Timer"
+	depends on WATCHDOG & X86
+
+config WAFER_WDT
+	tristate "ICP Wafer 5823 Single Board Computer Watchdog"
+	depends on WATCHDOG & X86
+
+config I8XX_TCO
+	tristate "Intel i8xx TCO Timer/Watchdog"
+	depends on WATCHDOG & (X86 | IA64) & PCI
+
+config SC1200_WDT
+	tristate "National Semiconductor PC87307/PC97307 (ala SC1200) Watchdog"
+	depends on WATCHDOG & X86
+
+config SCx200_WDT
+	tristate "National Semiconductor SCx200 Watchdog"
+	depends on WATCHDOG & X86 & PCI
+
+config SBC60XX_WDT
+	tristate "SBC-60XX Watchdog Timer"
+	depends on WATCHDOG & X86
+
+config CPU5_WDT
+	tristate "SMA CPU5 Watchdog"
+	depends on WATCHDOG & X86
+
+config W83627HF_WDT
+	tristate "W83627HF Watchdog Timer"
+	depends on WATCHDOG & X86
+
+config W83877F_WDT
+	tristate "W83877F (EMACS) Watchdog Timer"
+	depends on WATCHDOG & X86
+
+config MACHZ_WDT
+	tristate "ZF MachZ Watchdog"
+	depends on WATCHDOG & X86
+
+config SYM_8XX_WDT
+	tristate "MPC8xx Watchdog Timer"
+	depends on WATCHDOG & ARCH_8XX
+
+config INDYDOG
+	tristate "Indy/I2 Hardware Watchdog"
+	depends on WATCHDOG & SGI_IP22
+
+config SH_WDT
+	tristate "SuperH Watchdog"
+	depends on WATCHDOG & SUPERH
+
+config WATCHDOG_CP1XXX
+	tristate "CP1XXX Hardware Watchdog support"
+	depends on WATCHDOG & SPARC64 & PCI
+
+config WATCHDOG_RIO
+	tristate "RIO Hardware Watchdog support"
+	depends on WATCHDOG & SPARC64 & PCI
+
+config PCWATCHDOG
+	tristate "Berkshire Products ISA-PC Watchdog"
+	depends on WATCHDOG & ISA
+
+config MIXCOMWD
+	tristate "Mixcom Watchdog"
+	depends on WATCHDOG & ISA
+
+config WDT
+	tristate "WDT Watchdog timer"
+	depends on WATCHDOG & ISA
+
+config WDT_501
+	bool "WDT501 features"
+	depends on WDT
+
+config PCIPCWATCHDOG
+	tristate "Berkshire Products PCI-PC Watchdog"
+	depends on WATCHDOG & PCI
+
+config WDTPCI
+	tristate "PCI-WDT500/501 Watchdog timer"
+	depends on WATCHDOG & PCI
+
+config WDT_501_PCI
+	bool "PCI-WDT501 features"
+	depends on WDTPCI
+
+config USBPCWATCHDOG
+	tristate "Berkshire Products USB-PC Watchdog"
+	depends on WATCHDOG & USB
+
+endmenu
+
+config ARCH_IXP2000
+	bool
+	default n
+
+config ARCH_IXP4XX
+	bool
+	default n
+
+config ARCH_NETWINDER
+	bool
+	default n
+
+config ARCH_PXA
+	bool
+	default n
+
+config ARCH_SA1100
+	bool
+	default n
+
+config ARCH_8XX
+	bool
+	default n
+
+config FOOTBRIDGE
+	bool
+	default n
+
+config IA64
+	bool
+	default n
+
+config ISA
+	bool
+	default n
+
+config PCI
+	bool
+	default n
+
+config SGI_IP22
+	bool
+	default n
+
+config SPARC64
+	bool
+	default n
+
+config SUPERH
+	bool
+	default n
+
+config USB
+	bool
+	default n
+
+config X86
+	bool
+	default n
+

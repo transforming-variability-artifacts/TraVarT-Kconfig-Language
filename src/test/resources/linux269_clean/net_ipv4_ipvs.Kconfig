@@ -1,0 +1,81 @@
+menu MENU_IPVS4
+	depends on INET & NETFILTER
+
+config IP_VS
+	tristate "IP virtual server support (EXPERIMENTAL)"
+	depends on INET & NETFILTER
+
+config IP_VS_DEBUG
+	bool "IP virtual server debugging"
+	depends on IP_VS
+
+config IP_VS_PROTO_TCP
+	bool "TCP load balancing support"
+	depends on IP_VS
+
+config IP_VS_PROTO_UDP
+	bool "UDP load balancing support"
+	depends on IP_VS
+
+config IP_VS_PROTO_ESP
+	bool "ESP load balancing support"
+	depends on IP_VS
+
+config IP_VS_PROTO_AH
+	bool "AH load balancing support"
+	depends on IP_VS
+
+config IP_VS_RR
+	tristate "round-robin scheduling"
+	depends on IP_VS
+
+config IP_VS_WRR
+	tristate "weighted round-robin scheduling" 
+	depends on IP_VS
+
+config IP_VS_LC
+	tristate "least-connection scheduling"
+	depends on IP_VS
+
+config IP_VS_WLC
+	tristate "weighted least-connection scheduling"
+	depends on IP_VS
+
+config IP_VS_LBLC
+	tristate "locality-based least-connection scheduling"
+	depends on IP_VS
+
+config IP_VS_LBLCR
+	tristate "locality-based least-connection with replication scheduling"
+	depends on IP_VS
+
+config IP_VS_DH
+	tristate "destination hashing scheduling"
+	depends on IP_VS
+
+config IP_VS_SH
+	tristate "source hashing scheduling"
+	depends on IP_VS
+
+config IP_VS_SED
+	tristate "shortest expected delay scheduling"
+	depends on IP_VS
+
+config IP_VS_NQ
+	tristate "never queue scheduling"
+	depends on IP_VS
+
+config IP_VS_FTP
+	tristate "FTP protocol helper"
+	depends on IP_VS & IP_VS_PROTO_TCP
+
+endmenu
+
+config INET
+	bool
+	default n
+
+config NETFILTER
+	bool
+	default n
+

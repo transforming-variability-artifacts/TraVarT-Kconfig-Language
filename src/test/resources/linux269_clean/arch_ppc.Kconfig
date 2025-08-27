@@ -1,0 +1,689 @@
+mainmenu MENU_PPC
+
+config MMU
+	bool
+	default y
+
+config UID16
+	bool
+
+config RWSEM_GENERIC_SPINLOCK
+	bool
+
+config RWSEM_XCHGADD_ALGORITHM
+	bool
+	default y
+
+config HAVE_DEC_LOCK
+	bool
+	default y
+
+config PPC
+	bool
+	default y
+
+config PPC32
+	bool
+	default y
+
+config GENERIC_NVRAM
+	bool
+	default y
+
+menu MENU_PROCESSOR
+
+# Configuration symbols renamed CPU_*
+choice PROCESSOR_TYPE
+	bool "Processor Type"
+	default CPU_6XX
+
+config CPU_6XX
+	bool "6xx/7xx/74xx/52xx/8260"
+
+config CPU_40X
+	bool "40x"
+
+config CPU_44X
+	bool "44x"
+
+config POWER3
+	bool "POWER3"
+
+config POWER4
+	bool "POWER4 and 970 (G5)"
+
+config CPU_8XX
+	bool "8xx"
+
+config E500
+	bool "e500"
+
+endchoice
+
+config BOOKE
+	bool
+	depends on E500
+	default y
+
+config FSL_BOOKE
+	bool
+	depends on E500
+	default y
+
+config PTE_64BIT
+	bool
+	depends on CPU_44X
+	default y
+
+config ALTIVEC
+	bool "AltiVec Support"
+	depends on CPU_6XX | POWER4
+	depends on ~MB_8260
+
+config SPE
+	bool "SPE Support"
+	depends on E500
+
+config TAU
+	bool "Thermal Management Support"
+	depends on CPU_6XX & ~MB_8260
+
+config TAU_INT
+	bool "Interrupt driven TAU driver (DANGEROUS)"
+	depends on TAU
+
+config TAU_AVERAGE
+	bool "Average high and low temp"
+	depends on TAU
+
+config MATH_EMULATION
+	bool "Math emulation"
+	depends on CPU_4XX | CPU_8XX | E500
+
+config CPU_FREQ
+	bool "CPU Frequency scaling"
+
+config CPU_FREQ_PMAC
+	bool "Support for Apple PowerBooks"
+	depends on CPU_FREQ & ADB_PMU
+
+config CPU_FREQ_TABLE
+	bool
+	depends on CPU_FREQ_PMAC
+	default y
+
+config PPC601_SYNC_FIX
+	bool "Workarounds for PPC601 bugs"
+	depends on CPU_6XX & (PPC_PREP | PPC_PMAC)
+
+config PPC64BRIDGE
+	bool
+	depends on POWER3 | POWER4
+	default y
+
+config PPC_STD_MMU
+	bool
+	depends on CPU_6XX | POWER3 | POWER4
+	default y
+
+config NOT_COHERENT_CACHE
+	bool
+	depends on CPU_4XX | CPU_8XX
+	default y
+
+endmenu
+
+menu MENU_PLATFORM
+
+choice CPU_8XX_TYPE
+	bool "8xx Machine Type"
+	depends on CPU_8XX
+	default RPXLITE
+
+config RPXLITE
+	bool "RPX-Lite"
+
+config RPXCLASSIC
+	bool "RPX-Classic"
+
+config BSEIP
+	bool "BSE-IP"
+
+config FADS
+	bool "FADS"
+
+config TQM823L
+	bool "TQM823L"
+
+config TQM850L
+	bool "TQM850L"
+
+config TQM855L
+	bool "TQM855L"
+
+config TQM860L
+	bool "TQM860L"
+
+config FPS850L
+	bool "FPS850L"
+
+config SPD823TS
+	bool "SPD823TS"
+
+config IVMS8
+	bool "IVMS8"
+
+config IVML24
+	bool "IVML24"
+
+config SM850
+	bool "SM850"
+
+config HERMES_PRO
+	bool "HERMES"
+
+config IP860
+	bool "IP860"
+
+config LWMON
+	bool "LWMON"
+
+config PCU_E
+	bool "PCU_E"
+
+config CCM
+	bool "CCM"
+
+config LANTEC
+	bool "LANTEC"
+
+config MBX
+	bool "MBX"
+
+config WINCEPT
+	bool "WinCept"
+
+endchoice
+
+choice MACHINE_TYPE
+	bool "Machine Type"
+	depends on CPU_6XX | POWER3 | POWER4
+	default PPC_MULTIPLATFORM
+
+config PPC_MULTIPLATFORM
+	bool "CHRP/PowerMac/PReP"
+
+config APUS
+	bool "Amiga-APUS"
+
+config WILLOW
+	bool "Cogent-Willow"
+
+config PCORE
+	bool "Force-PowerCore"
+
+config POWERPMC250
+	bool "Force-PowerPMC250"
+
+config EV64260
+	bool "Galileo-EV-64260-BP"
+
+config SPRUCE
+	bool "IBM-Spruce"
+
+config LOPEC
+	bool "Motorola-LoPEC"
+
+config MCPN765
+	bool "Motorola-MCPN765"
+
+config MVME5100
+	bool "Motorola-MVME5100"
+
+config PPLUS
+	bool "Motorola-PowerPlus"
+
+config PRPMC750
+	bool "Motorola-PrPMC750"
+
+config PRPMC800
+	bool "Motorola-PrPMC800"
+
+config SANDPOINT
+	bool "Motorola-Sandpoint"
+
+config ADIR
+	bool "SBS-Adirondack"
+
+config K2
+	bool "SBS-K2"
+
+config PAL4
+	bool "SBS-Palomar4"
+
+config GEMINI
+	bool "Synergy-Gemini"
+
+config EST8260
+	bool "EST8260"
+
+config SBC82xx
+	bool "SBC82xx"
+
+config SBS8260
+	bool "SBS8260"
+
+config RPX8260
+	bool "RPXSUPER"
+
+config TQM8260
+	bool "TQM8260"
+
+config ADS8272
+	bool "ADS8272"
+
+config LITE5200
+	bool "Freescale LITE5200 / (IceCube)"
+	select PPC_MPC52xx
+
+endchoice
+
+config PQ2ADS
+	bool
+	depends on ADS8272
+	default y
+
+config TQM8xxL
+	bool
+	depends on CPU_8XX & (TQM823L | TQM850L | FPS850L | TQM855L | TQM860L | SM850)
+	default y
+
+config EMBEDDEDBOOT
+	bool
+	depends on CPU_8XX | MB_8260
+	default y
+
+config PPC_MPC52xx
+	bool
+
+# Omitted auxiliary ifs
+# Renamed to MB_*
+config MB_8260
+	bool "CPM2 Support"
+	depends on CPU_6XX
+
+config MB_8272
+	bool
+	depends on CPU_6XX
+	default y
+	select MB_8260
+
+config CPM2
+	bool
+	depends on MB_8260 | MPC8560
+	default y
+
+config PPC_CHRP
+	bool
+	depends on PPC_MULTIPLATFORM
+	default y
+
+config PPC_PMAC
+	bool
+	depends on PPC_MULTIPLATFORM
+	default y
+
+config PPC_PMAC64
+	bool
+	depends on PPC_PMAC & POWER4
+	default y
+
+config PPC_PREP
+	bool
+	depends on PPC_MULTIPLATFORM
+	default y
+
+config PPC_OF
+	bool
+	depends on PPC_PMAC | PPC_CHRP
+	default y
+
+config PPC_GEN550
+	bool
+	depends on SANDPOINT | MCPN765 | SPRUCE | PPLUS | PCORE | PRPMC750 | K2 | PRPMC800 | LOPEC
+	default y
+
+config FORCE
+	bool
+	depends on CPU_6XX & (PCORE | POWERPMC250)
+	default y
+
+config GT64260
+	bool
+	depends on EV64260
+	default y
+
+config NONMONARCH_SUPPORT
+	bool "Enable Non-Monarch Support"
+	depends on PRPMC800
+
+config HARRIER
+	bool
+	depends on PRPMC800
+	default y
+
+config EPIC_SERIAL_MODE
+	bool
+	depends on CPU_6XX & (LOPEC | SANDPOINT)
+	default y
+
+config MPC10X_BRIDGE
+	bool
+	depends on PCORE | POWERPMC250 | LOPEC | SANDPOINT
+	default y
+
+config FSL_OCP
+	bool
+	depends on MPC10X_BRIDGE | PPC_MPC52xx
+	default y
+
+config MPC10X_OPENPIC
+	bool
+	depends on POWERPMC250 | LOPEC | SANDPOINT
+	default y
+
+config MPC10X_STORE_GATHERING
+	bool "Enable MPC10x store gathering"
+	depends on MPC10X_BRIDGE
+
+config CPC710_DATA_GATHERING
+	bool "Enable CPC710 data gathering"
+	depends on K2
+
+config HARRIER_STORE_GATHERING
+	bool "Enable Harrier store gathering"
+	depends on HARRIER
+
+config MVME5100_IPMC761_PRESENT
+	bool "MVME5100 configured with an IPMC761"
+	depends on MVME5100
+
+config SPRUCE_BAUD_33M
+	bool "Spruce baud clock support"
+	depends on SPRUCE
+
+config PC_KEYBOARD
+	bool "PC PS/2 style Keyboard"
+	depends on CPU_4XX | CPM2
+
+config SERIAL_CONSOLE
+	bool
+	depends on CPU_8XX
+	default y
+
+# Omitted auxiliary ifs
+config PPCBUG_NVRAM
+	bool "Enable reading PPCBUG NVRAM during boot"
+	default y
+
+config SMP
+	bool "Symmetric multi-processing support"
+
+config IRQ_ALL_CPUS
+	bool "Distribute interrupts on all CPUs by default"
+	depends on SMP
+
+config PREEMPT
+	bool "Preemptible Kernel"
+
+config HIGHMEM
+	bool "High memory support"
+
+config PROC_DEVICETREE
+	bool "Support for Open Firmware device tree in /proc"
+	depends on PPC_OF & PROC_FS
+
+config PREP_RESIDUAL
+	bool "Support for PReP Residual Data"
+	depends on PPC_PREP
+
+config PROC_PREPRESIDUAL
+	bool "Support for reading of PReP Residual Data in /proc"
+	depends on PREP_RESIDUAL & PROC_FS
+
+config CMDLINE_BOOL
+	bool "Default bootloader kernel arguments"
+
+config AMIGA
+	bool
+	depends on APUS
+	default y
+
+config ZORRO
+	bool
+	depends on APUS
+	default y
+
+config ABSTRACT_CONSOLE
+	bool
+	depends on APUS
+	default y
+
+config APUS_FAST_EXCEPT
+	bool
+	depends on APUS
+	default y
+
+config AMIGA_PCMCIA
+	bool "Amiga 1200/600 PCMCIA support"
+	depends on APUS & EXPERIMENTAL
+
+config AMIGA_BUILTIN_SERIAL
+	tristate "Amiga builtin serial support"
+	depends on APUS
+
+config GVPIOEXT
+	tristate "GVP IO-Extender support"
+	depends on APUS
+
+config GVPIOEXT_LP
+	tristate "GVP IO-Extender parallel printer support"
+	depends on GVPIOEXT
+
+config GVPIOEXT_PLIP
+	tristate "GVP IO-Extender PLIP support"
+	depends on GVPIOEXT
+
+config MULTIFACE_III_TTY
+	tristate "Multiface Card III serial support"
+	depends on APUS
+
+config A2232
+	tristate "Commodore A2232 serial support (EXPERIMENTAL)"
+	depends on EXPERIMENTAL & APUS
+
+config WHIPPET_SERIAL
+	tristate "Hisoft Whippet PCMCIA serial support"
+	depends on AMIGA_PCMCIA
+
+config APNE
+	tristate "PCMCIA NE2000 support"
+	depends on AMIGA_PCMCIA
+
+# Renamed due to duplicate
+config SERIAL_CONSOLE_DUP
+	bool "Support for serial port console"
+	depends on APUS & (AMIGA_BUILTIN_SERIAL | GVPIOEXT | MULTIFACE_III_TTY)
+
+config HEARTBEAT
+	bool "Use power LED as a heartbeat"
+	depends on APUS
+
+config PROC_HARDWARE
+	bool "/proc/hardware support"
+	depends on APUS
+
+endmenu
+
+menu MENU_BUS
+
+config ISA
+	bool "Support for ISA-bus hardware"
+	depends on PPC_PREP | PPC_CHRP
+
+config GENERIC_ISA_DMA
+	bool
+	depends on POWER3 | POWER4 | CPU_6XX & ~CPM2
+	default y
+
+config EISA
+	bool
+
+config SBUS
+	bool
+
+config MCA
+	bool
+
+# Removed default statements
+# Multiple auxiliary ifs omitted
+config PCI
+	bool "PCI support"
+
+config PCI_DOMAINS
+	bool
+	default PCI
+
+config PCI_QSPAN
+	bool "QSpan PCI"
+	depends on ~CPU_4XX & ~CPM2 & CPU_8XX
+
+config PCI_8260
+	bool
+	depends on PCI & MB_8260 & ~MB_8272
+	default y
+
+config PCI_8260_PCI9
+	bool "  Enable workaround for MPC826x erratum PCI 9"
+	depends on PCI_8260
+	default y
+
+choice PCI_8260_PCI9_IDMA
+	bool "  IDMA channel for PCI 9 workaround"
+	depends on PCI_8260_PCI9
+
+config 8260_PCI9_IDMA1
+	bool "IDMA1"
+
+config 8260_PCI9_IDMA2
+	bool "IDMA2"
+
+config 8260_PCI9_IDMA3
+	bool "IDMA3"
+
+config 8260_PCI9_IDMA4
+	bool "IDMA4"
+
+endchoice
+
+config PCI_PERMEDIA
+	bool "PCI for Permedia2"
+	depends on ~CPU_4XX & ~CPU_8XX & APUS
+
+endmenu
+
+menu MENU_ADV
+
+config ADVANCED_OPTIONS
+	bool "Prompt for advanced kernel configuration options"
+
+comment "Default settings for advanced configuration options are used"
+	depends on ~ADVANCED_OPTIONS
+
+config HIGHMEM_START_BOOL
+	bool "Set high memory pool address"
+	depends on ADVANCED_OPTIONS & HIGHMEM
+
+config LOWMEM_SIZE_BOOL
+	bool "Set maximum low memory"
+	depends on ADVANCED_OPTIONS
+
+config KERNEL_START_BOOL
+	bool "Set custom kernel base address"
+	depends on ADVANCED_OPTIONS
+
+config TASK_SIZE_BOOL
+	bool "Set custom user task size"
+	depends on ADVANCED_OPTIONS
+
+
+config CONSISTENT_START_BOOL
+	bool "Set custom consistent memory pool address"
+	depends on ADVANCED_OPTIONS & NOT_COHERENT_CACHE
+
+config CONSISTENT_SIZE_BOOL
+	bool "Set custom consistent memory pool size"
+	depends on ADVANCED_OPTIONS & NOT_COHERENT_CACHE
+
+config BOOT_LOAD_BOOL
+	bool "Set the boot link/load address"
+	depends on ADVANCED_OPTIONS & ~PPC_MULTIPLATFORM
+
+config PIN_TLB
+	bool "Pinned Kernel TLBs (860 ONLY)"
+	depends on ADVANCED_OPTIONS & CPU_8XX
+endmenu
+
+# Double enclosure, add dummy confsym
+config IBM_40X_OPTIONS_DUMMY
+	bool
+	default y
+
+menu MENU_IBM_40X_OPTIONS
+	depends on CPU_40X & IBM_40X_OPTIONS_DUMMY
+
+config SERIAL_SICC
+	bool "SICC Serial port"
+	depends on STB03xxx
+
+config UART1_DFLT_CONSOLE
+	bool
+	depends on SERIAL_SICC & UART0_TTYS1
+	default y
+
+config SERIAL_SICC_CONSOLE
+	bool
+	depends on SERIAL_SICC & UART0_TTYS1
+	default y
+
+endmenu
+
+# Stub added manually
+config CPU_4XX
+	bool
+	default n
+
+config ADB_PMU
+	bool
+	default n
+
+config EXPERIMENTAL
+	bool
+	default n
+
+config MPC8560
+	bool
+	default n
+
+config PROC_FS
+	bool
+	default n
+
+config STB03xxx
+	bool
+	default n
+
+config UART0_TTYS1
+	bool
+	default n
+

@@ -1,0 +1,76 @@
+# File adapted after automatic reduction
+
+config INPUT_KEYBOARD
+	bool "Keyboards"
+	default y
+	depends on INPUT
+
+config KEYBOARD_ATKBD
+	tristate "AT keyboard support"
+	default y
+	depends on INPUT & INPUT_KEYBOARD
+	select SERIO
+
+config KEYBOARD_SUNKBD
+	tristate "Sun Type 4 and Type 5 keyboard support"
+	depends on INPUT & INPUT_KEYBOARD
+	select SERIO
+
+config KEYBOARD_LKKBD
+	tristate "DECstation/VAXstation LK201/LK401 keyboard support"
+	depends on INPUT & INPUT_KEYBOARD
+	select SERIO
+
+config KEYBOARD_XTKBD
+	tristate "XT Keyboard support"
+	depends on INPUT & INPUT_KEYBOARD
+	select SERIO
+
+config KEYBOARD_NEWTON
+	tristate "Newton keyboard"
+	depends on INPUT & INPUT_KEYBOARD
+	select SERIO
+
+config KEYBOARD_MAPLE
+	tristate "Maple bus keyboard support"
+	depends on SH_DREAMCAST & INPUT & INPUT_KEYBOARD & MAPLE
+
+config KEYBOARD_AMIGA
+	tristate "Amiga keyboard"
+	depends on AMIGA & INPUT & INPUT_KEYBOARD
+
+config AMIGA
+	bool
+	default n
+
+config GSC
+	bool
+	default n
+
+config INPUT
+	bool
+	default n
+
+config MAPLE
+	bool
+	default n
+
+config PC
+	bool
+	default n
+
+config SERIO
+	bool
+	default n
+
+config SERIO_GSCPS2
+	bool
+	default n
+
+config SERIO_I8042
+	bool
+	default n
+
+config SH_DREAMCAST
+	bool
+	default n

@@ -1,0 +1,94 @@
+# File adapted after automatic reduction
+
+menu NET_8XX_CPM
+	depends on NET_8XX
+
+config SCC_ENET
+	bool "CPM SCC Ethernet"
+	depends on NET_ETHERNET
+
+choice SCC_ENET_TYPE
+	bool "SCC used for Ethernet"
+	depends on SCC_ENET
+	default SCC1_ENET
+
+config SCC1_ENET
+	bool "SCC1"
+
+config SCC2_ENET
+	bool "SCC2"
+
+config SCC3_ENET
+	bool "SCC3"
+
+endchoice
+
+config FEC_ENET
+	bool "860T FEC Ethernet"
+	depends on NET_ETHERNET
+
+config USE_MDIO
+	bool "Use MDIO for PHY configuration"
+	depends on FEC_ENET
+
+config  FEC_AM79C874
+	bool "Support AMD79C874 PHY"
+	depends on USE_MDIO
+
+config FEC_LXT970
+	bool "Support LXT970 PHY"
+	depends on USE_MDIO
+
+config FEC_LXT971
+	bool "Support LXT971 PHY"
+	depends on USE_MDIO
+
+config FEC_QS6612
+	bool "Support QS6612 PHY"
+	depends on USE_MDIO
+
+config ENET_BIG_BUFFERS
+	bool "Use Big CPM Ethernet Buffers"
+	depends on NET_ETHERNET
+
+config SMC2_UART
+	bool "Use SMC2 for UART"
+
+config ALTSMC2
+	bool "Use Alternate SMC2 I/O (823/850)"
+	depends on SMC2_UART
+
+config CONS_SMC2
+	bool "Use SMC2 for Console"
+	depends on SMC2_UART
+
+config USE_SCC_IO
+	bool "Enable SCC2 and SCC3 for UART"
+
+config HTDMSOUND
+	bool "Embedded Planet HIOX Audio"
+	depends on SOUND
+
+config 8xx_COPYBACK
+	bool "Copy-Back Data Cache (else Writethrough)"
+
+config 8xx_CPU6
+	bool "CPU6 Silicon Errata (860 Pre Rev. C)"
+
+config UCODE_PATCH
+	bool "I2C/SPI Microcode Patch"
+
+endmenu
+
+config NET_ETHERNET
+	bool
+	default n
+
+config SOUND
+	bool
+	default n
+
+config NET_8XX
+	bool
+	default n
+

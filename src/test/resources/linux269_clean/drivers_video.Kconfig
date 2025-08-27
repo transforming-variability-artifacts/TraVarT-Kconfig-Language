@@ -1,0 +1,616 @@
+menu MENU_GFX
+
+config FB
+	bool "Support for frame buffer devices"
+
+config FB_MODE_HELPERS
+	bool "Enable Video Mode Handling Helpers"
+	depends on FB
+	default y
+
+config FB_CIRRUS
+	tristate "Cirrus Logic support"
+	depends on FB & (ZORRO | PCI)
+
+config FB_PM2
+	tristate "Permedia2 support"
+	depends on FB & ((AMIGA & BROKEN) | PCI)
+
+config FB_PM2_FIFO_DISCONNECT
+	bool "enable FIFO disconnect feature"
+	depends on FB_PM2 & PCI
+
+config FB_ARMCLCD
+	tristate "ARM PrimeCell PL110 support"
+	depends on FB & ARM & ARM_AMBA
+
+config FB_ACORN
+	bool "Acorn VIDC support"
+	depends on FB & ARM & ARCH_ACORN
+
+config FB_CLPS711X
+	bool "CLPS711X LCD support"
+	depends on FB & ARM & ARCH_CLPS711X
+
+config FB_SA1100
+	bool "SA-1100 LCD support"
+	depends on FB & ARM & ARCH_SA1100
+
+config FB_CYBER2000
+	tristate "CyberPro 2000/2010/5000 support"
+	depends on FB & PCI & (BROKEN | ~SPARC64)
+
+config FB_APOLLO
+	bool
+	depends on FB & APOLLO
+	default y
+
+config FB_Q40
+	bool
+	depends on FB & Q40
+	default y
+
+config FB_AMIGA
+	tristate "Amiga native chipset support"
+	depends on FB & AMIGA
+
+config FB_AMIGA_OCS
+	bool "Amiga OCS chipset support"
+	depends on FB_AMIGA
+
+config FB_AMIGA_ECS
+	bool "Amiga ECS chipset support"
+	depends on FB_AMIGA
+
+config FB_AMIGA_AGA
+	bool "Amiga AGA chipset support"
+	depends on FB_AMIGA
+
+config FB_CYBER
+	tristate "Amiga CyberVision 64 support"
+	depends on FB & ZORRO & BROKEN
+
+config FB_VIRGE
+	bool "Amiga CyberVision 64/3D support "
+	depends on FB & ZORRO & BROKEN
+
+config FB_RETINAZ3
+	tristate "Amiga Retina Z3 support"
+	depends on FB & ZORRO & BROKEN
+
+config FB_FM2
+	bool "Amiga FrameMaster II/Rainbow II support"
+	depends on FB & ZORRO
+
+config FB_ATARI
+	bool "Atari native chipset support"
+	depends on FB & ATARI & BROKEN
+
+config FB_OF
+	bool "Open Firmware frame buffer device support"
+	depends on FB & (PPC64 | PPC_OF)
+
+config FB_CONTROL
+	bool "Apple \"control\" display support"
+	depends on FB & PPC_PMAC
+
+config FB_PLATINUM
+	bool "Apple \"platinum\" display support"
+	depends on FB & PPC_PMAC
+
+config FB_VALKYRIE
+	bool "Apple \"valkyrie\" display support"
+	depends on FB & (MAC | PPC_PMAC)
+
+config FB_CT65550
+	bool "Chips 65550 display support"
+	depends on FB & PPC
+
+config FB_ASILIANT
+	bool "Chips 69000 display support"
+	depends on FB & PCI
+
+config FB_IMSTT
+	bool "IMS Twin Turbo display support"
+	depends on FB & PCI
+
+config FB_S3TRIO
+	bool "S3 Trio display support"
+	depends on FB & PPC & BROKEN
+
+config FB_VGA16
+	tristate "VGA 16-color graphics support"
+	depends on FB & (X86 | PPC)
+
+config FB_STI
+	tristate "HP STI frame buffer device support"
+	depends on FB & PARISC
+	default y
+
+config FB_MAC
+	bool "Generic Macintosh display support"
+	depends on FB & MAC
+
+config FB_HP300
+	bool
+	depends on FB & HP300
+	default y
+
+config FB_TGA
+	tristate "TGA framebuffer support"
+	depends on FB & ALPHA
+
+config FB_VESA
+	bool "VESA VGA graphics support"
+	depends on FB & (X86 | X86_64)
+
+config VIDEO_SELECT
+	bool
+	depends on FB_VESA
+	default y
+
+config FB_HGA
+	tristate "Hercules mono graphics support"
+	depends on FB & X86
+
+config FB_HGA_ACCEL
+	bool "Hercules mono Acceleration functions (EXPERIMENTAL)"
+	depends on FB_HGA & EXPERIMENTAL
+
+# Duplicated symbol
+config VIDEO_SELECT_DUP
+	bool
+	depends on FB & X86
+	default y
+
+config FB_SGIVW
+	tristate "SGI Visual Workstation framebuffer support"
+	depends on FB & X86_VISWS
+
+config FB_GBE
+	bool "SGI Graphics Backend frame buffer support"
+	depends on FB & (SGI_IP32 | X86_VISWS)
+
+config BUS_I2C
+	bool
+	depends on FB & VISWS
+	default y
+
+config FB_SUN3
+	bool "Sun3 framebuffer support"
+	depends on FB & (SUN3 | SUN3X) & BROKEN
+
+config FB_BW2
+	bool "BWtwo support"
+	depends on FB & ((SPARC32 | SPARC64) & FB_SBUS | (SUN3 | SUN3X) & FB_SUN3)
+
+config FB_CG3
+	bool "CGthree support"
+	depends on FB & ((SPARC32 | SPARC64) & FB_SBUS | (SUN3 | SUN3X) & FB_SUN3)
+
+config FB_CG6
+	bool "CGsix (GX,TurboGX) support"
+	depends on FB & ((SPARC32 | SPARC64) & FB_SBUS | (SUN3 | SUN3X) & FB_SUN3)
+
+config FB_PVR2
+	tristate "NEC PowerVR 2 display support"
+	depends on FB & SH_DREAMCAST
+
+config FB_EPSON1355
+	bool "Epson 1355 framebuffer support"
+	depends on FB & (SUPERH | ARCH_CEIVA)
+
+# Select expression with auxiliary if reduced here
+config FB_RIVA
+	tristate "nVidia Riva support"
+	depends on FB & PCI
+	select (~FB_RIVA_I2C | I2C_ALGOBIT) & (~FB_RIVA_I2C | I2C) & FB_MODE_HELPERS
+
+config FB_RIVA_I2C
+	bool "Enable DDC Support"
+	depends on FB_RIVA
+
+config FB_RIVA_DEBUG
+	bool "Lots of debug output from Riva(nVidia) driver"
+	depends on FB_RIVA
+	default n
+
+config FB_I810
+	tristate "Intel 810/815 support (EXPERIMENTAL)"
+	depends on FB & EXPERIMENTAL & PCI & X86 & ~X86_64
+	select AGP & AGP_INTEL & FB_MODE_HELPERS
+
+config FB_I810_GTF
+	bool "use VESA Generalized Timing Formula"
+	depends on FB_I810
+
+config FB_MATROX
+	tristate "Matrox acceleration"
+	depends on FB & PCI
+
+config FB_MATROX_MILLENIUM
+	bool "Millennium I/II support"
+	depends on FB_MATROX
+
+config FB_MATROX_MYSTIQUE
+	bool "Mystique support"
+	depends on FB_MATROX
+
+config FB_MATROX_G450
+	bool "G100/G200/G400/G450/G550 support"
+	depends on FB_MATROX
+
+config FB_MATROX_G100A
+	bool "G100/G200/G400 support"
+	depends on FB_MATROX & ~FB_MATROX_G450
+
+config FB_MATROX_G100
+	bool
+	depends on FB_MATROX & (FB_MATROX_G450 | FB_MATROX_G100A)
+	default y
+
+config FB_MATROX_I2C
+	tristate "Matrox I2C support"
+	depends on FB_MATROX & I2C
+	select I2C_ALGOBIT
+
+config FB_MATROX_MAVEN
+	tristate "G400 second head support"
+	depends on FB_MATROX_G100 & FB_MATROX_I2C
+
+config FB_MATROX_MULTIHEAD
+	bool "Multihead support"
+	depends on FB_MATROX
+
+config FB_RADEON_OLD
+	tristate "ATI Radeon display support (Old driver)"
+	depends on FB & PCI
+
+# Auxiliary if removed here (select expression)
+config FB_RADEON
+	tristate "ATI Radeon display support"
+	depends on FB & PCI
+	select I2C_ALGOBIT
+
+config FB_RADEON_I2C
+	bool "DDC/I2C for ATI Radeon support"
+	depends on FB_RADEON
+	default y
+
+config FB_RADEON_DEBUG
+	bool "Lots of debug output from Radeon driver"
+	depends on FB_RADEON
+	default n
+
+config FB_ATY128
+	tristate "ATI Rage128 display support"
+	depends on FB & PCI
+
+# Auxiliary if for visible omitted
+config FB_ATY
+	tristate "ATI Mach64 display support"
+	depends on FB
+
+# Auxiliary if in default omitted
+config FB_ATY_CT
+	bool "Mach64 CT/VT/GT/LT (incl. 3D RAGE) support"
+	depends on PCI & FB_ATY
+	default y
+
+# Auxiliary ifs removed
+config FB_ATY_GX
+	bool "Mach64 GX support"
+	depends on FB_ATY
+	default y
+
+# Auxiliary if removed
+config FB_ATY_XL_INIT
+	bool "  Rage XL No-BIOS Init support"
+	depends on FB_ATY
+
+config FB_SIS
+	tristate "SiS acceleration"
+	depends on FB & PCI
+
+config FB_SIS_300
+	bool "SiS 300 series support"
+	depends on FB_SIS
+
+config FB_SIS_315
+	bool "SiS 315/330 series support"
+	depends on FB_SIS
+
+config FB_NEOMAGIC
+	tristate "NeoMagic display support"
+	depends on FB & PCI
+	select FB_MODE_HELPERS
+
+config FB_KYRO
+	tristate "IMG Kyro support"
+	depends on FB & PCI
+
+config FB_3DFX
+	tristate "3Dfx Banshee/Voodoo3 display support"
+	depends on FB & PCI
+
+config FB_3DFX_ACCEL
+	bool "3Dfx Banshee/Voodoo3 Acceleration functions (EXPERIMENTAL)"
+	depends on FB_3DFX & EXPERIMENTAL
+
+config FB_VOODOO1
+	tristate "3Dfx Voodoo Graphics (sst1) support"
+	depends on FB & PCI
+
+config FB_TRIDENT
+	tristate "Trident support"
+	depends on FB & PCI
+
+config FB_TRIDENT_ACCEL
+	bool "Trident Acceleration functions (EXPERIMENTAL)"
+	depends on FB_TRIDENT & EXPERIMENTAL
+
+config FB_PM3
+	tristate "Permedia3 support"
+	depends on FB & PCI & BROKEN
+
+config FB_SBUS
+	bool "SBUS and UPA framebuffers"
+	depends on FB & (SPARC32 | SPARC64)
+
+config FB_FFB
+	bool "Creator/Creator3D/Elite3D support"
+	depends on FB_SBUS & SPARC64
+
+config FB_TCX
+	bool "TCX (SS4/SS5 only) support"
+	depends on FB_SBUS
+
+config FB_CG14
+	bool "CGfourteen (SX) support"
+	depends on FB_SBUS
+
+config FB_P9100
+	bool "P9100 (Sparcbook 3 only) support"
+	depends on FB_SBUS
+
+config FB_LEO
+	bool "Leo (ZX) support"
+	depends on FB_SBUS
+
+config FB_PCI
+	bool "PCI framebuffers"
+	depends on FB & PCI & (SPARC64 | SPARC32)
+
+config FB_IGA
+	bool "IGA 168x display support"
+	depends on SPARC32 & FB_PCI
+
+config FB_HIT
+	tristate "HD64461 Frame Buffer support"
+	depends on FB & HD64461
+
+config FB_PMAG_BA
+	bool "PMAG-BA TURBOchannel framebuffer support"
+	depends on FB & DECSTATION & TC
+
+config FB_PMAGB_B
+	bool "PMAGB-B TURBOchannel framebuffer spport"
+	depends on FB & DECSTATION & TC
+
+config FB_MAXINE
+	bool "Maxine (Personal DECstation) onboard framebuffer spport"
+	depends on FB & DECSTATION & TC
+
+config FB_TX3912
+	bool "TMPTX3912/PR31700 frame buffer support"
+	depends on FB & NINO
+
+config FB_68328
+	bool "Motorola 68328 native frame buffer support"
+	depends on (M68328 | M68EZ328 | M68VZ328)
+
+config FB_PXA
+	tristate "PXA LCD framebuffer support"
+	depends on FB & ARCH_PXA
+
+config FB_PXA_PARAMETERS
+	bool "PXA LCD command line parameters"
+	default n
+	depends on FB_PXA
+
+config FB_VIRTUAL
+	tristate "Virtual Frame Buffer support (ONLY FOR TESTING!)"
+	depends on FB
+
+# Removed two empty if blocks
+
+endmenu
+
+config AGP
+	bool
+	default n
+
+config AGP_INTEL
+	bool
+	default n
+
+config ALPHA
+	bool
+	default n
+
+config AMIGA
+	bool
+	default n
+
+config APOLLO
+	bool
+	default n
+
+config ARCH_ACORN
+	bool
+	default n
+
+config ARCH_CEIVA
+	bool
+	default n
+
+config ARCH_CLPS711X
+	bool
+	default n
+
+config ARCH_PXA
+	bool
+	default n
+
+config ARCH_SA1100
+	bool
+	default n
+
+config ARM
+	bool
+	default n
+
+config ARM_AMBA
+	bool
+	default n
+
+config ATARI
+	bool
+	default n
+
+config BROKEN
+	bool
+	default n
+
+config DECSTATION
+	bool
+	default n
+
+config EXPERIMENTAL
+	bool
+	default n
+
+config HD64461
+	bool
+	default n
+
+config HP300
+	bool
+	default n
+
+config I2C
+	bool
+	default n
+
+config I2C_ALGOBIT
+	bool
+	default n
+
+config M68328
+	bool
+	default n
+
+config M68EZ328
+	bool
+	default n
+
+config M68VZ328
+	bool
+	default n
+
+config MAC
+	bool
+	default n
+
+config NINO
+	bool
+	default n
+
+config PARISC
+	bool
+	default n
+
+config PCI
+	bool
+	default n
+
+config PPC
+	bool
+	default n
+
+config PPC64
+	bool
+	default n
+
+config PPC_OF
+	bool
+	default n
+
+config PPC_PMAC
+	bool
+	default n
+
+config Q40
+	bool
+	default n
+
+config SGI_IP32
+	bool
+	default n
+
+config SGI_NEWPORT_CONSOLE
+	bool
+	default n
+
+config SH_DREAMCAST
+	bool
+	default n
+
+config SPARC32
+	bool
+	default n
+
+config SPARC64
+	bool
+	default n
+
+config SUN3
+	bool
+	default n
+
+config SUN3X
+	bool
+	default n
+
+config SUPERH
+	bool
+	default n
+
+config TC
+	bool
+	default n
+
+config VISWS
+	bool
+	default n
+
+config VT
+	bool
+	default n
+
+config X86
+	bool
+	default n
+
+config X86_64
+	bool
+	default n
+
+config X86_VISWS
+	bool
+	default n
+
+config ZORRO
+	bool
+	default n
+

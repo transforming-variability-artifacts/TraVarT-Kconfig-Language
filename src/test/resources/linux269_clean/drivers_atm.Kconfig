@@ -1,0 +1,185 @@
+menu MENU_ATM
+	depends on NETDEVICES & ATM
+
+config ATM_TCP
+	tristate "ATM over TCP"
+	depends on INET & ATM
+
+config ATM_LANAI
+	tristate "Efficient Networks Speedstream 3010"
+	depends on PCI & ATM
+
+config ATM_ENI
+	tristate "Efficient Networks ENI155P"
+	depends on PCI & ATM
+
+config ATM_ENI_DEBUG
+	bool "Enable extended debugging"
+	depends on ATM_ENI
+
+config ATM_ENI_TUNE_BURST
+	bool "Fine-tune burst settings"
+	depends on ATM_ENI
+
+config ATM_ENI_BURST_TX_16W
+	bool "Enable 16W TX bursts (discouraged)"
+	depends on ATM_ENI_TUNE_BURST
+
+config ATM_ENI_BURST_TX_8W
+	bool "Enable 8W TX bursts (recommended)"
+	depends on ATM_ENI_TUNE_BURST
+
+config ATM_ENI_BURST_TX_4W
+	bool "Enable 4W TX bursts (optional)"
+	depends on ATM_ENI_TUNE_BURST
+
+config ATM_ENI_BURST_TX_2W
+	bool "Enable 2W TX bursts (optional)"
+	depends on ATM_ENI_TUNE_BURST
+
+config ATM_ENI_BURST_RX_16W
+	bool "Enable 16W RX bursts (discouraged)"
+	depends on ATM_ENI_TUNE_BURST
+
+config ATM_ENI_BURST_RX_8W
+	bool "Enable 8W RX bursts (discouraged)"
+	depends on ATM_ENI_TUNE_BURST
+
+config ATM_ENI_BURST_RX_4W
+	bool "Enable 4W RX bursts (recommended)"
+	depends on ATM_ENI_TUNE_BURST
+
+config ATM_ENI_BURST_RX_2W
+	bool "Enable 2W RX bursts (optional)"
+	depends on ATM_ENI_TUNE_BURST
+
+config ATM_FIRESTREAM
+	tristate "Fujitsu FireStream (FS50/FS155) "
+	depends on PCI & ATM
+
+config ATM_ZATM
+	tristate "ZeitNet ZN1221/ZN1225"
+	depends on PCI & ATM
+
+config ATM_ZATM_DEBUG
+	bool "Enable extended debugging"
+	depends on ATM_ZATM
+
+config ATM_NICSTAR
+	tristate "IDT 77201 (NICStAR) (ForeRunnerLE)"
+	depends on PCI & ATM & ~ARCH_64BIT
+
+config ATM_NICSTAR_USE_SUNI
+	bool "Use suni PHY driver (155Mbps)"
+	depends on ATM_NICSTAR
+
+config ATM_NICSTAR_USE_IDT77105
+	bool "Use IDT77015 PHY driver (25Mbps)"
+	depends on ATM_NICSTAR
+
+config ATM_IDT77252
+	tristate "IDT 77252 (NICStAR II)"
+	depends on PCI & ATM
+
+config ATM_IDT77252_DEBUG
+	bool "Enable debugging messages"
+	depends on ATM_IDT77252
+
+config ATM_IDT77252_RCV_ALL
+	bool "Receive ALL cells in raw queue"
+	depends on ATM_IDT77252
+
+config ATM_IDT77252_USE_SUNI
+	bool
+	depends on ATM_IDT77252
+	default y
+
+config ATM_AMBASSADOR
+	tristate "Madge Ambassador (Collage PCI 155 Server)"
+	depends on PCI & ATM
+
+config ATM_AMBASSADOR_DEBUG
+	bool "Enable debugging messages"
+	depends on ATM_AMBASSADOR
+
+config ATM_HORIZON
+	tristate "Madge Horizon [Ultra] (Collage PCI 25 and Collage PCI 155 Client)"
+	depends on PCI & ATM
+
+config ATM_HORIZON_DEBUG
+	bool "Enable debugging messages"
+	depends on ATM_HORIZON
+
+config ATM_IA
+	tristate "Interphase ATM PCI x575/x525/x531"
+	depends on PCI & ATM & ~ARCH_64BIT
+
+config ATM_IA_DEBUG
+	bool "Enable debugging messages"
+	depends on ATM_IA
+
+config ATM_FORE200E_MAYBE
+	tristate "FORE Systems 200E-series"
+	depends on (PCI | SBUS) & ATM
+
+config ATM_FORE200E_PCA
+	bool "PCA-200E support"
+	depends on ATM_FORE200E_MAYBE & PCI
+
+config ATM_FORE200E_PCA_DEFAULT_FW
+	bool "Use default PCA-200E firmware (normally enabled)"
+	depends on ATM_FORE200E_PCA
+
+config ATM_FORE200E_SBA
+	bool "SBA-200E support"
+	depends on ATM_FORE200E_MAYBE & SBUS
+
+config ATM_FORE200E_SBA_DEFAULT_FW
+	bool "Use default SBA-200E firmware (normally enabled)"
+	depends on ATM_FORE200E_SBA
+
+config ATM_FORE200E_USE_TASKLET
+	bool "Defer interrupt work to a tasklet"
+	depends on (PCI | SBUS) & (ATM_FORE200E_PCA | ATM_FORE200E_SBA)
+	default n
+
+# Default statements omitted
+config ATM_FORE200E
+	tristate
+	depends on (PCI | SBUS) & (ATM_FORE200E_PCA | ATM_FORE200E_SBA)
+
+config ATM_HE
+	tristate "ForeRunner HE Series"
+	depends on PCI & ATM
+
+config ATM_HE_USE_SUNI
+	bool "Use S/UNI PHY driver"
+	depends on ATM_HE
+
+endmenu
+
+# Stub added manually
+config ARCH_64BIT
+	bool
+	default n
+
+config ATM
+	bool
+	default n
+
+config INET
+	bool
+	default n
+
+config NETDEVICES
+	bool
+	default n
+
+config PCI
+	bool
+	default n
+
+config SBUS
+	bool
+	default n
+

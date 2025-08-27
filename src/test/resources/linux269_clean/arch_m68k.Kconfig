@@ -1,0 +1,313 @@
+config M68K
+	bool
+	default y
+
+config MMU
+	bool
+	default y
+
+config UID16
+	bool
+	default y
+
+config RWSEM_GENERIC_SPINLOCK
+	bool
+	default y
+
+config RWSEM_XCHGADD_ALGORITHM
+	bool
+
+mainmenu MENU_LKC
+
+menu MENU_PLATFORM
+
+config EISA
+	bool
+
+config MCA
+	bool
+
+config PCMCIA
+	tristate
+
+# Auxiliary if replaced with implication
+config SUN3
+	bool "Sun3 support"
+	select M68020 & (~MMU | MMU_SUN3)
+
+config AMIGA
+	bool "Amiga support"
+	depends on ~MMU_SUN3
+
+config ATARI
+	bool "Atari support"
+	depends on ~MMU_SUN3
+
+config HADES
+	bool "Hades support"
+	depends on ATARI & BROKEN
+
+config PCI
+	bool
+	depends on HADES
+	default y
+
+config MAC
+	bool "Macintosh support"
+	depends on ~MMU_SUN3
+
+config NUBUS
+	bool
+	depends on MAC
+	default y
+
+config M68K_L2_CACHE
+	bool
+	depends on MAC
+	default y
+
+config APOLLO
+	bool "Apollo support"
+	depends on ~MMU_SUN3
+
+config VME
+	bool "VME (Motorola and BVM) support"
+	depends on ~MMU_SUN3
+
+config MVME147
+	bool "MVME147 support"
+	depends on VME
+
+config MVME16x
+	bool "MVME162, 166 and 167 support"
+	depends on VME
+
+config BVME6000
+	bool "BVME4000 and BVME6000 support"
+	depends on VME
+
+config HP300
+	bool "HP9000/300 support"
+	depends on ~MMU_SUN3
+
+config DIO
+	bool "DIO bus support"
+	depends on HP300
+
+config SUN3X
+	bool "Sun3x support"
+	depends on ~MMU_SUN3
+	select M68030
+
+config Q40
+	bool "Q40/Q60 support"
+	depends on ~MMU_SUN3
+
+config M68020
+	bool "68020 support"
+
+config M68030
+	bool "68030 support"
+	depends on ~MMU_SUN3
+
+config M68040
+	bool "68040 support"
+	depends on ~MMU_SUN3
+
+config M68060
+	bool "68060 support"
+	depends on ~MMU_SUN3
+
+config MMU_MOTOROLA
+	bool
+	depends on MMU & ~MMU_SUN3
+	default y
+
+config MMU_SUN3
+	bool
+
+config M68KFPU_EMU
+	bool "Math emulation support (EXPERIMENTAL)"
+	depends on EXPERIMENTAL
+
+config M68KFPU_EMU_EXTRAPREC
+	bool "Math emulation extra precision"
+	depends on M68KFPU_EMU
+
+config M68KFPU_EMU_ONLY
+	bool "Math emulation only kernel"
+	depends on M68KFPU_EMU
+
+config ADVANCED
+	bool "Advanced configuration options"
+
+config RMW_INSNS
+	bool "Use read-modify-write instructions"
+	depends on ADVANCED
+
+config SINGLE_MEMORY_CHUNK
+	bool "Use one physical chunk of memory only"
+	depends on ADVANCED & ~SUN3
+
+# Symbol renamed
+config M060_WRITETHROUGH
+	bool "Use write-through caching for 68060 supervisor accesses"
+	depends on ADVANCED & M68060
+
+endmenu
+
+menu MENU_SETUP
+
+config ZORRO
+	bool "Amiga Zorro (AutoConfig) bus support"
+	depends on AMIGA
+
+config AMIGA_PCMCIA
+	bool "Amiga 1200/600 PCMCIA support (EXPERIMENTAL)"
+	depends on AMIGA & EXPERIMENTAL
+
+config STRAM_SWAP
+	bool "Support for ST-RAM as swap space"
+	depends on ATARI & BROKEN
+
+config STRAM_PROC
+	bool "ST-RAM statistics in /proc"
+	depends on ATARI
+
+# Auxiliary ifs removed
+config HEARTBEAT
+	bool "Use power LED as a heartbeat"
+	default y
+
+config PROC_HARDWARE
+	bool "/proc/hardware support"
+
+config ISA
+	bool
+	depends on Q40 | AMIGA_PCMCIA | GG2
+	default y
+
+config GENERIC_ISA_DMA
+	bool
+	depends on Q40 | AMIGA_PCMCIA | GG2
+	default y
+
+endmenu
+
+menu MENU_CHARDEV
+
+config ATARI_MFPSER
+	tristate "Atari MFP serial support"
+	depends on ATARI
+
+config ATARI_SCC
+	tristate "Atari SCC serial support"
+	depends on ATARI
+
+config ATARI_SCC_DMA
+	bool "Atari SCC serial DMA support"
+	depends on ATARI_SCC
+
+config ATARI_MIDI
+	tristate "Atari MIDI serial support"
+	depends on ATARI
+
+config ATARI_DSP56K
+	tristate "Atari DSP56k support (EXPERIMENTAL)"
+	depends on ATARI & EXPERIMENTAL
+
+config AMIGA_BUILTIN_SERIAL
+	tristate "Amiga builtin serial support"
+	depends on AMIGA
+
+config WHIPPET_SERIAL
+	tristate "Hisoft Whippet PCMCIA serial support"
+	depends on AMIGA_PCMCIA
+
+config MULTIFACE_III_TTY
+	tristate "Multiface Card III serial support"
+	depends on AMIGA
+
+config GVPIOEXT
+	tristate "GVP IO-Extender support"
+	depends on ~PARPORT & ZORRO
+
+config GVPIOEXT_LP
+	tristate "GVP IO-Extender parallel printer support"
+	depends on GVPIOEXT
+
+config GVPIOEXT_PLIP
+	tristate "GVP IO-Extender PLIP support"
+	depends on GVPIOEXT
+
+config MAC_SCC
+	tristate "Macintosh serial support"
+	depends on MAC
+
+config MAC_HID
+	bool
+	depends on INPUT_ADBHID
+	default y
+
+config MAC_ADBKEYCODES
+	bool "Support for ADB raw keycodes"
+	depends on INPUT_ADBHID
+
+config ADB_KEYBOARD
+	bool "Support for ADB keyboard (old driver)"
+	depends on MAC & ~INPUT_ADBHID
+
+config HPDCA
+	tristate "HP DCA serial support"
+	depends on DIO
+
+config MVME147_SCC
+	bool "SCC support for MVME147 serial ports"
+	depends on MVME147
+
+config SERIAL167
+	bool "CD2401 support for MVME166/7 serial ports"
+	depends on MVME16x & BROKEN
+
+config MVME162_SCC
+	bool "SCC support for MVME162 serial ports"
+	depends on MVME16x
+
+config BVME6000_SCC
+	bool "SCC support for BVME6000 serial ports"
+	depends on BVME6000
+
+config DN_SERIAL
+	bool "Support for DN serial port (dummy)"
+	depends on APOLLO
+
+# `=y` removed in dependency expression
+config SERIAL_CONSOLE
+	bool "Support for serial port console"
+	depends on (AMIGA | ATARI | MAC | HP300 | SUN3 | SUN3X | VME | APOLLO) & (ATARI_MFPSER | ATARI_SCC | ATARI_MIDI | MAC_SCC | AMIGA_BUILTIN_SERIAL | GVPIOEXT | MULTIFACE_III_TTY | HPDCA | SERIAL | MVME147_SCC | SERIAL167 | MVME162_SCC | BVME6000_SCC | DN_SERIAL)
+
+endmenu
+
+config BROKEN
+	bool
+	default n
+
+config EXPERIMENTAL
+	bool
+	default n
+
+config GG2
+	bool
+	default n
+
+config INPUT_ADBHID
+	bool
+	default n
+
+config PARPORT
+	bool
+	default n
+
+config SERIAL
+	bool
+	default n

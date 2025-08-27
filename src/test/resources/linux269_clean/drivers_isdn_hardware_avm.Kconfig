@@ -1,0 +1,68 @@
+menu MENU_AVM
+	depends on NET & ISDN & ISDN_CAPI
+
+config CAPI_AVM
+	bool "Support AVM cards"
+
+config ISDN_DRV_AVMB1_B1ISA
+	tristate "AVM B1 ISA support"
+	depends on CAPI_AVM & ISDN_CAPI & ISA & BROKEN_ON_SMP
+
+config ISDN_DRV_AVMB1_B1PCI
+	tristate "AVM B1 PCI support"
+	depends on CAPI_AVM & ISDN_CAPI & PCI & BROKEN_ON_SMP
+
+config ISDN_DRV_AVMB1_B1PCIV4
+	bool "AVM B1 PCI V4 support"
+	depends on ISDN_DRV_AVMB1_B1PCI
+
+config ISDN_DRV_AVMB1_T1ISA
+	tristate "AVM T1/T1-B ISA support"
+	depends on CAPI_AVM & ISDN_CAPI & ISA & BROKEN_ON_SMP
+
+config ISDN_DRV_AVMB1_B1PCMCIA
+	tristate "AVM B1/M1/M2 PCMCIA support"
+	depends on CAPI_AVM & ISDN_CAPI & BROKEN_ON_SMP
+
+config ISDN_DRV_AVMB1_AVM_CS
+	tristate "AVM B1/M1/M2 PCMCIA cs module"
+	depends on ISDN_DRV_AVMB1_B1PCMCIA & PCMCIA
+
+config ISDN_DRV_AVMB1_T1PCI
+	tristate "AVM T1/T1-B PCI support"
+	depends on CAPI_AVM & ISDN_CAPI & PCI & BROKEN_ON_SMP
+
+config ISDN_DRV_AVMB1_C4
+	tristate "AVM C4/C2 support"
+	depends on CAPI_AVM & ISDN_CAPI & PCI & BROKEN_ON_SMP
+
+endmenu
+
+config BROKEN_ON_SMP
+	bool
+	default n
+
+config ISA
+	bool
+	default n
+
+config ISDN
+	bool
+	default n
+
+config ISDN_CAPI
+	bool
+	default n
+
+config NET
+	bool
+	default n
+
+config PCI
+	bool
+	default n
+
+config PCMCIA
+	bool
+	default n
+

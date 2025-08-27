@@ -1,0 +1,115 @@
+menu MENU_CPU_FREQ
+
+config CPU_FREQ
+	bool "CPU Frequency scaling"
+
+config CPU_FREQ_TABLE
+	tristate "CPU frequency table helpers"
+	depends on CPU_FREQ
+	default y
+
+comment "CPUFreq processor drivers"
+	depends on CPU_FREQ
+
+config X86_ACPI_CPUFREQ
+	tristate "ACPI Processor P-States driver"
+	depends on CPU_FREQ_TABLE & ACPI_PROCESSOR
+
+config X86_ACPI_CPUFREQ_PROC_INTF
+	bool "/proc/acpi/processor/../performance interface (deprecated)"
+	depends on X86_ACPI_CPUFREQ & PROC_FS
+
+config ELAN_CPUFREQ
+	tristate "AMD Elan"
+	depends on CPU_FREQ_TABLE & X86_ELAN
+
+config X86_POWERNOW_K6
+	tristate "AMD Mobile K6-2/K6-3 PowerNow!"
+	depends on CPU_FREQ_TABLE
+
+config X86_POWERNOW_K7
+	tristate "AMD Mobile Athlon/Duron PowerNow!"
+	depends on CPU_FREQ_TABLE
+
+# Dependency with `=m` omitted
+config X86_POWERNOW_K7_ACPI
+	bool
+	depends on X86_POWERNOW_K7 & ACPI_PROCESSOR
+	default y
+
+config X86_POWERNOW_K8
+	tristate "AMD Opteron/Athlon64 PowerNow!"
+	depends on CPU_FREQ & EXPERIMENTAL
+
+# Dependency with `=m` omitted
+config X86_POWERNOW_K8_ACPI
+	bool
+	depends on X86_POWERNOW_K8 & ACPI_PROCESSOR
+	default y
+
+config X86_GX_SUSPMOD
+	tristate "Cyrix MediaGX/NatSemi Geode Suspend Modulation"
+	depends on CPU_FREQ
+
+config X86_SPEEDSTEP_CENTRINO
+	tristate "Intel Enhanced SpeedStep"
+	depends on CPU_FREQ_TABLE
+
+config X86_SPEEDSTEP_CENTRINO_TABLE
+	bool
+	depends on X86_SPEEDSTEP_CENTRINO
+	default y
+
+# Dependency with `=m` omitted
+config X86_SPEEDSTEP_CENTRINO_ACPI
+	bool "Use ACPI tables to decode valid frequency/voltage pairs (EXPERIMENTAL)"
+	depends on X86_SPEEDSTEP_CENTRINO & ACPI_PROCESSOR
+	depends on EXPERIMENTAL
+
+config X86_SPEEDSTEP_ICH
+	tristate "Intel Speedstep on ICH-M chipsets (ioport interface)"
+	depends on CPU_FREQ_TABLE
+
+config X86_SPEEDSTEP_SMI
+	tristate "Intel SpeedStep on 440BX/ZX/MX chipsets (SMI interface)"
+	depends on CPU_FREQ_TABLE & EXPERIMENTAL
+
+config X86_P4_CLOCKMOD
+	tristate "Intel Pentium 4 clock modulation"
+	depends on CPU_FREQ_TABLE
+
+# Composite default statement omitted
+config X86_SPEEDSTEP_LIB
+	tristate
+	depends on (X86_SPEEDSTEP_ICH | X86_SPEEDSTEP_SMI | X86_P4_CLOCKMOD)
+
+config X86_SPEEDSTEP_RELAXED_CAP_CHECK
+	bool "Relaxed speedstep capability checks"
+	depends on (X86_SPEEDSTEP_SMI | X86_SPEEDSTEP_ICH)
+
+config X86_LONGRUN
+	tristate "Transmeta LongRun"
+	depends on CPU_FREQ
+
+config X86_LONGHAUL
+	tristate "VIA Cyrix III Longhaul"
+	depends on CPU_FREQ_TABLE
+
+endmenu
+
+config ACPI_PROCESSOR
+	bool
+	default n
+
+config EXPERIMENTAL
+	bool
+	default n
+
+config PROC_FS
+	bool
+	default n
+
+config X86_ELAN
+	bool
+	default n
+

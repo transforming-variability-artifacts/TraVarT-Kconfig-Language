@@ -1,0 +1,163 @@
+
+menu MENU_NLS
+
+config NLS
+	tristate "Base native language support"
+
+config NLS_CODEPAGE_437
+	tristate "Codepage 437 (United States, Canada)"
+	depends on NLS
+
+config NLS_CODEPAGE_737
+	tristate "Codepage 737 (Greek)"
+	depends on NLS
+
+config NLS_CODEPAGE_775
+	tristate "Codepage 775 (Baltic Rim)"
+	depends on NLS
+
+config NLS_CODEPAGE_850
+	tristate "Codepage 850 (Europe)"
+	depends on NLS
+
+config NLS_CODEPAGE_852
+	tristate "Codepage 852 (Central/Eastern Europe)"
+	depends on NLS
+
+config NLS_CODEPAGE_855
+	tristate "Codepage 855 (Cyrillic)"
+	depends on NLS
+
+config NLS_CODEPAGE_857
+	tristate "Codepage 857 (Turkish)"
+	depends on NLS
+
+config NLS_CODEPAGE_860
+	tristate "Codepage 860 (Portuguese)"
+	depends on NLS
+
+config NLS_CODEPAGE_861
+	tristate "Codepage 861 (Icelandic)"
+	depends on NLS
+
+config NLS_CODEPAGE_862
+	tristate "Codepage 862 (Hebrew)"
+	depends on NLS
+
+config NLS_CODEPAGE_863
+	tristate "Codepage 863 (Canadian French)"
+	depends on NLS
+
+config NLS_CODEPAGE_864
+	tristate "Codepage 864 (Arabic)"
+	depends on NLS
+
+config NLS_CODEPAGE_865
+	tristate "Codepage 865 (Norwegian, Danish)"
+	depends on NLS
+
+config NLS_CODEPAGE_866
+	tristate "Codepage 866 (Cyrillic/Russian)"
+	depends on NLS
+
+config NLS_CODEPAGE_869
+	tristate "Codepage 869 (Greek)"
+	depends on NLS
+
+config NLS_CODEPAGE_936
+	tristate "Simplified Chinese charset (CP936, GB2312)"
+	depends on NLS
+
+config NLS_CODEPAGE_950
+	tristate "Traditional Chinese charset (Big5)"
+	depends on NLS
+
+config NLS_CODEPAGE_932
+	tristate "Japanese charsets (Shift-JIS, EUC-JP)"
+	depends on NLS
+
+config NLS_CODEPAGE_949
+	tristate "Korean charset (CP949, EUC-KR)"
+	depends on NLS
+
+config NLS_CODEPAGE_874
+	tristate "Thai charset (CP874, TIS-620)"
+	depends on NLS
+
+config NLS_ISO8859_8
+	tristate "Hebrew charsets (ISO-8859-8, CP1255)"
+	depends on NLS
+
+config NLS_CODEPAGE_1250
+	tristate "Windows CP1250 (Slavic/Central European Languages)"
+	depends on NLS
+
+config NLS_CODEPAGE_1251
+	tristate "Windows CP1251 (Bulgarian, Belarusian)"
+	depends on NLS
+
+config NLS_ASCII
+	tristate "ASCII (United States)"
+	depends on NLS
+
+config NLS_ISO8859_1
+	tristate "NLS ISO 8859-1  (Latin 1; Western European Languages)"
+	depends on NLS
+
+config NLS_ISO8859_2
+	tristate "NLS ISO 8859-2  (Latin 2; Slavic/Central European Languages)"
+	depends on NLS
+
+config NLS_ISO8859_3
+	tristate "NLS ISO 8859-3  (Latin 3; Esperanto, Galician, Maltese, Turkish)"
+	depends on NLS
+
+config NLS_ISO8859_4
+	tristate "NLS ISO 8859-4  (Latin 4; old Baltic charset)"
+	depends on NLS
+
+config NLS_ISO8859_5
+	tristate "NLS ISO 8859-5  (Cyrillic)"
+	depends on NLS
+
+config NLS_ISO8859_6
+	tristate "NLS ISO 8859-6  (Arabic)"
+	depends on NLS
+
+config NLS_ISO8859_7
+	tristate "NLS ISO 8859-7  (Modern Greek)"
+	depends on NLS
+
+config NLS_ISO8859_9
+	tristate "NLS ISO 8859-9  (Latin 5; Turkish)"
+	depends on NLS
+
+config NLS_ISO8859_13
+	tristate "NLS ISO 8859-13 (Latin 7; Baltic)"
+	depends on NLS
+
+config NLS_ISO8859_14
+	tristate "NLS ISO 8859-14 (Latin 8; Celtic)"
+	depends on NLS
+
+config NLS_ISO8859_15
+	tristate "NLS ISO 8859-15 (Latin 9; Western European Languages with Euro)"
+	depends on NLS
+
+config NLS_KOI8_R
+	tristate "NLS KOI8-R (Russian)"
+	depends on NLS
+
+config NLS_KOI8_U
+	tristate "NLS KOI8-U/RU (Ukrainian, Belarusian)"
+	depends on NLS
+
+config NLS_UTF8
+	tristate "NLS UTF8"
+	depends on NLS
+
+endmenu
+
+config DUMMY
+	bool
+	default n

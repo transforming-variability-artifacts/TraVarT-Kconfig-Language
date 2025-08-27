@@ -1,0 +1,103 @@
+menu IP6_NF
+	depends on INET & IPV6 & NETFILTER
+
+config IP6_NF_QUEUE
+	tristate "Userspace queueing via NETLINK"
+
+config IP6_NF_IPTABLES
+	tristate "IP6 tables support (required for filtering/masq/NAT)"
+
+config IP6_NF_MATCH_LIMIT
+	tristate "limit match support"
+	depends on IP6_NF_IPTABLES
+
+config IP6_NF_MATCH_MAC
+	tristate "MAC address match support"
+	depends on IP6_NF_IPTABLES
+
+config IP6_NF_MATCH_RT
+	tristate "Routing header match support"
+	depends on IP6_NF_IPTABLES
+
+config IP6_NF_MATCH_OPTS
+	tristate "Hop-by-hop and Dst opts header match support"
+	depends on IP6_NF_IPTABLES
+
+config IP6_NF_MATCH_FRAG
+	tristate "Fragmentation header match support"
+	depends on IP6_NF_IPTABLES
+
+config IP6_NF_MATCH_HL
+	tristate "HL match support"
+	depends on IP6_NF_IPTABLES
+
+config IP6_NF_MATCH_MULTIPORT
+	tristate "Multiple port match support"
+	depends on IP6_NF_IPTABLES
+
+config IP6_NF_MATCH_OWNER
+	tristate "Owner match support"
+	depends on IP6_NF_IPTABLES
+
+config IP6_NF_MATCH_MARK
+	tristate "netfilter MARK match support"
+	depends on IP6_NF_IPTABLES
+
+config IP6_NF_MATCH_IPV6HEADER
+	tristate "IPv6 Extension Headers Match"
+	depends on IP6_NF_IPTABLES
+
+config IP6_NF_MATCH_AHESP
+	tristate "AH/ESP match support"
+	depends on IP6_NF_IPTABLES
+
+config IP6_NF_MATCH_LENGTH
+	tristate "Packet Length match support"
+	depends on IP6_NF_IPTABLES
+
+config IP6_NF_MATCH_EUI64
+	tristate "EUI64 address check"
+	depends on IP6_NF_IPTABLES
+
+config IP6_NF_MATCH_PHYSDEV
+	tristate "Physdev match support"
+	depends on IP6_NF_IPTABLES & BRIDGE_NETFILTER
+
+config IP6_NF_FILTER
+	tristate "Packet filtering"
+	depends on IP6_NF_IPTABLES
+
+config IP6_NF_TARGET_LOG
+	tristate "LOG target support"
+	depends on IP6_NF_FILTER
+
+config IP6_NF_MANGLE
+	tristate "Packet mangling"
+	depends on IP6_NF_IPTABLES
+
+config IP6_NF_TARGET_MARK
+	tristate "MARK target support"
+	depends on IP6_NF_MANGLE
+
+config IP6_NF_RAW
+	tristate  'raw table support (required for TRACE)'
+	depends on IP6_NF_IPTABLES
+
+endmenu
+
+config BRIDGE_NETFILTER
+	bool
+	default n
+
+config INET
+	bool
+	default n
+
+config IPV6
+	bool
+	default n
+
+config NETFILTER
+	bool
+	default n
+

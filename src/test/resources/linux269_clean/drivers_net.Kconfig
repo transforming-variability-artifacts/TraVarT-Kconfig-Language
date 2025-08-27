@@ -1,0 +1,1116 @@
+config NETDEVICES
+	bool "Network device support"
+	depends on NET
+
+config DUMMY
+	tristate "Dummy net driver support"
+	depends on NETDEVICES
+
+config BONDING
+	tristate "Bonding driver support"
+	depends on NETDEVICES
+
+config EQUALIZER
+	tristate "EQL (serial line load balancing) support"
+	depends on NETDEVICES
+
+config TUN
+	tristate "Universal TUN/TAP device driver support"
+	depends on NETDEVICES
+
+config ETHERTAP
+	tristate "Ethertap network tap"
+	depends on NETDEVICES & EXPERIMENTAL & NETLINK_DEV
+
+config NET_SB1000
+	tristate "General Instruments Surfboard 1000"
+	depends on NETDEVICES & PNP
+
+# Empty if block removed
+
+menu "Ethernet (10 or 100Mbit)"
+	depends on NETDEVICES
+
+config NET_ETHERNET
+	bool "Ethernet (10 or 100Mbit)"
+
+config MII
+	tristate "Generic Media Independent Interface device support"
+	depends on NET_ETHERNET
+
+config MACE
+	tristate "MACE (Power Mac ethernet) support"
+	depends on NET_ETHERNET & PPC_PMAC & PPC32
+	select CRC32
+
+config MACE_AAUI_PORT
+	bool "Use AAUI port instead of TP by default"
+	depends on MACE
+
+config BMAC
+	tristate "BMAC (G3 ethernet) support"
+	depends on NET_ETHERNET & PPC_PMAC & PPC32
+	select CRC32
+
+config OAKNET
+	tristate "National DP83902AV (Oak ethernet) support"
+	depends on NET_ETHERNET & PPC & BROKEN
+	select CRC32
+
+config ARIADNE
+	tristate "Ariadne support"
+	depends on NET_ETHERNET & ZORRO
+
+config A2065
+	tristate "A2065 support"
+	depends on NET_ETHERNET & ZORRO
+	select CRC32
+
+config HYDRA
+	tristate "Hydra support"
+	depends on NET_ETHERNET & ZORRO
+	select CRC32
+
+config ZORRO8390
+	tristate "Zorro NS8390-based Ethernet support"
+	depends on NET_ETHERNET & ZORRO
+	select CRC32
+
+config APNE
+	tristate "PCMCIA NE2000 support"
+	depends on NETDEVICES & AMIGA_PCMCIA
+	select CRC32
+
+config APOLLO_ELPLUS
+	tristate "Apollo 3c505 support"
+	depends on NETDEVICES & APOLLO
+
+config MAC8390
+	bool "Macintosh NS 8390 based ethernet cards"
+	depends on NETDEVICES & MAC
+	select CRC32
+
+config MAC89x0
+	tristate "Macintosh CS89x0 based ethernet cards"
+	depends on NETDEVICES & MAC & BROKEN
+
+config MACSONIC
+	tristate "Macintosh SONIC based ethernet (onboard, NuBus, LC, CS)"
+	depends on NETDEVICES & MAC
+
+config MACMACE
+	bool "Macintosh (AV) onboard MACE ethernet (EXPERIMENTAL)"
+	depends on NETDEVICES & MAC & EXPERIMENTAL
+	select CRC32
+
+config MVME147_NET
+	tristate "MVME147 (Lance) Ethernet support"
+	depends on NETDEVICES & MVME147
+	select CRC32
+
+config MVME16x_NET
+	tristate "MVME16x Ethernet support"
+	depends on NETDEVICES & MVME16x
+
+config BVME6000_NET
+	tristate "BVME6000 Ethernet support"
+	depends on NETDEVICES & BVME6000
+
+config ATARILANCE
+	tristate "Atari Lance support"
+	depends on NETDEVICES & ATARI
+
+config ATARI_BIONET
+	tristate "BioNet-100 support"
+	depends on NETDEVICES & ATARI & ATARI_ACSI & BROKEN
+
+config ATARI_PAMSNET
+	tristate "PAMsNet support"
+	depends on NETDEVICES & ATARI & ATARI_ACSI & BROKEN
+
+config SUN3LANCE
+	tristate "Sun3/Sun3x on-board LANCE support"
+	depends on NETDEVICES & (SUN3 | SUN3X)
+
+config SUN3_82586
+	tristate "Sun3 on-board Intel 82586 support"
+	depends on NETDEVICES & SUN3
+
+config HPLANCE
+	bool "HP on-board LANCE support"
+	depends on NETDEVICES & HP300
+	select CRC32
+
+config LASI_82596
+	tristate "Lasi ethernet"
+	depends on NET_ETHERNET & PARISC & GSC_LASI
+
+config MIPS_JAZZ_SONIC
+	tristate "MIPS JAZZ onboard SONIC Ethernet support"
+	depends on NET_ETHERNET & MIPS_JAZZ
+
+config MIPS_GT96100ETH
+	bool "MIPS GT96100 Ethernet support"
+	depends on NET_ETHERNET & MIPS_GT96100
+
+config MIPS_AU1X00_ENET
+	bool "MIPS AU1000 Ethernet support"
+	depends on NET_ETHERNET & SOC_AU1X00
+	select CRC32
+
+config NET_SB1250_MAC
+	tristate "SB1250 Ethernet support"
+	depends on NET_ETHERNET & SIBYTE_SB1xxx_SOC
+
+config SGI_IOC3_ETH
+	bool "SGI IOC3 Ethernet"
+	depends on NET_ETHERNET & SGI_IP27
+	select CRC32 & MII
+
+config SGI_IOC3_ETH_HW_RX_CSUM
+	bool "Receive hardware checksums"
+	depends on SGI_IOC3_ETH & INET
+	default y
+
+config SGI_IOC3_ETH_HW_TX_CSUM
+	bool "Transmit hardware checksums"
+	depends on SGI_IOC3_ETH & INET
+	default y
+
+config SGI_O2MACE_ETH
+	tristate "SGI O2 MACE Fast Ethernet support"
+	depends on NET_ETHERNET & SGI_IP32
+
+config STNIC
+	tristate "National DP83902AV  support"
+	depends on NET_ETHERNET & SUPERH
+	select CRC32
+
+config SUNLANCE
+	tristate "Sun LANCE support"
+	depends on NET_ETHERNET & SBUS
+	select CRC32
+
+config HAPPYMEAL
+	tristate "Sun Happy Meal 10/100baseT support"
+	depends on NET_ETHERNET & (SBUS | PCI)
+	select CRC32
+
+config SUNBMAC
+	tristate "Sun BigMAC 10/100baseT support (EXPERIMENTAL)"
+	depends on NET_ETHERNET & SBUS & EXPERIMENTAL
+	select CRC32
+
+config SUNQE
+	tristate "Sun QuadEthernet support"
+	depends on NET_ETHERNET & SBUS
+	select CRC32
+
+config SUNGEM
+	tristate "Sun GEM support"
+	depends on NET_ETHERNET & PCI
+	select CRC32
+
+config NET_VENDOR_3COM
+	bool "3COM cards"
+	depends on NET_ETHERNET & (ISA | EISA | MCA | PCI)
+
+config EL1
+	tristate "3c501 \"EtherLink\" support"
+	depends on NET_VENDOR_3COM & ISA
+
+config EL2
+	tristate "3c503 \"EtherLink II\" support"
+	depends on NET_VENDOR_3COM & ISA
+	select CRC32
+
+config ELPLUS
+	tristate "3c505 \"EtherLink Plus\" support"
+	depends on NET_VENDOR_3COM & ISA
+
+config EL16
+	tristate "3c507 \"EtherLink 16\" support (EXPERIMENTAL)"
+	depends on NET_VENDOR_3COM & ISA & EXPERIMENTAL
+
+config EL3
+	tristate "3c509/3c529 (MCA)/3c569B (98)/3c579 \"EtherLink III\" support"
+	depends on NET_VENDOR_3COM & (ISA | EISA | MCA)
+
+config ISA_3C515
+	tristate "3c515 ISA \"Fast EtherLink\""
+	depends on NET_VENDOR_3COM & (ISA | EISA)
+
+config ELMC
+	tristate "3c523 \"EtherLink/MC\" support"
+	depends on NET_VENDOR_3COM & MCA_LEGACY
+
+config ELMC_II
+	tristate "3c527 \"EtherLink/MC 32\" support (EXPERIMENTAL)"
+	depends on NET_VENDOR_3COM & MCA & MCA_LEGACY
+
+config VORTEX
+	tristate "3c590/3c900 series (592/595/597) \"Vortex/Boomerang\" support"
+	depends on NET_VENDOR_3COM & (PCI | EISA)
+
+config TYPHOON
+	tristate "3cr990 series \"Typhoon\" support"
+	depends on NET_VENDOR_3COM & PCI
+	select CRC32
+
+config LANCE
+	tristate "AMD LANCE and PCnet (AT1500 and NE2100) support"
+	depends on NET_ETHERNET & ISA
+
+config NET_VENDOR_SMC
+	bool "Western Digital/SMC cards"
+	depends on NET_ETHERNET & (ISA | MCA | EISA | MAC)
+
+config WD80x3
+	tristate "WD80*3 support"
+	depends on NET_VENDOR_SMC & ISA
+	select CRC32
+
+config ULTRAMCA
+	tristate "SMC Ultra MCA support"
+	depends on NET_VENDOR_SMC & MCA
+	select CRC32
+
+config ULTRA
+	tristate "SMC Ultra support"
+	depends on NET_VENDOR_SMC & ISA
+	select CRC32
+
+config ULTRA32
+	tristate "SMC Ultra32 EISA support"
+	depends on NET_VENDOR_SMC & EISA
+	select CRC32
+
+config SMC91X
+	tristate "SMC 91C9x/91C1xxx support"
+	select CRC32 & MII
+	depends on NET_ETHERNET & (ARM | REDWOOD_5 | REDWOOD_6 | M32R)
+
+config SMC9194
+	tristate "SMC 9194 support"
+	depends on NET_VENDOR_SMC & (ISA | MAC & BROKEN)
+	select CRC32
+
+config NET_VENDOR_RACAL
+	bool "Racal-Interlan (Micom) NI cards"
+	depends on NET_ETHERNET & ISA
+
+config NI5010
+	tristate "NI5010 support (EXPERIMENTAL)"
+	depends on NET_VENDOR_RACAL & ISA & EXPERIMENTAL & BROKEN_ON_SMP
+
+config NI52
+	tristate "NI5210 support"
+	depends on NET_VENDOR_RACAL & ISA
+
+config NI65
+	tristate "NI6510 support"
+	depends on NET_VENDOR_RACAL & ISA
+
+config AT1700
+	tristate "AT1700/1720/RE1000Plus(C-Bus) support (EXPERIMENTAL)"
+	depends on NET_ETHERNET & (ISA | MCA_LEGACY) & EXPERIMENTAL
+	select CRC32
+
+config DEPCA
+	tristate "DEPCA, DE10x, DE200, DE201, DE202, DE422 support"
+	depends on NET_ETHERNET & (ISA | EISA | MCA)
+	select CRC32
+
+config HP100
+	tristate "HP 10/100VG PCLAN (ISA, EISA, PCI) support"
+	depends on NET_ETHERNET & (ISA | EISA | PCI)
+
+config NET_ISA
+	bool "Other ISA cards"
+	depends on NET_ETHERNET & ISA
+
+config E2100
+	tristate "Cabletron E21xx support"
+	depends on NET_ISA
+	select CRC32
+
+config EWRK3
+	tristate "EtherWORKS 3 (DE203, DE204, DE205) support"
+	depends on NET_ISA
+	select CRC32
+
+config EEXPRESS
+	tristate "EtherExpress 16 support"
+	depends on NET_ISA
+
+config EEXPRESS_PRO
+	tristate "EtherExpressPro support/EtherExpress 10 (i82595) support"
+	depends on NET_ISA
+
+config FMV18X
+	tristate "FMV-181/182/183/184 support (OBSOLETE)"
+	depends on NET_ISA & OBSOLETE
+
+config HPLAN_PLUS
+	tristate "HP PCLAN+ (27247B and 27252A) support"
+	depends on NET_ISA
+	select CRC32
+
+config HPLAN
+	tristate "HP PCLAN (27245 and other 27xxx series) support"
+	depends on NET_ISA
+	select CRC32
+
+config LP486E
+	tristate "LP486E on board Ethernet"
+	depends on NET_ISA
+
+config ETH16I
+	tristate "ICL EtherTeam 16i/32 support"
+	depends on NET_ISA
+
+# Omitted `m` from dependency expression
+config NE2000
+	tristate "NE2000/NE1000 support"
+	depends on NET_ISA | Q40 | M32R
+	select CRC32
+
+config ZNET
+	tristate "Zenith Z-Note support (EXPERIMENTAL)"
+	depends on NET_ISA & EXPERIMENTAL
+
+config SEEQ8005
+	tristate "SEEQ8005 support (EXPERIMENTAL)"
+	depends on NET_ISA & EXPERIMENTAL
+
+config SK_G16
+	tristate "SK_G16 support (OBSOLETE)"
+	depends on NET_ISA & OBSOLETE
+
+config SKMC
+	tristate "SKnet MCA support"
+	depends on NET_ETHERNET & MCA & BROKEN
+
+config NE2_MCA
+	tristate "NE/2 (ne2000 MCA version) support"
+	depends on NET_ETHERNET & MCA_LEGACY
+	select CRC32
+
+config IBMLANA
+	tristate "IBM LAN Adapter/A support"
+	depends on NET_ETHERNET & MCA & MCA_LEGACY
+
+config IBMVETH
+	tristate "IBM LAN Virtual Ethernet support"
+	depends on NETDEVICES & NET_ETHERNET & PPC_PSERIES
+
+config IBM_EMAC
+	tristate "IBM PPC4xx EMAC driver support"
+	depends on CPU_4XX
+
+config IBM_EMAC_ERRMSG
+	bool "Verbose error messages"
+	depends on IBM_EMAC
+
+config NET_PCI
+	bool "EISA, VLB, PCI and on board controllers"
+	depends on NET_ETHERNET & (ISA | EISA | PCI)
+
+config PCNET32
+	tristate "AMD PCnet32 PCI support"
+	depends on NET_PCI & PCI
+	select CRC32 & MII
+
+config AMD8111_ETH
+	tristate "AMD 8111 (new PCI lance) support"
+	depends on NET_PCI & PCI
+	select CRC32 & MII
+
+config AMD8111E_NAPI
+	bool "Enable NAPI support"
+	depends on AMD8111_ETH
+
+config ADAPTEC_STARFIRE
+	tristate "Adaptec Starfire/DuraLAN support"
+	depends on NET_PCI & PCI
+	select CRC32 & MII
+
+config ADAPTEC_STARFIRE_NAPI
+	bool "Use Rx Polling (NAPI) (EXPERIMENTAL)"
+	depends on ADAPTEC_STARFIRE & EXPERIMENTAL
+
+config AC3200
+	tristate "Ansel Communications EISA 3200 support (EXPERIMENTAL)"
+	depends on NET_PCI & (ISA | EISA) & EXPERIMENTAL
+	select CRC32
+
+config APRICOT
+	tristate "Apricot Xen-II on board Ethernet"
+	depends on NET_PCI & ISA
+
+config B44
+	tristate "Broadcom 4400 ethernet support (EXPERIMENTAL)"
+	depends on NET_PCI & PCI & EXPERIMENTAL
+	select MII
+
+config FORCEDETH
+	tristate "Reverse Engineered nForce Ethernet support (EXPERIMENTAL)"
+	depends on NET_PCI & PCI & EXPERIMENTAL
+
+config CS89x0
+	tristate "CS89x0 support"
+	depends on NET_PCI & (ISA | ARCH_IXDP2X01)
+
+config TC35815
+	tristate "TOSHIBA TC35815 Ethernet support"
+	depends on NET_PCI & PCI & TOSHIBA_JMR3927
+
+config DGRS
+	tristate "Digi Intl. RightSwitch SE-X support"
+	depends on NET_PCI & (PCI | EISA)
+
+config EEPRO100
+	tristate "EtherExpressPro/100 support (eepro100, original Becker driver)"
+	depends on NET_PCI & PCI
+	select MII
+
+# Auxiliary if statements removed
+config EEPRO100_PIO
+	bool "Use PIO instead of MMIO"
+	depends on EEPRO100
+	default y
+
+config E100
+	tristate "Intel(R) PRO/100+ support"
+	depends on NET_PCI & PCI
+	select MII
+
+config E100_NAPI
+	bool "Use Rx Polling (NAPI)"
+	depends on E100
+
+config LNE390
+	tristate "Mylex EISA LNE390A/B support (EXPERIMENTAL)"
+	depends on NET_PCI & EISA & EXPERIMENTAL
+	select CRC32
+
+config FEALNX
+	tristate "Myson MTD-8xx PCI Ethernet support"
+	depends on NET_PCI & PCI
+	select CRC32 & MII
+
+config NATSEMI
+	tristate "National Semiconductor DP8381x series PCI Ethernet support"
+	depends on NET_PCI & PCI
+	select CRC32
+
+config NE2K_PCI
+	tristate "PCI NE2000 and clones support (see help)"
+	depends on NET_PCI & PCI
+	select CRC32
+
+config NE3210
+	tristate "Novell/Eagle/Microdyne NE3210 EISA support (EXPERIMENTAL)"
+	depends on NET_PCI & EISA & EXPERIMENTAL
+	select CRC32
+
+config PCI_ES3210
+	tristate "Racal-Interlan EISA ES3210 support (EXPERIMENTAL)"
+	depends on NET_PCI & EISA & EXPERIMENTAL
+	select CRC32
+
+config PCI_8139CP
+	tristate "RealTek RTL-8139 C+ PCI Fast Ethernet Adapter support (EXPERIMENTAL)"
+	depends on NET_PCI & PCI & EXPERIMENTAL
+	select CRC32 & MII
+
+config PCI_8139TOO
+	tristate "RealTek RTL-8139 PCI Fast Ethernet Adapter support"
+	depends on NET_PCI & PCI
+	select CRC32 & MII
+
+config PCI_8139TOO_PIO
+	bool "Use PIO instead of MMIO"
+	default y
+	depends on PCI_8139TOO
+
+config PCI_8139TOO_TUNE_TWISTER
+	bool "Support for uncommon RTL-8139 rev. K (automatic channel equalization)"
+	depends on PCI_8139TOO
+
+config PCI_8139TOO_8129
+	bool "Support for older RTL-8129/8130 boards"
+	depends on PCI_8139TOO
+
+config PCI_8139_OLD_RX_RESET
+	bool "Use older RX-reset method"
+	depends on PCI_8139TOO
+
+config SIS900
+	tristate "SiS 900/7016 PCI Fast Ethernet Adapter support"
+	depends on NET_PCI & PCI
+	select CRC32
+
+config EPIC100
+	tristate "SMC EtherPower II"
+	depends on NET_PCI & PCI
+	select CRC32 & MII
+
+config SUNDANCE
+	tristate "Sundance Alta support"
+	depends on NET_PCI & PCI
+	select CRC32 & MII
+
+config SUNDANCE_MMIO
+	bool "Use MMIO instead of PIO"
+	depends on SUNDANCE
+
+config TLAN
+	tristate "TI ThunderLAN support"
+	depends on NET_PCI & (PCI | EISA) & ~ARCH_64BIT
+
+config VIA_RHINE
+	tristate "VIA Rhine support"
+	depends on NET_PCI & PCI
+	select CRC32 & MII
+
+config VIA_RHINE_MMIO
+	bool "Use MMIO instead of PIO"
+	depends on VIA_RHINE
+
+config VIA_VELOCITY
+	tristate "VIA Velocity support"
+	depends on NET_PCI & PCI
+	select CRC32 & CRC_CCITT & MII
+
+config LAN_SAA9730
+	bool "Philips SAA9730 Ethernet support (EXPERIMENTAL)"
+	depends on NET_PCI & EXPERIMENTAL & MIPS
+
+config NET_POCKET
+	bool "Pocket and portable adapters"
+	depends on NET_ETHERNET & ISA
+
+config ATP
+	tristate "AT-LAN-TEC/RealTek pocket adapter support"
+	depends on NET_POCKET & ISA & X86
+	select CRC32
+
+config DE600
+	tristate "D-Link DE600 pocket adapter support"
+	depends on NET_POCKET & ISA
+
+config DE620
+	tristate "D-Link DE620 pocket adapter support"
+	depends on NET_POCKET & ISA
+
+config SGISEEQ
+	tristate "SGI Seeq ethernet controller support"
+	depends on NET_ETHERNET & SGI_IP22
+
+config DECLANCE
+	tristate "DEC LANCE ethernet controller support"
+	depends on NET_ETHERNET & MACH_DECSTATION
+	select CRC32
+
+config BAGETLANCE
+	tristate "Baget AMD LANCE support"
+	depends on NET_ETHERNET & BAGET_MIPS
+
+config 68360_ENET
+	bool "Motorola 68360 ethernet controller"
+	depends on M68360
+
+config FEC
+	bool "FEC ethernet controller (of ColdFire 5272)"
+	depends on M5272 | M5282
+
+config NE_H8300
+	tristate "NE2000 compatible support for H8/300"
+	depends on H8300 & NET_ETHERNET
+
+endmenu
+
+menu MENU_1000ETH
+	depends on NETDEVICES
+
+config ACENIC
+	tristate "Alteon AceNIC/3Com 3C985/NetGear GA620 Gigabit support"
+	depends on PCI
+
+config ACENIC_OMIT_TIGON_I
+	bool "Omit support for old Tigon I based AceNICs"
+	depends on ACENIC
+
+config DL2K
+	tristate "D-Link DL2000-based Gigabit Ethernet support"
+	depends on PCI
+	select CRC32
+
+config E1000
+	tristate "Intel(R) PRO/1000 Gigabit Ethernet support"
+	depends on PCI
+
+config E1000_NAPI
+	bool "Use Rx Polling (NAPI)"
+	depends on E1000
+
+config MYRI_SBUS
+	tristate "MyriCOM Gigabit Ethernet support"
+	depends on SBUS
+
+config NS83820
+	tristate "National Semiconduct DP83820 support"
+	depends on PCI
+
+config HAMACHI
+	tristate "Packet Engines Hamachi GNIC-II support"
+	depends on PCI
+	select MII
+
+config YELLOWFIN
+	tristate "Packet Engines Yellowfin Gigabit-NIC support (EXPERIMENTAL)"
+	depends on PCI & EXPERIMENTAL
+	select CRC32
+
+config R8169
+	tristate "Realtek 8169 gigabit ethernet support"
+	depends on PCI
+	select CRC32
+
+config R8169_NAPI
+	bool "Use Rx and Tx Polling (NAPI) (EXPERIMENTAL)"
+	depends on R8169 & EXPERIMENTAL
+
+config SK98LIN
+	tristate "Marvell Yukon Chipset / SysKonnect SK-98xx Support"
+	depends on PCI
+
+config TIGON3
+	tristate "Broadcom Tigon3 support"
+	depends on PCI
+
+config GIANFAR
+	tristate "Gianfar Ethernet"
+	depends on CPU_85XX
+
+config GFAR_NAPI
+	bool "NAPI Support"
+	depends on GIANFAR
+
+config MV643XX_ETH
+	tristate "MV-643XX Ethernet support"
+	depends on MOMENCO_OCELOT_C | MOMENCO_JAGUAR_ATX
+
+config MV643XX_ETH_0
+	bool "MV-643XX Port 0"
+	depends on MV643XX_ETH
+
+config MV643XX_ETH_1
+	bool "MV-643XX Port 1"
+	depends on MV643XX_ETH
+
+config MV643XX_ETH_2
+	bool "MV-643XX Port 2"
+	depends on MV643XX_ETH
+
+endmenu
+
+menu MENU_10000ETH
+	depends on NETDEVICES
+
+config IXGB
+	tristate "Intel(R) PRO/10GbE support"
+	depends on PCI
+
+config IXGB_NAPI
+	bool "Use Rx Polling (NAPI) (EXPERIMENTAL)"
+	depends on IXGB & EXPERIMENTAL
+
+config S2IO
+	tristate "S2IO 10Gbe XFrame NIC"
+	depends on PCI
+
+config S2IO_NAPI
+	bool "Use Rx Polling (NAPI) (EXPERIMENTAL)"
+	depends on S2IO & EXPERIMENTAL
+
+endmenu
+
+config ISERIES_VETH
+	tristate "iSeries Virtual Ethernet driver support"
+	depends on NETDEVICES & PPC_ISERIES
+
+config FDDI
+	bool "FDDI driver support"
+	depends on NETDEVICES & (PCI | EISA)
+
+config DEFXX
+	tristate "Digital DEFEA and DEFPA adapter support"
+	depends on FDDI & (PCI | EISA)
+
+config SKFP
+	tristate "SysKonnect FDDI PCI support"
+	depends on FDDI & PCI
+
+config HIPPI
+	bool "HIPPI driver support (EXPERIMENTAL)"
+	depends on NETDEVICES & EXPERIMENTAL & INET & PCI
+
+config ROADRUNNER
+	tristate "Essential RoadRunner HIPPI PCI adapter support (EXPERIMENTAL)"
+	depends on HIPPI & PCI
+
+config ROADRUNNER_LARGE_RINGS
+	bool "Use large TX/RX rings (EXPERIMENTAL)"
+	depends on ROADRUNNER
+
+config PLIP
+	tristate "PLIP (parallel port) support"
+	depends on NETDEVICES & PARPORT
+
+config PPP
+	tristate "PPP (point-to-point protocol) support"
+	depends on NETDEVICES
+
+config PPP_MULTILINK
+	bool "PPP multilink support (EXPERIMENTAL)"
+	depends on PPP & EXPERIMENTAL
+
+config PPP_FILTER
+	bool "PPP filtering"
+	depends on PPP
+
+config PPP_ASYNC
+	tristate "PPP support for async serial ports"
+	depends on PPP
+	select CRC_CCITT
+
+config PPP_SYNC_TTY
+	tristate "PPP support for sync tty ports"
+	depends on PPP
+
+config PPP_DEFLATE
+	tristate "PPP Deflate compression"
+	depends on PPP
+	select ZLIB_INFLATE & ZLIB_DEFLATE
+
+config PPP_BSDCOMP
+	tristate "PPP BSD-Compress compression"
+	depends on PPP
+
+config PPPOE
+	tristate "PPP over Ethernet (EXPERIMENTAL)"
+	depends on EXPERIMENTAL & PPP
+
+config PPPOATM
+	tristate "PPP over ATM"
+	depends on ATM & PPP
+
+config SLIP
+	tristate "SLIP (serial line) support"
+	depends on NETDEVICES
+
+config SLIP_COMPRESSED
+	bool "CSLIP compressed headers"
+	depends on SLIP
+
+config SLIP_SMART
+	bool "Keepalive and linefill"
+	depends on SLIP
+
+config SLIP_MODE_SLIP6
+	bool "Six bit SLIP encapsulation"
+	depends on SLIP
+
+config NET_FC
+	bool "Fibre Channel driver support"
+	depends on NETDEVICES & SCSI & PCI
+
+config IPHASE5526
+	tristate "Interphase 5526 Tachyon chipset based adapter support"
+	depends on NET_FC & SCSI & PCI & BROKEN
+
+config SHAPER
+	tristate "Traffic Shaper (EXPERIMENTAL)"
+	depends on NETDEVICES & EXPERIMENTAL
+
+config NETCONSOLE
+	tristate "Network console logging support (EXPERIMENTAL)"
+	depends on NETDEVICES & EXPERIMENTAL
+
+config AMIGA_PCMCIA
+	bool
+	default n
+
+config APOLLO
+	bool
+	default n
+
+config ARCH_IXDP2X01
+	bool
+	default n
+
+config ARM
+	bool
+	default n
+
+config ATARI
+	bool
+	default n
+
+config ATARI_ACSI
+	bool
+	default n
+
+config ATM
+	bool
+	default n
+
+config BAGET_MIPS
+	bool
+	default n
+
+config BROKEN
+	bool
+	default n
+
+config BROKEN_ON_SMP
+	bool
+	default n
+
+config BVME6000
+	bool
+	default n
+
+config CRC32
+	bool
+	default n
+
+config CRC_CCITT
+	bool
+	default n
+
+config EISA
+	bool
+	default n
+
+config EXPERIMENTAL
+	bool
+	default n
+
+config GSC_LASI
+	bool
+	default n
+
+config H8300
+	bool
+	default n
+
+config HP300
+	bool
+	default n
+
+config INET
+	bool
+	default n
+
+config ISA
+	bool
+	default n
+
+config M32R
+	bool
+	default n
+
+config M5272
+	bool
+	default n
+
+config M5282
+	bool
+	default n
+
+config M68360
+	bool
+	default n
+
+config MAC
+	bool
+	default n
+
+config MACH_DECSTATION
+	bool
+	default n
+
+config MCA
+	bool
+	default n
+
+config MCA_LEGACY
+	bool
+	default n
+
+config MIPS
+	bool
+	default n
+
+config MIPS_GT96100
+	bool
+	default n
+
+config MIPS_JAZZ
+	bool
+	default n
+
+config MOMENCO_JAGUAR_ATX
+	bool
+	default n
+
+config MOMENCO_OCELOT_C
+	bool
+	default n
+
+config MVME147
+	bool
+	default n
+
+config MVME16x
+	bool
+	default n
+
+config NET
+	bool
+	default n
+
+config NETLINK_DEV
+	bool
+	default n
+
+config OBSOLETE
+	bool
+	default n
+
+config PARISC
+	bool
+	default n
+
+config PARPORT
+	bool
+	default n
+
+config PCI
+	bool
+	default n
+
+config PNP
+	bool
+	default n
+
+config PPC
+	bool
+	default n
+
+config PPC32
+	bool
+	default n
+
+config PPC_ISERIES
+	bool
+	default n
+
+config PPC_PMAC
+	bool
+	default n
+
+config PPC_PSERIES
+	bool
+	default n
+
+# Stubs added manually
+# Probably something about PPC
+config CPU_85XX
+	bool
+	default n
+
+config CPU_4XX
+	bool
+	default n
+
+# Stub added manually
+config ARCH_64BIT
+	bool
+	default n
+
+config Q40
+	bool
+	default n
+
+config REDWOOD_5
+	bool
+	default n
+
+config REDWOOD_6
+	bool
+	default n
+
+config SBUS
+	bool
+	default n
+
+config SCSI
+	bool
+	default n
+
+config SGI_IP22
+	bool
+	default n
+
+config SGI_IP27
+	bool
+	default n
+
+config SGI_IP32
+	bool
+	default n
+
+config SIBYTE_SB1xxx_SOC
+	bool
+	default n
+
+config SOC_AU1X00
+	bool
+	default n
+
+config SUN3
+	bool
+	default n
+
+config SUN3X
+	bool
+	default n
+
+config SUPERH
+	bool
+	default n
+
+config TOSHIBA_JMR3927
+	bool
+	default n
+
+config X86
+	bool
+	default n
+
+config ZLIB_DEFLATE
+	bool
+	default n
+
+config ZLIB_INFLATE
+	bool
+	default n
+
+config ZORRO
+	bool
+	default n
+

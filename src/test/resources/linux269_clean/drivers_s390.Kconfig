@@ -1,0 +1,85 @@
+config CCW
+	bool
+	default y
+
+menu "Character device drivers"
+
+config UNIX98_PTYS
+	bool "Unix98 PTY support"
+
+config TN3270
+	tristate "Support for locally attached 3270 terminals"
+
+config TN3270_TTY
+	tristate "Support for tty input/output on 3270 terminals"
+	depends on TN3270
+
+config TN3270_FS
+	tristate "Support for fullscreen applications on 3270 terminals"
+	depends on TN3270
+
+config TN3270_CONSOLE
+	bool "Support for console on 3270 terminal"
+	depends on TN3270 & TN3270_TTY
+
+config TN3215
+	bool "Support for 3215 line mode terminal"
+
+config TN3215_CONSOLE
+	bool "Support for console on 3215 line mode terminal"
+	depends on TN3215
+
+config CCW_CONSOLE
+	bool
+	depends on TN3215_CONSOLE | TN3270_CONSOLE
+	default y
+
+config SCLP
+	bool "Support for SCLP"
+
+config SCLP_TTY
+	bool "Support for SCLP line mode terminal"
+	depends on SCLP
+
+config SCLP_CONSOLE
+	bool "Support for console on SCLP line mode terminal"
+	depends on SCLP_TTY
+
+config SCLP_VT220_TTY
+	bool "Support for SCLP VT220-compatible terminal"
+	depends on SCLP
+
+config SCLP_VT220_CONSOLE
+	bool "Support for console on SCLP VT220-compatible terminal"
+	depends on SCLP_VT220_TTY
+
+config SCLP_CPI
+	tristate "Control-Program Identification"
+	depends on SCLP
+
+config S390_TAPE
+	tristate "S/390 tape device support"
+
+comment "S/390 tape interface support"
+	depends on S390_TAPE
+
+config S390_TAPE_BLOCK
+	bool "Support for tape block devices"
+	depends on S390_TAPE
+
+comment "S/390 tape hardware support"
+	depends on S390_TAPE
+
+config S390_TAPE_34XX
+	tristate "Support for 3480/3490 tape hardware"
+	depends on S390_TAPE
+
+endmenu
+
+menu "Cryptographic devices"
+
+config Z90CRYPT
+	tristate "Support for PCI-attached cryptographic adapters"
+		default "m"
+
+endmenu

@@ -1,0 +1,276 @@
+menu MENU_IP_NF
+	depends on INET & NETFILTER
+
+config IP_NF_CONNTRACK
+	tristate "Connection tracking (required for masq/NAT)"
+
+config IP_NF_CT_ACCT
+	bool "Connection tracking flow accounting"
+	depends on IP_NF_CONNTRACK
+
+config IP_NF_CT_PROTO_SCTP
+	tristate  'SCTP protocol connection tracking support (EXPERIMENTAL)'
+	depends on IP_NF_CONNTRACK & EXPERIMENTAL
+
+config IP_NF_FTP
+	tristate "FTP protocol support"
+	depends on IP_NF_CONNTRACK
+
+config IP_NF_IRC
+	tristate "IRC protocol support"
+	depends on IP_NF_CONNTRACK
+
+config IP_NF_TFTP
+	tristate "TFTP protocol support"
+	depends on IP_NF_CONNTRACK
+
+config IP_NF_AMANDA
+	tristate "Amanda backup protocol support"
+	depends on IP_NF_CONNTRACK
+
+config IP_NF_QUEUE
+	tristate "Userspace queueing via NETLINK"
+
+config IP_NF_IPTABLES
+	tristate "IP tables support (required for filtering/masq/NAT)"
+
+config IP_NF_MATCH_LIMIT
+	tristate "limit match support"
+	depends on IP_NF_IPTABLES
+
+config IP_NF_MATCH_IPRANGE
+	tristate "IP range match support"
+	depends on IP_NF_IPTABLES
+
+config IP_NF_MATCH_MAC
+	tristate "MAC address match support"
+	depends on IP_NF_IPTABLES
+
+config IP_NF_MATCH_PKTTYPE
+	tristate "Packet type match support"
+	depends on IP_NF_IPTABLES
+
+config IP_NF_MATCH_MARK
+	tristate "netfilter MARK match support"
+	depends on IP_NF_IPTABLES
+
+config IP_NF_MATCH_MULTIPORT
+	tristate "Multiple port match support"
+	depends on IP_NF_IPTABLES
+
+config IP_NF_MATCH_TOS
+	tristate "TOS match support"
+	depends on IP_NF_IPTABLES
+
+config IP_NF_MATCH_RECENT
+	tristate "recent match support"
+	depends on IP_NF_IPTABLES
+
+config IP_NF_MATCH_ECN
+	tristate "ECN match support"
+	depends on IP_NF_IPTABLES
+
+config IP_NF_MATCH_DSCP
+	tristate "DSCP match support"
+	depends on IP_NF_IPTABLES
+
+config IP_NF_MATCH_AH_ESP
+	tristate "AH/ESP match support"
+	depends on IP_NF_IPTABLES
+
+config IP_NF_MATCH_LENGTH
+	tristate "LENGTH match support"
+	depends on IP_NF_IPTABLES
+
+config IP_NF_MATCH_TTL
+	tristate "TTL match support"
+	depends on IP_NF_IPTABLES
+
+config IP_NF_MATCH_TCPMSS
+	tristate "tcpmss match support"
+	depends on IP_NF_IPTABLES
+
+config IP_NF_MATCH_HELPER
+	tristate "Helper match support"
+	depends on IP_NF_CONNTRACK & IP_NF_IPTABLES
+
+config IP_NF_MATCH_STATE
+	tristate "Connection state match support"
+	depends on IP_NF_CONNTRACK & IP_NF_IPTABLES
+
+config IP_NF_MATCH_CONNTRACK
+	tristate "Connection tracking match support"
+	depends on IP_NF_CONNTRACK & IP_NF_IPTABLES
+
+config IP_NF_MATCH_OWNER
+	tristate "Owner match support"
+	depends on IP_NF_IPTABLES
+
+config IP_NF_MATCH_PHYSDEV
+	tristate "Physdev match support"
+	depends on IP_NF_IPTABLES & BRIDGE_NETFILTER
+
+config IP_NF_MATCH_ADDRTYPE
+	tristate  'address type match support'
+	depends on IP_NF_IPTABLES
+
+config IP_NF_MATCH_REALM
+	tristate  'realm match support'
+	depends on IP_NF_IPTABLES
+	select NET_CLS_ROUTE
+
+config IP_NF_MATCH_SCTP
+	tristate  'SCTP protocol match support'
+	depends on IP_NF_IPTABLES
+
+config IP_NF_MATCH_COMMENT
+	tristate  'comment match support'
+	depends on IP_NF_IPTABLES
+
+config IP_NF_FILTER
+	tristate "Packet filtering"
+	depends on IP_NF_IPTABLES
+
+config IP_NF_TARGET_REJECT
+	tristate "REJECT target support"
+	depends on IP_NF_FILTER
+
+config IP_NF_TARGET_LOG
+	tristate "LOG target support"
+	depends on IP_NF_IPTABLES
+
+config IP_NF_TARGET_ULOG
+	tristate "ULOG target support"
+	depends on IP_NF_IPTABLES
+
+config IP_NF_TARGET_TCPMSS
+	tristate "TCPMSS target support"
+	depends on IP_NF_IPTABLES
+
+config IP_NF_NAT
+	tristate "Full NAT"
+	depends on IP_NF_IPTABLES & IP_NF_CONNTRACK
+
+config IP_NF_NAT_NEEDED
+	bool
+	depends on ~IP_NF_CONNTRACK & ~IP_NF_IPTABLES & (~IP_NF_COMPAT_IPCHAINS & IP_NF_COMPAT_IPFWADM | IP_NF_COMPAT_IPCHAINS) | IP_NF_IPTABLES & IP_NF_CONNTRACK & IP_NF_NAT
+	default y
+
+config IP_NF_TARGET_MASQUERADE
+	tristate "MASQUERADE target support"
+	depends on IP_NF_NAT
+
+config IP_NF_TARGET_REDIRECT
+	tristate "REDIRECT target support"
+	depends on IP_NF_NAT
+
+config IP_NF_TARGET_NETMAP
+	tristate "NETMAP target support"
+	depends on IP_NF_NAT
+
+config IP_NF_TARGET_SAME
+	tristate "SAME target support"
+	depends on IP_NF_NAT
+
+config IP_NF_NAT_LOCAL
+	bool "NAT of local connections (READ HELP)"
+	depends on IP_NF_NAT
+
+config IP_NF_NAT_SNMP_BASIC
+	tristate "Basic SNMP-ALG support (EXPERIMENTAL)"
+	depends on EXPERIMENTAL & IP_NF_NAT
+
+# Removed multiple default statements with auxiliary if
+config IP_NF_NAT_IRC
+	tristate
+	depends on IP_NF_IPTABLES & IP_NF_CONNTRACK & IP_NF_NAT
+
+# Removed multiple default statements with auxiliary if
+config IP_NF_NAT_FTP
+	tristate
+	depends on IP_NF_IPTABLES & IP_NF_CONNTRACK & IP_NF_NAT
+
+# Removed multiple default statements with auxiliary if
+config IP_NF_NAT_TFTP
+	tristate
+	depends on IP_NF_IPTABLES & IP_NF_CONNTRACK & IP_NF_NAT
+
+# Removed multiple default statements with auxiliary if
+config IP_NF_NAT_AMANDA
+	tristate
+	depends on IP_NF_IPTABLES & IP_NF_CONNTRACK & IP_NF_NAT
+
+config IP_NF_MANGLE
+	tristate "Packet mangling"
+	depends on IP_NF_IPTABLES
+
+config IP_NF_TARGET_TOS
+	tristate "TOS target support"
+	depends on IP_NF_MANGLE
+
+config IP_NF_TARGET_ECN
+	tristate "ECN target support"
+	depends on IP_NF_MANGLE
+
+config IP_NF_TARGET_DSCP
+	tristate "DSCP target support"
+	depends on IP_NF_MANGLE
+
+config IP_NF_TARGET_MARK
+	tristate "MARK target support"
+	depends on IP_NF_MANGLE
+
+config IP_NF_TARGET_CLASSIFY
+	tristate "CLASSIFY target support"
+	depends on IP_NF_MANGLE
+
+config IP_NF_RAW
+	tristate  'raw table support (required for NOTRACK/TRACE)'
+	depends on IP_NF_IPTABLES
+
+config IP_NF_TARGET_NOTRACK
+	tristate  'NOTRACK target support'
+	depends on IP_NF_RAW
+	depends on IP_NF_CONNTRACK
+
+config IP_NF_ARPTABLES
+	tristate "ARP tables support"
+
+config IP_NF_ARPFILTER
+	tristate "ARP packet filtering"
+	depends on IP_NF_ARPTABLES
+
+config IP_NF_ARP_MANGLE
+	tristate "ARP payload mangling"
+	depends on IP_NF_ARPTABLES
+
+config IP_NF_COMPAT_IPCHAINS
+	tristate "ipchains (2.2-style) support"
+	depends on IP_NF_CONNTRACK & IP_NF_IPTABLES
+
+config IP_NF_COMPAT_IPFWADM
+	tristate "ipfwadm (2.0-style) support"
+	depends on IP_NF_CONNTRACK & IP_NF_IPTABLES & IP_NF_COMPAT_IPCHAINS
+
+endmenu
+
+config BRIDGE_NETFILTER
+	bool
+	default n
+
+config EXPERIMENTAL
+	bool
+	default n
+
+config INET
+	bool
+	default n
+
+config NETFILTER
+	bool
+	default n
+
+config NET_CLS_ROUTE
+	bool
+	default n
+

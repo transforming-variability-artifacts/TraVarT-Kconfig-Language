@@ -1,0 +1,404 @@
+config SOUND_BT878
+	tristate "BT878 audio dma"
+	depends on SOUND_PRIME & SOUND
+
+config SOUND_CMPCI
+	tristate "C-Media PCI (CMI8338/8738)"
+	depends on SOUND_PRIME & SOUND & PCI
+
+config SOUND_CMPCI_FM
+	bool "Enable legacy FM"
+	depends on SOUND_CMPCI & X86
+
+config SOUND_CMPCI_MIDI
+	bool "Enable legacy MPU-401"
+	depends on SOUND_CMPCI & X86
+
+config SOUND_CMPCI_JOYSTICK
+	bool "Enable joystick"
+	depends on SOUND_CMPCI & X86
+
+config SOUND_EMU10K1
+	tristate "Creative SBLive! (EMU10K1)"
+	depends on SOUND_PRIME & SOUND & PCI
+
+config MIDI_EMU10K1
+	bool "Creative SBLive! MIDI (EXPERIMENTAL)"
+	depends on SOUND_EMU10K1 & EXPERIMENTAL
+
+config SOUND_FUSION
+	tristate "Crystal SoundFusion (CS4280/461x)"
+	depends on SOUND_PRIME & SOUND
+
+config SOUND_CS4281
+	tristate "Crystal Sound CS4281"
+	depends on SOUND_PRIME & SOUND
+
+config SOUND_ES1370
+	tristate "Ensoniq AudioPCI (ES1370)"
+	depends on SOUND_PRIME & SOUND & PCI & SOUND_GAMEPORT
+
+config SOUND_ES1371
+	tristate "Creative Ensoniq AudioPCI 97 (ES1371)"
+	depends on SOUND_PRIME & SOUND & PCI & SOUND_GAMEPORT
+
+config SOUND_ESSSOLO1
+	tristate "ESS Technology Solo1" 
+	depends on SOUND_PRIME & SOUND & SOUND_GAMEPORT & PCI
+
+config SOUND_MAESTRO
+	tristate "ESS Maestro, Maestro2, Maestro2E driver"
+	depends on SOUND_PRIME & SOUND & PCI
+
+config SOUND_MAESTRO3
+	tristate "ESS Maestro3/Allegro driver (EXPERIMENTAL)"
+	depends on SOUND_PRIME & SOUND & PCI & EXPERIMENTAL
+
+config SOUND_ICH
+	tristate "Intel ICH (i8xx) audio support"
+	depends on SOUND_PRIME & PCI
+
+config SOUND_HARMONY
+	tristate "PA Harmony audio driver"
+	depends on GSC_LASI & SOUND_PRIME
+
+config SOUND_SONICVIBES
+	tristate "S3 SonicVibes"
+	depends on SOUND_PRIME & SOUND & SOUND_GAMEPORT
+
+config SOUND_VWSND
+	tristate "SGI Visual Workstation Sound"
+	depends on SOUND_PRIME & X86_VISWS & SOUND
+
+config SOUND_HAL2
+	tristate "SGI HAL2 sound (EXPERIMENTAL)"
+	depends on SOUND_PRIME & SOUND & SGI_IP22 & EXPERIMENTAL
+
+config SOUND_VRC5477
+	tristate "NEC Vrc5477 AC97 sound"
+	depends on SOUND_PRIME & DDB5477 & SOUND
+
+config SOUND_TRIDENT
+	tristate "Trident 4DWave DX/NX, SiS 7018 or ALi 5451 PCI Audio Core"
+	depends on SOUND_PRIME & SOUND & SOUND_GAMEPORT
+
+# Omitted `&(m | ~STANDALONE)` from dependency
+config SOUND_MSNDCLAS
+	tristate "Support for Turtle Beach MultiSound Classic, Tahiti, Monterey"
+	depends on SOUND_PRIME & SOUND
+
+config MSNDCLAS_HAVE_BOOT
+	bool
+	depends on SOUND_MSNDCLAS & ~STANDALONE
+	default y
+
+# Omitted `&(m | ~STANDALONE)` from dependency
+config SOUND_MSNDPIN
+	tristate "Support for Turtle Beach MultiSound Pinnacle, Fiji"
+	depends on SOUND_PRIME & SOUND
+
+config MSNDPIN_HAVE_BOOT
+	bool
+	depends on SOUND_MSNDPIN
+	default y
+
+config MSNDPIN_DIGITAL
+	bool "MSND Pinnacle has S/PDIF I/O"
+	depends on SOUND_MSNDPIN
+
+config MSNDPIN_NONPNP
+	bool "MSND Pinnacle non-PnP Mode"
+	depends on SOUND_MSNDPIN
+
+config SOUND_VIA82CXXX
+	tristate "VIA 82C686 Audio Codec"
+	depends on SOUND_PRIME & PCI
+
+config MIDI_VIA82CXXX
+	bool "VIA 82C686 MIDI"
+	depends on SOUND_VIA82CXXX
+
+config SOUND_OSS
+	tristate "OSS sound modules"
+	depends on SOUND_PRIME & SOUND
+
+config SOUND_TRACEINIT
+	bool "Verbose initialisation"
+	depends on SOUND_OSS
+
+config SOUND_DMAP
+	bool "Persistent DMA buffers"
+	depends on SOUND_OSS
+
+config SOUND_AD1816
+	tristate "AD1816(A) based cards (EXPERIMENTAL)"
+	depends on EXPERIMENTAL & SOUND_OSS
+
+config SOUND_AD1889
+	tristate "AD1889 based cards (AD1819 codec) (EXPERIMENTAL)"
+	depends on EXPERIMENTAL & SOUND_OSS
+
+config SOUND_SGALAXY
+	tristate "Aztech Sound Galaxy (non-PnP) cards"
+	depends on SOUND_OSS
+
+config SOUND_ADLIB
+	tristate "Adlib Cards"
+	depends on SOUND_OSS
+
+config SOUND_ACI_MIXER
+	tristate "ACI mixer (miroSOUND PCM1-pro/PCM12/PCM20)"
+	depends on SOUND_OSS
+
+config SOUND_CS4232
+	tristate "Crystal CS4232 based (PnP) cards"
+	depends on SOUND_OSS
+
+config SOUND_SSCAPE
+	tristate "Ensoniq SoundScape support"
+	depends on SOUND_OSS
+
+config SOUND_GUS
+	tristate "Gravis Ultrasound support"
+	depends on SOUND_OSS
+
+config SOUND_GUS16
+	bool "16 bit sampling option of GUS (_NOT_ GUS MAX)"
+	depends on SOUND_GUS
+
+config SOUND_GUSMAX
+	bool "GUS MAX support"
+	depends on SOUND_GUS
+
+config SOUND_VMIDI
+	tristate "Loopback MIDI device support"
+	depends on SOUND_OSS
+
+config SOUND_TRIX
+	tristate "MediaTrix AudioTrix Pro support"
+	depends on SOUND_OSS
+
+config TRIX_HAVE_BOOT
+	bool "Have TRXPRO.HEX firmware file"
+	depends on SOUND_TRIX & ~STANDALONE
+
+config SOUND_MSS
+	tristate "Microsoft Sound System support"
+	depends on SOUND_OSS
+
+config SOUND_MPU401
+	tristate "MPU-401 support (NOT for SB16)"
+	depends on SOUND_OSS
+
+config SOUND_NM256
+	tristate "NM256AV/NM256ZX audio support"
+	depends on SOUND_OSS
+
+config SOUND_MAD16
+	tristate "OPTi MAD16 and/or Mozart based cards"
+	depends on SOUND_OSS & SOUND_GAMEPORT
+
+config MAD16_OLDCARD
+	bool "Support MIDI in older MAD16 based cards (requires SB)"
+	depends on SOUND_MAD16
+
+config SOUND_PAS
+	tristate "ProAudioSpectrum 16 support"
+	depends on SOUND_OSS
+
+config PAS_JOYSTICK
+	bool "Enable PAS16 joystick port"
+	depends on SOUND_PAS
+
+config SOUND_PSS
+	tristate "PSS (AD1848, ADSP-2115, ESC614) support"
+	depends on SOUND_OSS
+
+config PSS_MIXER
+	bool "Enable PSS mixer (Beethoven ADSP-16 and other compatibile)"
+	depends on SOUND_PSS
+
+config PSS_HAVE_BOOT
+	bool "Have DSPxxx.LD firmware file"
+	depends on SOUND_PSS & ~STANDALONE
+
+config SOUND_SB
+	tristate "100% Sound Blaster compatibles (SB16/32/64, ESS, Jazz16) support"
+	depends on SOUND_OSS
+
+config SOUND_AWE32_SYNTH
+	tristate "AWE32 synth"
+	depends on SOUND_OSS
+
+# Omitted `& m` from dependency
+config SOUND_WAVEFRONT
+	tristate "Full support for Turtle Beach WaveFront (Tropez Plus, Tropez, Maui) synth/soundcards"
+	depends on SOUND_OSS
+
+config SOUND_MAUI
+	tristate "Limited support for Turtle Beach Wave Front (Maui, Tropez) synthesizers"
+	depends on SOUND_OSS
+
+config MAUI_HAVE_BOOT
+	bool "Have OSWF.MOT firmware file"
+	depends on SOUND_MAUI & ~STANDALONE
+
+config SOUND_YM3812
+	tristate "Yamaha FM synthesizer (YM3812/OPL-3) support"
+	depends on SOUND_OSS
+
+config SOUND_OPL3SA1
+	tristate "Yamaha OPL3-SA1 audio controller"
+	depends on SOUND_OSS
+
+config SOUND_OPL3SA2
+	tristate "Yamaha OPL3-SA2 and SA3 based PnP cards"
+	depends on SOUND_OSS
+
+config SOUND_YMFPCI
+	tristate "Yamaha YMF7xx PCI audio (native mode)"
+	depends on SOUND_OSS & PCI
+
+config SOUND_YMFPCI_LEGACY
+	bool "Yamaha PCI legacy ports support"
+	depends on SOUND_YMFPCI
+
+config SOUND_UART6850
+	tristate "6850 UART support"
+	depends on SOUND_OSS
+
+config SOUND_AEDSP16
+	tristate "Gallant Audio Cards (SC-6000 and SC-6600 based)"
+	depends on SOUND_OSS
+
+config SC6600
+	bool "SC-6600 based audio cards (new Audio Excel DSP 16)"
+	depends on SOUND_AEDSP16
+
+config SC6600_JOY
+	bool "Activate SC-6600 Joystick Interface"
+	depends on SC6600
+
+choice AEDSP16_EMU
+	bool "Audio Excel DSP 16"
+	optional
+	depends on SOUND_AEDSP16
+
+config AEDSP16_MSS
+	bool "MSS emulation"
+	depends on SOUND_MSS
+
+config AEDSP16_SBPRO
+	bool "SBPro emulation"
+	depends on SOUND_SB
+
+endchoice
+
+config AEDSP16_MPU401
+	bool "Audio Excel DSP 16 (MPU401 emulation)"
+	depends on SOUND_AEDSP16 & SOUND_MPU401
+
+config SOUND_VIDC
+	tristate "VIDC 16-bit sound"
+	depends on ARM & (ARCH_ACORN | ARCH_CLPS7500) & SOUND_OSS
+
+config SOUND_WAVEARTIST
+	tristate "Netwinder WaveArtist"
+	depends on ARM & SOUND_OSS & ARCH_NETWINDER
+
+config SOUND_TVMIXER
+	tristate "TV card (bt848) mixer support"
+	depends on SOUND_PRIME & SOUND & I2C
+
+config SOUND_KAHLUA
+	tristate "XpressAudio Sound Blaster emulation"
+	depends on SOUND_SB
+
+config SOUND_ALI5455
+	tristate "ALi5455 audio support"
+	depends on SOUND_PRIME & PCI
+
+config SOUND_FORTE
+	tristate "ForteMedia FM801 driver"
+	depends on SOUND_PRIME & PCI
+
+config SOUND_RME96XX
+	tristate "RME Hammerfall (RME96XX) support"
+	depends on SOUND_PRIME & PCI
+
+config SOUND_AD1980
+	tristate "AD1980 front/back switch plugin"
+	depends on SOUND_PRIME
+
+config SOUND_SH_DAC_AUDIO
+	tristate "SuperH DAC audio support"
+	depends on SOUND_PRIME & SOUND & CPU_SH3
+
+config ARCH_ACORN
+	bool
+	default n
+
+config ARCH_CLPS7500
+	bool
+	default n
+
+config ARCH_NETWINDER
+	bool
+	default n
+
+config ARM
+	bool
+	default n
+
+config CPU_SH3
+	bool
+	default n
+
+config DDB5477
+	bool
+	default n
+
+config EXPERIMENTAL
+	bool
+	default n
+
+config GSC_LASI
+	bool
+	default n
+
+config I2C
+	bool
+	default n
+
+config PCI
+	bool
+	default n
+
+config SGI_IP22
+	bool
+	default n
+
+config SOUND
+	bool
+	default n
+
+config SOUND_GAMEPORT
+	bool
+	default n
+
+config SOUND_PRIME
+	bool
+	default n
+
+config STANDALONE
+	bool
+	default n
+
+config X86
+	bool
+	default n
+
+config X86_VISWS
+	bool
+	default n
+

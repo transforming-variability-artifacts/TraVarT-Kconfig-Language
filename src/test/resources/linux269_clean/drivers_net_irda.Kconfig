@@ -1,0 +1,190 @@
+menu MENU_IRDA
+	depends on IRDA
+
+config IRTTY_SIR
+	tristate "IrTTY (uses Linux serial driver)"
+	depends on IRDA
+
+config DONGLE
+	bool "Serial dongle support"
+	depends on IRTTY_SIR
+
+config ESI_DONGLE
+	tristate "ESI JetEye PC dongle"
+	depends on DONGLE & IRDA
+
+config ACTISYS_DONGLE
+	tristate "ACTiSYS IR-220L and IR220L+ dongle"
+	depends on DONGLE & IRDA
+
+config TEKRAM_DONGLE
+	tristate "Tekram IrMate 210B dongle"
+	depends on DONGLE & IRDA
+
+config LITELINK_DONGLE
+	tristate "Parallax LiteLink dongle"
+	depends on DONGLE & IRDA
+
+config MA600_DONGLE
+	tristate "Mobile Action MA600 dongle"
+	depends on DONGLE & IRDA & EXPERIMENTAL
+
+config GIRBIL_DONGLE
+	tristate "Greenwich GIrBIL dongle"
+	depends on DONGLE & IRDA & EXPERIMENTAL
+
+config MCP2120_DONGLE
+	tristate "Microchip MCP2120"
+	depends on DONGLE & IRDA & EXPERIMENTAL
+
+config OLD_BELKIN_DONGLE
+	tristate "Old Belkin dongle"
+	depends on DONGLE & IRDA & EXPERIMENTAL
+
+config ACT200L_DONGLE
+	tristate "ACTiSYS IR-200L dongle"
+	depends on DONGLE & IRDA & EXPERIMENTAL
+
+config IRPORT_SIR
+	tristate "IrPORT (IrDA serial driver)"
+	depends on IRDA & BROKEN_ON_SMP
+
+config DONGLE_OLD
+	bool "Old Serial dongle support"
+	depends on (IRTTY_OLD | IRPORT_SIR) & BROKEN_ON_SMP
+
+config ESI_DONGLE_OLD
+	tristate "ESI JetEye PC dongle"
+	depends on DONGLE_OLD & IRDA
+
+config ACTISYS_DONGLE_OLD
+	tristate "ACTiSYS IR-220L and IR220L+ dongle"
+	depends on DONGLE_OLD & IRDA
+
+config TEKRAM_DONGLE_OLD
+	tristate "Tekram IrMate 210B dongle"
+	depends on DONGLE_OLD & IRDA
+
+config GIRBIL_DONGLE_OLD
+	tristate "Greenwich GIrBIL dongle"
+	depends on DONGLE_OLD & IRDA
+
+config LITELINK_DONGLE_OLD
+	tristate "Parallax LiteLink dongle"
+	depends on DONGLE_OLD & IRDA
+
+config MCP2120_DONGLE_OLD
+	tristate "Microchip MCP2120"
+	depends on DONGLE_OLD & IRDA
+
+config OLD_BELKIN_DONGLE_OLD
+	tristate "Old Belkin dongle"
+	depends on DONGLE_OLD & IRDA
+
+config ACT200L_DONGLE_OLD
+	tristate "ACTiSYS IR-200L dongle (EXPERIMENTAL)"
+	depends on DONGLE_OLD & EXPERIMENTAL & IRDA
+
+config MA600_DONGLE_OLD
+	tristate "Mobile Action MA600 dongle (EXPERIMENTAL)"
+	depends on DONGLE_OLD & EXPERIMENTAL & IRDA
+
+config EP7211_IR
+	tristate "EP7211 I/R support"
+	depends on DONGLE_OLD & ARCH_EP7211 & IRDA
+
+config USB_IRDA
+	tristate "IrDA USB dongles"
+	depends on IRDA & USB
+
+config SIGMATEL_FIR
+	tristate "SigmaTel STIr4200 bridge (EXPERIMENTAL)"
+	depends on IRDA & USB & EXPERIMENTAL
+	select CRC32
+
+config NSC_FIR
+	tristate "NSC PC87108/PC87338"
+	depends on IRDA & ISA
+
+config WINBOND_FIR
+	tristate "Winbond W83977AF (IR)"
+	depends on IRDA & ISA
+
+config TOSHIBA_FIR
+	tristate "Toshiba Type-O IR Port"
+	depends on IRDA & PCI & ~ARCH_64BIT
+
+config AU1000_FIR
+	tristate "Alchemy Au1000 SIR/FIR"
+	depends on MIPS_AU1000 & IRDA
+
+config SMC_IRCC_FIR
+	tristate "SMSC IrCC (EXPERIMENTAL)"
+	depends on EXPERIMENTAL & IRDA & ISA
+
+config ALI_FIR
+	tristate "ALi M5123 FIR (EXPERIMENTAL)"
+	depends on EXPERIMENTAL & IRDA & ISA
+
+config VLSI_FIR
+	tristate "VLSI 82C147 SIR/MIR/FIR (EXPERIMENTAL)"
+	depends on EXPERIMENTAL & IRDA & PCI
+
+config SA1100_FIR
+	tristate "SA1100 Internal IR"
+	depends on ARCH_SA1100 & IRDA
+
+config VIA_FIR
+	tristate "VIA VT8231/VT1211 SIR/MIR/FIR"
+	depends on IRDA & ISA & PCI
+
+endmenu
+
+config ARCH_EP7211
+	bool
+	default n
+
+config ARCH_SA1100
+	bool
+	default n
+
+config BROKEN_ON_SMP
+	bool
+	default n
+
+config CRC32
+	bool
+	default n
+
+config EXPERIMENTAL
+	bool
+	default n
+
+config IRDA
+	bool
+	default n
+
+config IRTTY_OLD
+	bool
+	default n
+
+config ISA
+	bool
+	default n
+
+config MIPS_AU1000
+	bool
+	default n
+
+config PCI
+	bool
+	default n
+
+config USB
+	bool
+	default n
+	
+config ARCH_64BIT
+	bool
+	default n
+

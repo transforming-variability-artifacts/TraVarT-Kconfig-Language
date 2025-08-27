@@ -1,0 +1,56 @@
+menu MENU_ARCNET
+	depends on NETDEVICES & (ISA | PCI)
+
+config ARCNET
+	tristate "ARCnet support"
+
+config ARCNET_1201
+	tristate "Enable standard ARCNet packet format (RFC 1201)"
+	depends on ARCNET
+
+config ARCNET_1051
+	tristate "Enable old ARCNet packet format (RFC 1051)"
+	depends on ARCNET
+
+config ARCNET_RAW
+	tristate "Enable raw mode packet interface"
+	depends on ARCNET
+
+config ARCNET_COM90xx
+	tristate "ARCnet COM90xx (normal) chipset driver"
+	depends on ARCNET
+
+config ARCNET_COM90xxIO
+	tristate "ARCnet COM90xx (IO mapped) chipset driver"
+	depends on ARCNET
+
+config ARCNET_RIM_I
+	tristate "ARCnet COM90xx (RIM I) chipset driver"
+	depends on ARCNET
+
+config ARCNET_COM20020
+	tristate "ARCnet COM20020 chipset driver"
+	depends on ARCNET
+
+config ARCNET_COM20020_ISA
+	tristate "Support for COM20020 on ISA"
+	depends on ARCNET_COM20020 & ISA
+
+config ARCNET_COM20020_PCI
+	tristate "Support for COM20020 on PCI"
+	depends on ARCNET_COM20020 & PCI
+
+endmenu
+
+config ISA
+	bool
+	default n
+
+config NETDEVICES
+	bool
+	default n
+
+config PCI
+	bool
+	default n
+

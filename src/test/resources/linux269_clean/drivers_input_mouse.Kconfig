@@ -1,0 +1,93 @@
+config INPUT_MOUSE
+	bool "Mice"
+	default y
+	depends on INPUT
+
+# Omitted auxiliary if from select expression
+config MOUSE_PS2
+	tristate "PS/2 mouse"
+	default y
+	depends on INPUT & INPUT_MOUSE
+	select SERIO & SERIO_I8042 if PC & SERIO_GSCPS2
+
+config MOUSE_SERIAL
+	tristate "Serial mouse"
+	depends on INPUT & INPUT_MOUSE
+	select SERIO
+
+config MOUSE_INPORT
+	tristate "InPort/MS/ATIXL busmouse"
+	depends on INPUT & INPUT_MOUSE & ISA
+
+config MOUSE_ATIXL
+	bool "ATI XL variant"
+	depends on MOUSE_INPORT
+
+config MOUSE_LOGIBM
+	tristate "Logitech busmouse"
+	depends on INPUT & INPUT_MOUSE & ISA
+
+config MOUSE_PC110PAD
+	tristate "IBM PC110 touchpad"
+	depends on INPUT & INPUT_MOUSE & ISA
+
+config MOUSE_MAPLE
+	tristate "Maple bus mouse"
+	depends on SH_DREAMCAST & INPUT & INPUT_MOUSE & MAPLE
+
+config MOUSE_AMIGA
+	tristate "Amiga mouse"
+	depends on AMIGA & INPUT & INPUT_MOUSE
+
+config MOUSE_RISCPC
+	tristate "Acorn RiscPC mouse"
+	depends on ARCH_ACORN & INPUT & INPUT_MOUSE
+
+config MOUSE_VSXXXAA
+	tristate "DEC VSXXX-AA/GA mouse and VSXXX-AB tablet"
+	depends on INPUT & INPUT_MOUSE
+	select SERIO
+
+config AMIGA
+	bool
+	default n
+
+config ARCH_ACORN
+	bool
+	default n
+
+config GSC
+	bool
+	default n
+
+config INPUT
+	bool
+	default n
+
+config ISA
+	bool
+	default n
+
+config MAPLE
+	bool
+	default n
+
+config PC
+	bool
+	default n
+
+config SERIO
+	bool
+	default n
+
+config SERIO_GSCPS2
+	bool
+	default n
+
+config SERIO_I8042
+	bool
+	default n
+
+config SH_DREAMCAST
+	bool
+	default n

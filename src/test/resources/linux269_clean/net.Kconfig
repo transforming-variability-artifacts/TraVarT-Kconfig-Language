@@ -1,0 +1,185 @@
+menu MENU_NET
+
+config NET
+	bool "Networking support"
+
+menu "Networking options"
+	depends on NET
+
+config PACKET
+	tristate "Packet socket"
+
+config PACKET_MMAP
+	bool "Packet socket: mmapped IO"
+	depends on PACKET
+
+config NETLINK_DEV
+	tristate "Netlink device emulation"
+
+config UNIX
+	tristate "Unix domain sockets"
+
+config NET_KEY
+	tristate "PF_KEY sockets"
+	select XFRM
+
+config INET
+	bool "TCP/IP networking"
+
+# Removed multiple default statements with auxiliary if
+config IPV6
+	tristate "The IPv6 protocol (EXPERIMENTAL)"
+	depends on INET & EXPERIMENTAL	
+
+menuconfig NETFILTER
+	bool "Network packet filtering (replaces ipchains)"
+
+# Removed if block (already factorized)
+
+config NETFILTER_DEBUG
+	bool "Network packet filtering debugging"
+	depends on NETFILTER
+
+config BRIDGE_NETFILTER
+	bool "Bridged IP/ARP packets filtering"
+	depends on BRIDGE & NETFILTER & INET
+	default y
+
+config ATM
+	tristate "Asynchronous Transfer Mode (ATM) (EXPERIMENTAL)"
+	depends on EXPERIMENTAL
+
+config ATM_CLIP
+	tristate "Classical IP over ATM (EXPERIMENTAL)"
+	depends on ATM & INET
+
+config ATM_CLIP_NO_ICMP
+	bool "Do NOT send ICMP if no neighbour (EXPERIMENTAL)"
+	depends on ATM_CLIP
+
+config ATM_LANE
+	tristate "LAN Emulation (LANE) support (EXPERIMENTAL)"
+	depends on ATM
+
+config ATM_MPOA
+	tristate "Multi-Protocol Over ATM (MPOA) support (EXPERIMENTAL)"
+	depends on ATM & INET & ATM_LANE
+
+config ATM_BR2684
+	tristate "RFC1483/2684 Bridged protocols"
+	depends on ATM & INET
+
+config ATM_BR2684_IPFILTER
+	bool "Per-VC IP filter kludge"
+	depends on ATM_BR2684
+
+config BRIDGE
+	tristate "802.1d Ethernet Bridging"
+
+config VLAN_8021Q
+	tristate "802.1Q VLAN Support"
+
+config DECNET
+	tristate "DECnet Support"
+
+config IPX
+	tristate "The IPX protocol"
+	select LLC
+
+config ATALK
+	tristate "Appletalk protocol support"
+	select LLC
+
+config X25
+	tristate "CCITT X.25 Packet Layer (EXPERIMENTAL)"
+	depends on EXPERIMENTAL
+
+config LAPB
+	tristate "LAPB Data Link Driver (EXPERIMENTAL)"
+	depends on EXPERIMENTAL
+
+config NET_DIVERT
+	bool "Frame Diverter (EXPERIMENTAL)"
+	depends on EXPERIMENTAL
+
+config ECONET
+	tristate "Acorn Econet/AUN protocols (EXPERIMENTAL)"
+	depends on EXPERIMENTAL & INET
+
+config ECONET_AUNUDP
+	bool "AUN over UDP"
+	depends on ECONET
+
+config ECONET_NATIVE
+	bool "Native Econet"
+	depends on ECONET
+
+config WAN_ROUTER
+	tristate "WAN router"
+	depends on EXPERIMENTAL
+
+config NET_HW_FLOWCONTROL
+	bool "Forwarding between high speed interfaces"
+	depends on EXPERIMENTAL
+
+menu MENU_QOS
+
+config NET_SCHED
+	bool "QoS and/or fair queueing"
+
+endmenu
+
+menu MENU_NETTEST
+
+config NET_PKTGEN
+	tristate "Packet Generator (USE WITH CAUTION)"
+	depends on PROC_FS
+
+endmenu
+
+endmenu
+
+# Added manually, defined as def_bool
+config NETPOLL
+	bool
+	default n
+
+config NETPOLL_RX
+	bool "Netpoll support for trapping incoming packets"
+	default n
+	depends on NETPOLL
+
+config NETPOLL_TRAP
+	bool "Netpoll traffic trapping"
+	default n
+	depends on NETPOLL
+
+endmenu
+
+config CRYPTO
+	bool
+	default n
+
+config CRYPTO_MD5
+	bool
+	default n
+
+config EXPERIMENTAL
+	bool
+	default n
+
+config IPV6_PRIVACY
+	bool
+	default n
+
+config LLC
+	bool
+	default n
+
+config PROC_FS
+	bool
+	default n
+
+config XFRM
+	bool
+	default n

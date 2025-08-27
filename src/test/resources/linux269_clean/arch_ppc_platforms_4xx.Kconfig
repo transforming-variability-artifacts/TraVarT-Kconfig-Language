@@ -1,0 +1,204 @@
+# Stubs added manually
+
+config ARCH_40X
+	bool
+	default n
+
+config ARCH_44X
+	bool
+	default n
+
+config ARCH_4XX
+	bool
+	depends on ARCH_40X | ARCH_44X
+	default y
+
+menu MENU_IBM_4XX
+	depends on ARCH_4XX
+
+choice MACHINE
+	bool "Machine Type"
+	depends on ARCH_40X
+	default WALNUT
+
+config ASH
+	bool "Ash"
+
+config BUBINGA
+	bool "Bubinga"
+
+config CPCI405
+	bool "CPCI405"
+
+config EP405
+	bool "EP405/EP405PC"
+
+config OAK
+	bool "Oak"
+
+config REDWOOD_5
+	bool "Redwood-5"
+
+config REDWOOD_6
+	bool "Redwood-6"
+
+config SYCAMORE
+	bool "Sycamore"
+
+config WALNUT
+	bool "Walnut"
+
+endchoice
+
+choice MACHINE_TYPE
+	bool "Machine Type"
+	depends on ARCH_44X
+	default EBONY
+
+config EBONY
+	bool "Ebony"
+
+config OCOTEA
+	bool "Ocotea"
+
+endchoice
+
+config EP405PC
+	bool "EP405PC Support"
+	depends on EP405
+
+config NP405H
+	bool
+	depends on ASH
+	default y
+
+config ARCH_440GP
+	bool
+	depends on EBONY
+	default y
+
+config ARCH_440GX
+	bool
+	depends on OCOTEA
+	default y
+
+config ARCH_440
+	bool
+	depends on ARCH_440GP
+	default y
+
+config ARCH_440A
+	bool
+	depends on ARCH_440GX
+	default y
+
+config IBM405_ERR77
+	bool
+	depends on ARCH_40X & ~ARCH_403GCX & ~ARCH_405GPR
+	default y
+
+config IBM405_ERR51
+	bool
+	depends on ARCH_40X & ~ARCH_405GPR
+	default y
+
+config BOOKE
+	bool
+	depends on ARCH_44X
+	default y
+
+config IBM_OCP
+	bool
+	depends on ASH | BUBINGA | CPCI405 | EBONY | EP405 | OCOTEA | REDWOOD_5 | REDWOOD_6 | SYCAMORE | WALNUT
+	default y
+
+config IBM_EMAC4
+	bool
+	depends on ARCH_440GX
+	default y
+
+config BIOS_FIXUP
+	bool
+	depends on BUBINGA | EP405 | SYCAMORE | WALNUT
+	default y
+
+config ARCH_403GCX
+	bool
+	depends on OAK
+	default y
+
+config ARCH_405EP
+	bool
+	depends on BUBINGA
+	default y
+
+config ARCH_405GP
+	bool
+	depends on CPCI405 | EP405 | WALNUT
+	default y
+
+config ARCH_405GPR
+	bool
+	depends on SYCAMORE
+	default y
+
+config STB03xxx
+	bool
+	depends on REDWOOD_5 | REDWOOD_6
+	default y
+
+config EMBEDDEDBOOT
+	bool
+	depends on EP405
+	default y
+
+config IBM_OPENBIOS
+	bool
+	depends on ASH | BUBINGA | REDWOOD_5 | REDWOOD_6 | SYCAMORE | WALNUT
+	default y
+
+config PPC4xx_DMA
+	bool "PPC4xx DMA controller support"
+	depends on ARCH_4XX
+
+config PPC4xx_EDMA
+	bool
+	depends on ~STB03xxx & PPC4xx_DMA
+	default y
+
+config PM
+	bool "Power Management support (EXPERIMENTAL)"
+	depends on ARCH_4XX & EXPERIMENTAL
+
+choice UART0_DEV
+	bool "TTYS0 device and default console"
+	depends on ARCH_40X
+	default UART0_TTYS0
+
+config UART0_TTYS0
+	bool "UART0"
+
+config UART0_TTYS1
+	bool "UART1"
+
+endchoice
+
+config SERIAL_SICC
+	bool "SICC Serial port support"
+	depends on STB03xxx
+
+config UART1_DFLT_CONSOLE
+	bool
+	depends on SERIAL_SICC & UART0_TTYS1
+	default y
+
+config SERIAL_SICC_CONSOLE
+	bool
+	depends on SERIAL_SICC & UART0_TTYS1
+	default y
+endmenu
+
+config EXPERIMENTAL
+	bool
+	default n
+

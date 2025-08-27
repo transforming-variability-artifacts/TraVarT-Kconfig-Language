@@ -1,0 +1,346 @@
+mainmenu MENU_SUPERH
+
+config SUPERH
+	bool
+	default y
+
+config UID16
+	bool
+	default y
+
+config RWSEM_GENERIC_SPINLOCK
+	bool
+	default y
+
+config RWSEM_XCHGADD_ALGORITHM
+	bool
+
+menu MENU_SUPERH_TYPE
+
+choice SH_TYPE
+	bool "SuperH system type"
+	default SH_UNKNOWN
+
+config SH_SOLUTION_ENGINE
+	bool "SolutionEngine"
+
+config SH_7751_SOLUTION_ENGINE
+	bool "SolutionEngine7751"
+
+config SH_7300_SOLUTION_ENGINE
+	bool "SolutionEngine7300"
+
+config SH_7751_SYSTEMH
+	bool "SystemH7751R"
+
+config SH_STB1_HARP
+	bool "STB1_Harp"
+
+config SH_STB1_OVERDRIVE
+	bool "STB1_Overdrive"
+
+config SH_HP620
+	bool "HP620"
+
+config SH_HP680
+	bool "HP680"
+
+config SH_HP690
+	bool "HP690"
+
+config SH_CQREEK
+	bool "CqREEK"
+
+config SH_DMIDA
+	bool "DMIDA"
+
+config SH_EC3104
+	bool "EC3104"
+
+config SH_SATURN
+	bool "Saturn"
+
+config SH_DREAMCAST
+	bool "Dreamcast"
+
+config SH_CAT68701
+	bool "CAT68701"
+
+config SH_BIGSUR
+	bool "BigSur"
+
+config SH_SH2000
+	bool "SH2000"
+
+config SH_ADX
+	bool "ADX"
+
+config SH_MPC1211
+	bool "MPC1211"
+
+config SH_SECUREEDGE5410
+	bool "SecureEdge5410"
+
+config SH_HS7751RVOIP
+	bool "HS7751RVOIP"
+
+config SH_RTS7751R2D
+	bool "RTS7751R2D"
+
+config SH_UNKNOWN
+	bool "BareCPU"
+
+endchoice
+
+choice CPU_FAMILY
+	bool "Processor family"
+	default CPU_SH4
+
+config CPU_SH2
+	bool "SH-2"
+	select SH_WRITETHROUGH
+
+config CPU_SH3
+	bool "SH-3"
+
+config CPU_SH4
+	bool "SH-4"
+
+endchoice
+
+choice CPU_SUBTYPE
+	bool "Processor subtype"
+
+config CPU_SUBTYPE_SH7604
+	bool "SH7604"
+	depends on CPU_SH2
+
+config CPU_SUBTYPE_SH7300
+	bool "SH7300"
+	depends on CPU_SH3
+
+config CPU_SUBTYPE_SH7705
+	bool "SH7705"
+	depends on CPU_SH3
+
+config CPU_SUBTYPE_SH7707
+	bool "SH7707"
+	depends on CPU_SH3
+
+config CPU_SUBTYPE_SH7708
+	bool "SH7708"
+	depends on CPU_SH3
+
+config CPU_SUBTYPE_SH7709
+	bool "SH7709"
+	depends on CPU_SH3
+
+config CPU_SUBTYPE_SH7750
+	bool "SH7750"
+	depends on CPU_SH4
+
+config CPU_SUBTYPE_SH7751
+	bool "SH7751/SH7751R"
+	depends on CPU_SH4
+
+config CPU_SUBTYPE_SH7760
+	bool "SH7760"
+	depends on CPU_SH4
+
+config CPU_SUBTYPE_ST40STB1
+	bool "ST40STB1 / ST40RA"
+	depends on CPU_SH4
+
+config CPU_SUBTYPE_ST40GX1
+	bool "ST40GX1"
+	depends on CPU_SH4
+
+endchoice
+
+config MMU
+	bool "Support for memory management hardware"
+	depends on ~CPU_SH2
+	default y
+
+choice HUGETLB_PAGE_SIZE
+	bool "HugeTLB page size"
+	depends on HUGETLB_PAGE & CPU_SH4 & MMU
+	default HUGETLB_PAGE_SIZE_64K
+
+config HUGETLB_PAGE_SIZE_64K
+	bool "64K"
+
+config HUGETLB_PAGE_SIZE_1MB
+	bool "1MB"
+
+endchoice
+
+config CMDLINE_BOOL
+	bool "Default bootloader kernel arguments"
+
+config MEMORY_SET
+	bool
+	depends on ~MEMORY_OVERRIDE & (SH_MPC1211 | SH_ADX | SH_DREAMCAST | SH_HP600 | SH_BIGSUR | SH_SH2000 | SH_7751_SOLUTION_ENGINE | SH_SOLUTION_ENGINE | SH_SECUREEDGE5410 | SH_HS7751RVOIP | SH_RTS7751R2D)
+	default y
+
+config MEMORY_OVERRIDE
+	bool "Override default load address and memory size"
+
+config CF_ENABLER
+	bool "Compact Flash Enabler support"
+	depends on SH_ADX | SH_SOLUTION_ENGINE | SH_UNKNOWN | SH_CAT68701
+ 
+choice CF_AREA
+	bool "Compact Flash Connection Area"
+	depends on CF_ENABLER
+	default CF_AREA6
+
+config CF_AREA5
+	bool "Area5"
+
+config CF_AREA6
+	bool "Area6"
+
+endchoice
+
+config SH_RTC
+	bool
+	depends on ~SH_DREAMCAST & ~SH_SATURN & ~SH_7300_SOLUTION_ENGINE
+	default y
+
+config SH_DSP
+	bool "DSP support"
+	depends on ~CPU_SH4
+	default y
+
+config SH_ADC
+	bool "ADC support"
+	depends on CPU_SH3
+	default y
+
+config SH_HP600
+	bool
+	depends on SH_HP620 | SH_HP680 | SH_HP690
+	default y
+
+config CPU_SUBTYPE_ST40
+	bool
+	depends on CPU_SUBTYPE_ST40STB1 | CPU_SUBTYPE_ST40GX1
+	default y
+
+config DISCONTIGMEM
+	bool
+	depends on SH_HP690
+	default y
+
+config ST40_LMI_MEMORY
+	bool "Memory on LMI"
+	depends on CPU_SUBTYPE_ST40STB1
+
+config MEMORY_SET2
+	bool
+	depends on CPU_SUBTYPE_ST40STB1 & ST40_LMI_MEMORY
+	default y
+
+config CPU_LITTLE_ENDIAN
+	bool "Little Endian"
+
+config PREEMPT
+	bool "Preemptible Kernel (EXPERIMENTAL)"
+	depends on EXPERIMENTAL
+
+config UBC_WAKEUP
+	bool "Wakeup UBC on startup"
+
+config SH_WRITETHROUGH
+	bool "Use write-through caching"
+
+config SH_OCRAM
+	bool "Operand Cache RAM (OCRAM) support"
+
+config SH_STORE_QUEUES
+	bool "Support for Store Queues"
+	depends on CPU_SH4
+
+config SMP
+	bool "Symmetric multi-processing support"
+
+config HS7751RVOIP_CODEC
+	bool "Support VoIP Codec section"
+	depends on SH_HS7751RVOIP
+
+config RTS7751R2D_REV11
+	bool "RTS7751R2D Rev. 1.1 board support"
+	depends on SH_RTS7751R2D
+
+config SH_PCLK_CALC
+	bool
+	default y
+
+menu MENU_CPU_FREQ
+
+config CPU_FREQ
+	bool "CPU Frequency scaling"
+
+config CPU_FREQ_TABLE
+	tristate "CPU frequency table helpers"
+	depends on CPU_FREQ
+	default y
+
+config SH_CPU_FREQ
+	tristate "SuperH CPU Frequency driver"
+	depends on CPU_FREQ
+
+endmenu
+
+config HEARTBEAT
+	bool "Heartbeat LED"
+	depends on SH_MPC1211 | SH_CAT68701 | SH_STB1_HARP | SH_STB1_OVERDRIVE | SH_BIGSUR | SH_7751_SOLUTION_ENGINE | SH_7300_SOLUTION_ENGINE | SH_SOLUTION_ENGINE | SH_RTS7751R2D
+
+config RTC_9701JE
+	tristate "EPSON RTC-9701JE support"
+	depends on SH_RTS7751R2D
+
+endmenu
+
+menu MENU_BUS
+
+config ISA
+	bool
+	default y if PCMCIA
+
+config EISA
+	bool
+
+config MCA
+	bool
+
+config SBUS
+	bool
+
+config MAPLE
+	tristate "Maple Bus support"
+	depends on SH_DREAMCAST
+	default y
+
+endmenu
+
+menu MENU_SH_INITRD
+	depends on BLK_DEV_INITRD
+
+config EMBEDDED_RAMDISK
+	bool "Embed root filesystem ramdisk into the kernel"
+
+endmenu
+
+config BLK_DEV_INITRD
+	bool
+	default n
+
+config EXPERIMENTAL
+	bool
+	default n
+
+config HUGETLB_PAGE
+	bool
+	default n

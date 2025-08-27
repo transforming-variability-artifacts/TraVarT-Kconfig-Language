@@ -1,0 +1,209 @@
+mainmenu MENU_V850
+
+config MMU
+	bool
+	default n
+
+config UID16
+	bool
+	default n
+
+config RWSEM_GENERIC_SPINLOCK
+	bool
+	default y
+
+config RWSEM_XCHGADD_ALGORITHM
+	bool
+	default n
+
+config ISA
+	bool
+	default n
+
+config ISAPNP
+	bool
+	default n
+
+config EISA
+	bool
+	default n
+
+config MCA
+	bool
+	default n
+
+config V850
+	bool
+	default y
+
+menu MENU_PROCESSOR
+
+choice PLATFORM
+	bool "Platform"
+	default GDB
+	
+	config V850E_SIM
+			bool "GDB"
+	config RTE_CB_MA1
+			bool "RTE-V850E/MA1-CB"
+	config RTE_CB_NB85E
+			bool "RTE-V850E/NB85E-CB"
+	config RTE_CB_ME2
+			bool "RTE-V850E/ME2-CB"
+	config V850E_AS85EP1
+			bool "AS85EP1"
+	config V850E2_SIM85E2C
+			bool "sim85e2c"
+	config V850E2_SIM85E2S
+			bool "sim85e2s"
+	config V850E2_FPGA85E2C
+			bool "NA85E2C-FPGA"
+	config V850E2_ANNA
+			bool "Anna"
+	
+endchoice
+
+
+config V850E
+	bool
+	default y
+
+config V850E_MA1
+	bool
+	depends RTE_CB_MA1
+	default y
+	
+config V850E_TEG
+	bool
+	depends RTE_CB_NB85E
+	default y
+
+config V850E_ME2
+	bool
+	depends RTE_CB_ME2
+	default y
+
+config V850E2_SIM85E2
+	bool
+	depends V850E2_SIM85E2C | V850E2_SIM85E2S
+	default y
+
+config V850E2
+	bool
+	depends V850E2_SIM85E2 | V850E2_FPGA85E2C | V850E2_ANNA
+	default y
+
+config RTE_CB
+	bool
+	depends RTE_CB_MA1 | RTE_CB_NB85E | RTE_CB_ME2
+	default y
+
+# Auxiliary if + prompt removed
+config RTE_CB_MULTI
+	bool "Multi monitor ROM support"
+	depends RTE_CB_MA1 | RTE_CB_NB85E
+	default y
+
+config RTE_CB_MULTI_DBTRAP
+	bool "Pass illegal insn trap / dbtrap to kernel"
+	depends RTE_CB_MULTI
+	default n
+
+config RTE_CB_MA1_KSRAM
+	bool "Kernel in SRAM (limits size of kernel)"
+	depends RTE_CB_MA1 & RTE_CB_MULTI
+	default n
+
+config RTE_MB_A_PCI
+	bool "Mother-A PCI support"
+	depends RTE_CB
+	default y
+
+config RTE_GBUS_INT
+	bool
+	depends RTE_MB_A_PCI
+	default y
+
+# Composite default expression removed
+config PCI
+	bool
+
+# Composite default expression removed
+config V850E_INTC
+	bool	
+
+# Composite default expression removed
+config V850E_TIMER_D
+	bool
+
+# Composite default expression removed
+config V850E_CACHE
+	bool
+
+# Composite default expression removed
+config V850E2_CACHE
+	bool
+
+# Composite default expression removed
+config NO_CACHE
+	bool
+
+config ROM_KERNEL
+	bool "Kernel in ROM"
+	depends V850E2_ANNA | V850E_AS85EP1 | RTE_CB_ME2
+
+config ZERO_BSS
+	bool
+	depends ~V850E2_SIM85E2C
+	default y
+
+config V850E_HIGHRES_TIMER
+	bool "High resolution timer support"
+	depends V850E_TIMER_D
+
+config TIME_BOOTUP
+	bool "Time bootup"
+	depends V850E_HIGHRES_TIMER
+
+config RESET_GUARD
+	bool "Reset Guard"
+
+config LARGE_ALLOCS
+	bool "Allow allocating large blocks (> 1MB) of memory"
+
+endmenu
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

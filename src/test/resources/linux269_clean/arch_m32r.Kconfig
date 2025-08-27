@@ -1,0 +1,215 @@
+
+mainmenu MENU_LKC
+
+config M32R
+	bool
+	default y
+
+config SBUS
+	bool
+
+config UID16
+	bool
+	default y
+
+config GENERIC_ISA_DMA
+	bool
+	default y
+
+menu MENU_PROC
+
+choice PLAT_TYPE
+	bool "Platform Type"
+	default PLAT_MAPPI
+
+config PLAT_MAPPI
+	bool "Mappi-I"
+
+config PLAT_USRV
+	bool "uServer"
+
+config PLAT_M32700UT
+	bool "M32700UT"
+
+config PLAT_OPSPUT
+	bool "OPSPUT"
+
+config PLAT_OAKS32R
+	bool "OAKS32R"
+
+config PLAT_MAPPI2
+	bool "Mappi-II(M3A-ZA36/M3A-ZA52)"
+
+endchoice
+
+choice PROCESSOR_FAMILY
+	bool "Processor family"
+	default CHIP_M32700
+
+config CHIP_M32700
+	bool "M32700 (Chaos)"
+
+config CHIP_M32102
+	bool "M32102"
+
+config CHIP_VDEC2
+	bool "VDEC2"
+
+config CHIP_OPSP
+	bool "OPSP"
+
+endchoice
+
+config MMU
+	bool "Support for memory management hardware"
+	depends on CHIP_M32700 | CHIP_VDEC2 | CHIP_OPSP
+	default y
+
+config ISA_M32R
+	bool
+	depends on CHIP_M32102
+	default y
+
+config ISA_M32R2
+	bool
+	depends on CHIP_M32700 | CHIP_VDEC2 | CHIP_OPSP
+	default y
+
+config ISA_DSP_LEVEL2
+	bool
+	depends on CHIP_M32700 | CHIP_OPSP
+	default y
+
+config ISA_DUAL_ISSUE
+	bool
+	depends on CHIP_M32700 | CHIP_OPSP
+	default y
+
+config CPU_LITTLE_ENDIAN
+		bool "Generate little endian code"
+	default n
+
+config NOHIGHMEM
+	bool
+	default y
+
+config DISCONTIGMEM
+	bool "Internal RAM Support"
+	depends on CHIP_M32700 | CHIP_M32102 | CHIP_VDEC2 | CHIP_OPSP
+	default y
+
+config RWSEM_GENERIC_SPINLOCK
+	bool
+	depends on M32R
+	default y
+
+config RWSEM_XCHGADD_ALGORITHM
+	bool
+	default n
+
+config PREEMPT
+	bool "Preemptible Kernel"
+
+config HAVE_DEC_LOCK
+	bool
+	depends on (SMP | PREEMPT)
+	default n
+
+config SMP
+	bool "Symmetric multi-processing support"
+
+config CHIP_M32700_TS1
+	bool "Workaround code for the M32700 TS1 chip's bug"
+	depends on (CHIP_M32700 & SMP)
+	default n
+
+config NUMA
+	bool "Numa Memory Allocation Support"
+	depends on SMP
+	default n
+
+config BOOT_IOREMAP
+	bool
+	depends on NUMA
+	default n
+
+endmenu
+
+menu MENU_BUS
+
+config PCI
+	bool "PCI support"
+	default n
+
+choice PCI_GO
+	bool "PCI access mode"
+	depends on PCI
+	default PCI_GOANY
+
+config PCI_GOBIOS
+	bool "BIOS"
+
+config PCI_GODIRECT
+	bool "Direct"
+
+config PCI_GOANY
+	bool "Any"
+
+endchoice
+
+config PCI_BIOS
+	bool
+	depends on PCI & (PCI_GOBIOS | PCI_GOANY)
+	default y
+
+config PCI_DIRECT
+	bool
+	depends on PCI & (PCI_GODIRECT | PCI_GOANY)
+	default y
+
+
+config ISA
+	bool "ISA support"
+
+endmenu
+
+menu MENU_KERNEL_HACK
+
+config DEBUG_KERNEL
+	bool "Kernel debugging"
+
+config DEBUG_STACKOVERFLOW
+	bool "Check for stack overflows"
+	depends on DEBUG_KERNEL
+
+config DEBUG_SLAB
+	bool "Debug memory allocations"
+	depends on DEBUG_KERNEL
+
+config DEBUG_IOVIRT
+	bool "Memory mapped I/O debugging"
+	depends on DEBUG_KERNEL
+
+config MAGIC_SYSRQ
+	bool "Magic SysRq key"
+	depends on DEBUG_KERNEL
+
+config DEBUG_SPINLOCK
+	bool "Spinlock debugging"
+	depends on DEBUG_KERNEL
+
+config DEBUG_PAGEALLOC
+	bool "Page alloc debugging"
+	depends on DEBUG_KERNEL
+
+config DEBUG_INFO
+	bool "Compile the kernel with debug info"
+	depends on DEBUG_KERNEL
+
+config DEBUG_SPINLOCK_SLEEP
+	bool "Sleep-inside-spinlock checking"
+
+config FRAME_POINTER
+	bool "Compile the kernel with frame pointers"
+
+endmenu

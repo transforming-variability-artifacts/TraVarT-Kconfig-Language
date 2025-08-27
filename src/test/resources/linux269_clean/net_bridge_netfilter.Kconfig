@@ -1,0 +1,90 @@
+# File adapted after automatic reduction
+
+menu BRIDGE_NF
+	depends on BRIDGE & NETFILTER
+
+config BRIDGE_NF_EBTABLES
+	tristate "Ethernet Bridge tables (ebtables) support"
+
+config BRIDGE_EBT_BROUTE
+	tristate "ebt: broute table support"
+	depends on BRIDGE_NF_EBTABLES
+
+config BRIDGE_EBT_T_FILTER
+	tristate "ebt: filter table support"
+	depends on BRIDGE_NF_EBTABLES
+
+config BRIDGE_EBT_T_NAT
+	tristate "ebt: nat table support"
+	depends on BRIDGE_NF_EBTABLES
+
+config BRIDGE_EBT_802_3
+	tristate "ebt: 802.3 filter support"
+	depends on BRIDGE_NF_EBTABLES
+
+config BRIDGE_EBT_AMONG
+	tristate "ebt: among filter support"
+	depends on BRIDGE_NF_EBTABLES
+
+config BRIDGE_EBT_ARP
+	tristate "ebt: ARP filter support"
+	depends on BRIDGE_NF_EBTABLES
+
+config BRIDGE_EBT_IP
+	tristate "ebt: IP filter support"
+	depends on BRIDGE_NF_EBTABLES
+
+config BRIDGE_EBT_LIMIT
+	tristate "ebt: limit match support"
+	depends on BRIDGE_NF_EBTABLES
+
+config BRIDGE_EBT_MARK
+	tristate "ebt: mark filter support"
+	depends on BRIDGE_NF_EBTABLES
+
+config BRIDGE_EBT_PKTTYPE
+	tristate "ebt: packet type filter support"
+	depends on BRIDGE_NF_EBTABLES
+
+config BRIDGE_EBT_STP
+	tristate "ebt: STP filter support"
+	depends on BRIDGE_NF_EBTABLES
+
+config BRIDGE_EBT_VLAN
+	tristate "ebt: 802.1Q VLAN filter support"
+	depends on BRIDGE_NF_EBTABLES
+
+config BRIDGE_EBT_ARPREPLY
+	tristate "ebt: arp reply target support"
+	depends on BRIDGE_NF_EBTABLES
+
+config BRIDGE_EBT_DNAT
+	tristate "ebt: dnat target support"
+	depends on BRIDGE_NF_EBTABLES
+
+config BRIDGE_EBT_MARK_T
+	tristate "ebt: mark target support"
+	depends on BRIDGE_NF_EBTABLES
+
+config BRIDGE_EBT_REDIRECT
+	tristate "ebt: redirect target support"
+	depends on BRIDGE_NF_EBTABLES
+
+config BRIDGE_EBT_SNAT
+	tristate "ebt: snat target support"
+	depends on BRIDGE_NF_EBTABLES
+
+config BRIDGE_EBT_LOG
+	tristate "ebt: log support"
+	depends on BRIDGE_NF_EBTABLES
+
+endmenu
+
+config BRIDGE
+	bool
+	default n
+
+config NETFILTER
+	bool
+	default n
+

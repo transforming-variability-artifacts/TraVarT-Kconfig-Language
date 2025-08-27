@@ -1,0 +1,334 @@
+
+mainmenu MENU_M68KNOMMU
+
+config M68KNOMMU
+	bool
+	default y
+
+config MMU
+	bool
+	default n
+
+config FPU
+	bool
+	default n
+
+config UID16
+	bool
+	default y
+
+config RWSEM_GENERIC_SPINLOCK
+	bool
+	default y
+
+config RWSEM_XCHGADD_ALGORITHM
+	bool
+	default n
+
+menu MENU_CPU
+
+choice CPU_TYPE
+	bool "CPU"
+	default M68EZ328
+
+config M68328
+	bool "MC68328"
+
+config M68EZ328
+	bool "MC68EZ328"
+
+config M68VZ328
+	bool "MC68VZ328"
+
+config M68360
+	bool "MC68360"
+
+config M5206
+	bool "MCF5206"
+
+config M5206e
+	bool "MCF5206e"
+
+config M5249
+	bool "MCF5249"
+
+config M5272
+	bool "MCF5272"
+
+config M5282
+	bool "MCF5282"
+
+config M5307
+	bool "MCF5307"
+
+config M5407
+	bool "MCF5407"
+
+endchoice
+
+config COLDFIRE
+	bool
+	depends on (M5206 | M5206e | M5249 | M5272 | M5282 | M5307 | M5407)
+	default y
+
+choice CLOCK_FREQ
+	bool "CPU CLOCK Frequency"
+	default AUTO
+
+config CLOCK_AUTO
+	bool "AUTO"
+
+config CLOCK_11MHz
+	bool "11MHz"
+
+config CLOCK_16MHz
+	bool "16MHz"
+
+config CLOCK_20MHz
+	bool "20MHz"
+
+config CLOCK_24MHz
+	bool "24MHz"
+
+config CLOCK_25MHz
+	bool "25MHz"
+
+config CLOCK_33MHz
+	bool "33MHz"
+
+config CLOCK_40MHz
+	bool "40MHz"
+
+config CLOCK_45MHz
+	bool "45MHz"
+
+config CLOCK_48MHz
+	bool "48MHz"
+
+config CLOCK_50MHz
+	bool "50MHz"
+
+config CLOCK_54MHz
+	bool "54MHz"
+
+config CLOCK_60MHz
+	bool "60MHz"
+
+config CLOCK_64MHz
+	bool "64MHz"
+
+config CLOCK_66MHz
+	bool "66MHz"
+
+config CLOCK_70MHz
+	bool "70MHz"
+
+config CLOCK_140MHz
+	bool "140MHz"
+
+endchoice
+
+config OLDMASK
+	bool "Old mask 5307 (1H55J) silicon"
+	depends on M5307
+
+config PILOT3
+	bool "Pilot 1000/5000, PalmPilot Personal/Pro, or PalmIII support"
+	depends on M68328
+
+config XCOPILOT_BUGS
+	bool "  (X)Copilot support"
+	depends on PILOT3
+
+config UCSIMM
+	bool "uCsimm module support"
+	depends on M68EZ328
+
+config UCDIMM
+	bool "uDsimm module support"
+	depends on M68VZ328
+
+config DRAGEN2
+	bool "DragenEngine II board support"
+	depends on M68VZ328
+
+config DIRECT_IO_ACCESS
+	bool "  Allow user to access IO directly"
+	depends on (UCSIMM | UCDIMM | DRAGEN2)
+
+config INIT_LCD
+	bool "  Initialize LCD"
+	depends on (UCSIMM | UCDIMM | DRAGEN2)
+
+config UCQUICC
+	bool "Lineo uCquicc board support"
+	depends on M68360
+
+config ARN5206
+	bool "Arnewsh 5206 board support"
+	depends on M5206
+
+config M5206eC3
+	bool "Motorola M5206eC3 board support"
+	depends on M5206e
+
+config ELITE
+	bool "Motorola M5206eLITE board support"
+	depends on M5206e
+
+config M5249C3
+	bool "Motorola M5249C3 board support"
+	depends on M5249
+
+config M5272C3
+	bool "Motorola M5272C3 board support"
+	depends on M5272
+
+config COBRA5272
+	bool "senTec COBRA5272 board support"
+	depends on M5272
+
+config M5282C3
+	bool "Motorola M5282C3 board support"
+	depends on M5282
+
+config COBRA5282
+	bool "senTec COBRA5282 board support"
+	depends on M5282
+
+config ARN5307
+	bool "Arnewsh 5307 board support"
+	depends on M5307
+
+config M5307C3
+	bool "Motorola M5307C3 board support"
+	depends on M5307
+
+config eLIA
+	bool "Moreton Bay eLIA board support"
+	depends on M5307
+
+config SECUREEDGEMP3
+	bool "SnapGear SecureEdge/MP3 platform support"
+	depends on M5307
+
+config M5407C3
+	bool "Motorola M5407C3 board support"
+	depends on M5407
+
+config CLEOPATRA
+	bool "Feith CLEOPATRA board support"
+	depends on (M5307 | M5407)
+
+config NETtel
+	bool "SecureEdge/NETtel board support"
+	depends on (M5206e | M5272 | M5307)
+
+config SNAPGEAR
+	bool "SnapGear router board support"
+	depends on NETtel
+
+config ROMFS_FROM_ROM
+	bool "  ROMFS image not RAM resident"
+	depends on (NETtel | SNAPGEAR)
+
+config PILOT
+	bool
+	default y
+	depends on (PILOT3 | PILOT5)
+
+config ARNEWSH
+	bool
+	default y
+	depends on (ARN5206 | ARN5307)
+
+config MOTOROLA
+	bool
+	default y
+	depends on (M5206eC3 | M5249C3 | M5272C3 | M5282C3 | M5307C3 | M5407C3)
+
+config senTec
+	bool
+	default y
+	depends on (COBRA5272 | COBRA5282)
+
+config LARGE_ALLOCS
+	bool "Allow allocating large blocks (> 1MB) of memory"
+
+choice RAMSIZE
+	bool "RAM size"
+	default AUTO
+
+config RAMAUTO
+	bool "AUTO"
+
+config RAM4MB
+	bool "4MiB"
+
+config RAM8MB
+	bool "8MiB"
+
+config RAM16MB
+	bool "16MiB"
+
+config RAM32MB
+	bool "32MiB"
+
+endchoice
+
+choice RAMBIT
+	bool "RAM bus width"
+	default RAMAUTOBIT
+
+config RAMAUTOBIT
+	bool "AUTO"
+
+config RAM8BIT
+	bool "8bit"
+
+config RAM16BIT
+	bool "16bit"
+
+config RAM32BIT
+	bool "32bit"
+
+endchoice
+
+choice KERNELFROM
+	bool "Kernel executes from"
+
+config RAMKERNEL
+	bool "RAM"
+
+config ROMKERNEL
+	bool "ROM"
+
+config HIMEMKERNEL
+	bool "HIMEM"
+
+endchoice
+
+endmenu
+
+menu MENU_BUS
+
+config PCI
+	bool "PCI support"
+
+config COMEMPCI
+	bool "CO-MEM lite PCI controller support"
+	depends on (M5307 | M5407)
+
+endmenu
+
+menu MENU_PM
+
+config PM
+	bool "Power Management support"
+
+endmenu
+
+config PILOT5
+	bool
+	default n
+

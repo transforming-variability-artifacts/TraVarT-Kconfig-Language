@@ -1,0 +1,433 @@
+mainmenu MENU_LKC
+
+config ARM
+	bool
+	default y
+
+config MMU
+	bool
+	default y
+
+config EISA
+	bool
+
+config SBUS
+	bool
+
+config MCA
+	bool
+
+config UID16
+	bool
+	default y
+
+config RWSEM_GENERIC_SPINLOCK
+	bool
+	default y
+
+config RWSEM_XCHGADD_ALGORITHM
+	bool
+
+config GENERIC_BUST_SPINLOCK
+	bool
+
+config GENERIC_ISA_DMA
+	bool
+
+config GENERIC_IOMAP
+	bool
+	default y
+
+menu MENU_SYSTEM
+
+choice ARCH_TYPE
+	bool "ARM system type"
+	default ARCH_RPC
+
+config ARCH_CLPS7500
+	bool "Cirrus-CL-PS7500FE"
+
+config ARCH_CLPS711X
+	bool "CLPS711x/EP721x-based"
+
+config ARCH_CO285
+	bool "Co-EBSA285"
+
+config ARCH_EBSA110
+	bool "EBSA-110"
+
+config ARCH_CAMELOT
+	bool "Epxa10db"
+
+config ARCH_FOOTBRIDGE
+	bool "FootBridge"
+
+config ARCH_INTEGRATOR
+	bool "Integrator"
+
+config ARCH_IOP3XX
+	bool "IOP3xx-based"
+
+config ARCH_IXP4XX
+	bool "IXP4xx-based"
+
+config ARCH_IXP2000
+	bool "IXP2400/2800-based"
+
+config ARCH_L7200
+	bool "LinkUp-L7200"
+
+config ARCH_PXA
+	bool "PXA2xx-based"
+
+config ARCH_RPC
+	bool "RiscPC"
+
+config ARCH_SA1100
+	bool "SA1100-based"
+
+config ARCH_S3C2410
+	bool "Samsung S3C2410"
+
+config ARCH_SHARK
+	bool "Shark"
+
+config ARCH_LH7A40X
+	bool "Sharp LH7A40X"
+
+config ARCH_OMAP
+	bool "TI OMAP"
+
+config ARCH_VERSATILE_PB
+	bool "Versatile PB"
+
+config ARCH_IMX
+	bool "IMX"
+
+config ARCH_H720X
+	bool "Hynix-HMS720x-based"
+
+endchoice
+
+config ARCH_ACORN
+	bool
+	depends on ARCH_RPC
+	default y
+
+config TIMER_ACORN
+	bool
+	depends on ARCH_ACORN | ARCH_CLPS7500
+	default y
+
+config FOOTBRIDGE
+	bool
+	depends on ARCH_CO285 | ARCH_FOOTBRIDGE
+	default y
+
+config FOOTBRIDGE_HOST
+	bool
+	depends on ARCH_CATS | ARCH_EBSA285_HOST | ARCH_NETWINDER | ARCH_PERSONAL_SERVER
+	default y
+
+config FOOTBRIDGE_ADDIN
+	bool
+	depends on ARCH_CO285 | ARCH_EBSA285_ADDIN
+	default y
+
+config ARCH_EBSA285
+	bool
+	depends on ARCH_EBSA285_HOST | ARCH_EBSA285_ADDIN
+	default y
+
+config SA1111
+	bool
+	depends on ASSABET_NEPONSET | SA1100_ADSBITSY | SA1100_BADGE4 | SA1100_CONSUS | SA1100_GRAPHICSMASTER | SA1100_JORNADA720 | ARCH_LUBBOCK | SA1100_PFS168 | SA1100_PT_SYSTEM3 | SA1100_XP860
+	default y
+
+config SHARP_LOCOMO
+	bool
+	depends on SA1100_COLLIE
+	default y
+
+config DMABOUNCE
+	bool
+	depends on SA1111 | ARCH_IXP4XX
+	default y
+
+config XSCALE_PMU
+	bool
+	depends on CPU_XSCALE & ~XSCALE_PMU_TIMER
+	default y
+
+endmenu
+
+menu MENU_GENERAL
+
+config DISCONTIGMEM
+	bool
+	depends on ARCH_EDB7211 | ARCH_SA1100 | (ARCH_LH7A40X & ~LH7A40X_CONTIGMEM)
+	default y
+
+# Default statement omitted
+config PCI
+	bool "PCI support" if ARCH_INTEGRATOR_AP	
+
+config PCI_HOST_VIA82C505
+	bool
+	depends on PCI & ARCH_SHARK
+	default y
+
+config ICST525
+	bool
+	depends on ARCH_INTEGRATOR
+	default y
+
+config ARM_AMBA
+	bool
+	depends on ARCH_INTEGRATOR | ARCH_VERSATILE_PB
+	default y
+
+config ISA
+	bool
+	depends on FOOTBRIDGE_HOST | ARCH_SHARK | ARCH_CLPS7500 | ARCH_EBSA110 | ARCH_CDB89712 | ARCH_EDB7211 | ARCH_SA1100 | ARCH_MX1ADS
+	default y
+
+config ISA_DMA
+	bool
+	depends on FOOTBRIDGE_HOST | ARCH_SHARK
+	default y
+
+config FIQ
+	bool
+	depends on ARCH_ACORN | ARCH_L7200 | ARCH_LH7A400
+	default y
+
+config ZBOOT_ROM
+	bool "Compressed boot loader in ROM/flash"
+
+config CPU_FREQ
+	bool "Support CPU clock change (EXPERIMENTAL)"
+	depends on (ARCH_SA1100 | ARCH_INTEGRATOR) & EXPERIMENTAL
+
+# Auxiliary if removed from select statement
+config CPU_FREQ_SA1100
+	bool
+	depends on CPU_FREQ & SA1100_LART
+	default y
+	select CPU_FREQ_24_API
+
+# Auxiliary if removed from select statement
+config CPU_FREQ_SA1110
+	bool
+	depends on CPU_FREQ & (SA1100_ASSABET | SA1100_CERF | SA1100_PT_SYSTEM3)
+	default y
+	select CPU_FREQ_24_API
+
+config CPU_FREQ_INTEGRATOR
+	tristate "CPUfreq driver for ARM Integrator CPUs"
+	depends on ARCH_INTEGRATOR & ICST525 & CPU_FREQ
+	default y
+
+# Remove empty if block
+
+config FPE_NWFPE
+	bool "NWFPE math emulation"
+
+config FPE_NWFPE_XP
+	bool "Support extended precision"
+	depends on FPE_NWFPE & ~CPU_BIG_ENDIAN
+
+config FPE_FASTFPE
+	bool "FastFPE math emulation (EXPERIMENTAL)"
+	depends on ~CPU_32v3 & EXPERIMENTAL
+
+config VFP
+	bool "VFP-format floating point maths"
+	depends on CPU_V6 | CPU_ARM926T
+
+config PM
+	bool "Power Management support"
+
+config PREEMPT
+	bool "Preemptible Kernel (EXPERIMENTAL)"
+	depends on CPU_32 & EXPERIMENTAL
+
+config APM
+	tristate "Advanced Power Management Emulation"
+	depends on PM
+
+config ARTHUR
+	tristate "RISC OS personality"
+	depends on CPU_32
+
+config LEDS
+	bool "Timer and CPU usage LEDs"
+	depends on ARCH_NETWINDER | ARCH_EBSA110 | ARCH_EBSA285 | ARCH_SHARK | ARCH_CO285 | ARCH_SA1100 | ARCH_LUBBOCK | MACH_MAINSTONE | ARCH_PXA_IDP | ARCH_INTEGRATOR | ARCH_CDB89712 | ARCH_P720T | ARCH_OMAP | ARCH_VERSATILE_PB | ARCH_IMX
+
+# Removed auxiliary ifs (visibility, default value)
+config LEDS_TIMER
+	bool "Timer LED"
+	depends on ARCH_NETWINDER | ARCH_EBSA110 | ARCH_EBSA285 | ARCH_SHARK | ARCH_CO285 | ARCH_SA1100 | ARCH_LUBBOCK | MACH_MAINSTONE | ARCH_PXA_IDP | ARCH_INTEGRATOR | ARCH_CDB89712 | ARCH_P720T | ARCH_OMAP | ARCH_VERSATILE_PB | ARCH_IMX
+	default y
+
+config LEDS_CPU
+	bool "CPU usage LED"
+	depends on LEDS & (ARCH_NETWINDER | ARCH_EBSA285 | ARCH_SHARK | ARCH_CO285 | ARCH_SA1100 | ARCH_LUBBOCK | MACH_MAINSTONE | ARCH_PXA_IDP | ARCH_INTEGRATOR | ARCH_P720T | ARCH_VERSATILE_PB | ARCH_IMX)
+
+# Removed auxiliary if in default statement
+config ALIGNMENT_TRAP
+	bool
+	depends on CPU_32
+	default y
+
+endmenu
+
+# Removed two empty if blocks
+
+config ARCH_CATS
+	bool
+	default n
+
+config ARCH_CDB89712
+	bool
+	default n
+
+config ARCH_EBSA285_ADDIN
+	bool
+	default n
+
+config ARCH_EBSA285_HOST
+	bool
+	default n
+
+config ARCH_EDB7211
+	bool
+	default n
+
+config ARCH_LH7A400
+	bool
+	default n
+
+config ARCH_LUBBOCK
+	bool
+	default n
+
+config ARCH_MX1ADS
+	bool
+	default n
+
+config ARCH_NETWINDER
+	bool
+	default n
+
+config ARCH_P720T
+	bool
+	default n
+
+config ARCH_PERSONAL_SERVER
+	bool
+	default n
+
+config ARCH_PXA_IDP
+	bool
+	default n
+
+config ASSABET_NEPONSET
+	bool
+	default n
+
+config CPU_32
+	bool
+	default n
+
+config CPU_32v3
+	bool
+	default n
+
+config CPU_ARM926T
+	bool
+	default n
+
+config CPU_BIG_ENDIAN
+	bool
+	default n
+
+config CPU_FREQ_24_API
+	bool
+	default n
+
+config CPU_V6
+	bool
+	default n
+
+config CPU_XSCALE
+	bool
+	default n
+
+config EXPERIMENTAL
+	bool
+	default n
+
+config LH7A40X_CONTIGMEM
+	bool
+	default n
+
+config MACH_MAINSTONE
+	bool
+	default n
+
+config SA1100_ADSBITSY
+	bool
+	default n
+
+config SA1100_ASSABET
+	bool
+	default n
+
+config SA1100_BADGE4
+	bool
+	default n
+
+config SA1100_CERF
+	bool
+	default n
+
+config SA1100_COLLIE
+	bool
+	default n
+
+config SA1100_CONSUS
+	bool
+	default n
+
+config SA1100_GRAPHICSMASTER
+	bool
+	default n
+
+config SA1100_JORNADA720
+	bool
+	default n
+
+config SA1100_LART
+	bool
+	default n
+
+config SA1100_PFS168
+	bool
+	default n
+
+config SA1100_PT_SYSTEM3
+	bool
+	default n
+
+config SA1100_XP860
+	bool
+	default n
+
+config SYSCTL
+	bool
+	default n
+
+config XSCALE_PMU_TIMER
+	bool
+	default n

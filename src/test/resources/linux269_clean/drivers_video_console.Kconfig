@@ -1,0 +1,145 @@
+# Caveat emptor: File has odd formatting
+menu MENU_VGA_CONSOLE
+
+# Omitted auxiliary if expression for visibility
+config VGA_CONSOLE
+	bool "VGA text console"
+	depends on ~ARCH_ACORN & ~ARCH_EBSA110 & ~ARCH_4XX & ~ARCH_8XX & ~SPARC32 & ~SPARC64 & ~M68K & ~PARISC
+	default y
+
+config VIDEO_SELECT
+	bool "Video mode selection support"
+	depends on  (X86 | X86_64) & VGA_CONSOLE
+
+config MDA_CONSOLE
+	tristate "MDA text console (dual-headed) (EXPERIMENTAL)"
+	depends on ~M68K & ISA
+
+config SGI_NEWPORT_CONSOLE
+	tristate "SGI Newport Console support"
+	depends on SGI_IP22 
+
+config STI_CONSOLE
+	tristate "STI text console" 
+	depends on PARISC & FRAMEBUFFER_CONSOLE
+	default y
+
+config PROM_CONSOLE
+	bool "PROM console"
+	depends on SPARC32 | SPARC64
+
+config DUMMY_CONSOLE
+	bool
+	depends on ~PROM_CONSOLE | ~VGA_CONSOLE | ~SGI_NEWPORT_CONSOLE 
+	default y
+
+config FRAMEBUFFER_CONSOLE
+	tristate "Framebuffer Console support"
+	depends on FB
+
+config FONTS
+	bool "Select compiled-in fonts"
+	depends on FRAMEBUFFER_CONSOLE
+
+# If visiblity constraints to FONTS were removed from the FONT_* confsyms
+
+# Removed auxiliary if expression for default statement
+config FONT_8x8
+	bool "VGA 8x8 font"
+	depends on FRAMEBUFFER_CONSOLE
+	default y
+
+# Removed auxiliary if expression for default statement
+config FONT_8x16
+	bool "VGA 8x16 font"
+	depends on FRAMEBUFFER_CONSOLE | SGI_NEWPORT_CONSOLE
+	default y
+
+# Removed auxiliary if expression for default statement
+config FONT_6x11
+	bool "Mac console 6x11 font (not supported by all drivers)"
+	depends on FRAMEBUFFER_CONSOLE
+	default y
+
+# Removed auxiliary if expression for default statement
+config FONT_PEARL_8x8
+	bool "Pearl (old m68k) console 8x8 font"
+	depends on FRAMEBUFFER_CONSOLE
+	default y
+
+# Removed auxiliary if expression for default statement
+config FONT_ACORN_8x8
+	bool "Acorn console 8x8 font"
+	depends on FRAMEBUFFER_CONSOLE
+	default y
+
+# Removed auxiliary if expression for default statement
+config FONT_MINI_4x6
+	bool "Mini 4x6 font"
+	depends on ~SPARC32 & ~SPARC64 & FONTS
+
+# Removed auxiliary if expression for default statement
+config FONT_SUN8x16
+	bool "Sparc console 8x16 font"
+	depends on FRAMEBUFFER_CONSOLE & (~SPARC32 & ~SPARC64 & FONTS | SPARC32 | SPARC64)
+
+# Removed auxiliary if expression for default statement
+config FONT_SUN12x22
+	bool "Sparc console 12x22 font (not supported by all drivers)"
+	depends on FRAMEBUFFER_CONSOLE & (~SPARC32 & ~SPARC64 & FONTS | SPARC32 | SPARC64)
+
+endmenu
+
+config ARCH_ACORN
+	bool
+	default n
+
+config ARCH_EBSA110
+	bool
+	default n
+
+config FB
+	bool
+	default n
+
+config ISA
+	bool
+	default n
+
+config M68K
+	bool
+	default n
+
+config PARISC
+	bool
+	default n
+
+config SGI_IP22
+	bool
+	default n
+
+config SPARC32
+	bool
+	default n
+
+config SPARC64
+	bool
+	default n
+
+# Stubs added manually
+config ARCH_8XX
+	bool
+	default n
+
+config ARCH_4XX
+	bool
+	default n
+
+config X86
+	bool
+	default n
+
+config X86_64
+	bool
+	default n
+

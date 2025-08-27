@@ -1,0 +1,233 @@
+menu SND_PCI
+	depends on SND & PCI
+
+config SND_AC97_CODEC
+	tristate
+	select SND_PCM
+
+config SND_ALI5451
+	tristate "ALi PCI Audio M5451"
+	depends on SND
+	select SND_MPU401_UART & SND_AC97_CODEC
+
+config SND_ATIIXP
+	tristate "ATI IXP 150/200/250/300"
+	depends on SND
+	select SND_AC97_CODEC
+
+config SND_ATIIXP_MODEM
+	tristate "ATI IXP 150/200/250 Modem"
+	depends on SND
+	select SND_AC97_CODEC
+
+config SND_AU8810
+	tristate "Aureal Advantage"
+	depends on SND
+	select SND_MPU401_UART & SND_AC97_CODEC
+
+config SND_AU8820
+		tristate "Aureal Vortex"
+		depends on SND
+	select SND_MPU401_UART & SND_AC97_CODEC
+
+config SND_AU8830
+		tristate "Aureal Vortex 2"
+		depends on SND
+	select SND_MPU401_UART & SND_AC97_CODEC
+
+config SND_AZT3328
+	tristate "Aztech AZF3328 / PCI168 (EXPERIMENTAL)"
+	depends on SND & EXPERIMENTAL
+	select SND_OPL3_LIB & SND_MPU401_UART & SND_PCM
+
+config SND_BT87X
+	tristate "Bt87x Audio Capture"
+	depends on SND
+	select SND_PCM
+
+config SND_CS46XX
+	tristate "Cirrus Logic (Sound Fusion) CS4280/CS461x/CS462x/CS463x"
+	depends on SND
+	select SND_RAWMIDI & SND_AC97_CODEC
+
+config SND_CS46XX_NEW_DSP
+	bool "Cirrus Logic (Sound Fusion) New DSP support (EXPERIMENTAL)"
+	depends on SND_CS46XX & EXPERIMENTAL
+
+config SND_CS4281
+	tristate "Cirrus Logic (Sound Fusion) CS4281"
+	depends on SND
+	select SND_OPL3_LIB & SND_RAWMIDI & SND_AC97_CODEC
+
+config SND_EMU10K1
+	tristate "EMU10K1 (SB Live! & Audigy, E-mu APS)"
+	depends on SND
+	select SND_HWDEP & SND_RAWMIDI & SND_AC97_CODEC
+
+config SND_KORG1212
+	tristate "Korg 1212 IO"
+	depends on SND
+	select SND_PCM
+
+config SND_MIXART
+	tristate "Digigram miXart"
+	depends on SND
+	select SND_HWDEP & SND_PCM
+
+config SND_NM256
+	tristate "NeoMagic NM256AV/ZX"
+	depends on SND
+	select SND_AC97_CODEC
+
+config SND_RME32
+	tristate "RME Digi32, 32/8, 32 PRO"
+	depends on SND
+	select SND_PCM
+
+config SND_RME96
+	tristate "RME Digi96, 96/8, 96/8 PRO"
+	depends on SND
+	select SND_PCM
+
+config SND_RME9652
+	tristate "RME Digi9652 (Hammerfall)"
+	depends on SND
+	select SND_PCM
+
+config SND_HDSP
+	tristate "RME Hammerfall DSP Audio"
+	depends on SND
+	select SND_HWDEP & SND_RAWMIDI & SND_PCM
+
+config SND_TRIDENT
+	tristate "Trident 4D-Wave DX/NX; SiS 7018"
+	depends on SND
+	select SND_MPU401_UART & SND_AC97_CODEC
+
+config SND_YMFPCI
+	tristate "Yamaha YMF724/740/744/754"
+	depends on SND
+	select SND_OPL3_LIB & SND_MPU401_UART & SND_AC97_CODEC
+
+config SND_ALS4000
+	tristate "Avance Logic ALS4000"
+	depends on SND
+	select SND_OPL3_LIB & SND_MPU401_UART & SND_PCM
+
+config SND_CMIPCI
+	tristate "C-Media 8738, 8338"
+	depends on SND
+	select SND_OPL3_LIB & SND_MPU401_UART & SND_PCM
+
+config SND_ENS1370
+	tristate "(Creative) Ensoniq AudioPCI 1370"
+	depends on SND
+	select SND_RAWMIDI & SND_PCM
+
+config SND_ENS1371
+	tristate "(Creative) Ensoniq AudioPCI 1371/1373"
+	depends on SND
+	select SND_RAWMIDI & SND_AC97_CODEC
+
+config SND_ES1938
+	tristate "ESS ES1938/1946/1969 (Solo-1)"
+	depends on SND
+	select SND_OPL3_LIB & SND_MPU401_UART & SND_AC97_CODEC
+
+config SND_ES1968
+	tristate "ESS ES1968/1978 (Maestro-1/2/2E)"
+	depends on SND
+	select SND_MPU401_UART & SND_AC97_CODEC
+
+config SND_MAESTRO3
+	tristate "ESS Allegro/Maestro3"
+	depends on SND
+	select SND_AC97_CODEC
+
+config SND_FM801
+	tristate "ForteMedia FM801"
+	depends on SND
+	select SND_OPL3_LIB & SND_MPU401_UART & SND_AC97_CODEC
+
+config SND_FM801_TEA575X
+	tristate "ForteMedia FM801 + TEA5757 tuner"
+	depends on SND_FM801
+	select VIDEO_DEV
+
+config SND_ICE1712
+	tristate "ICEnsemble ICE1712 (Envy24)"
+	depends on SND
+	select SND_MPU401_UART & SND_AC97_CODEC
+
+config SND_ICE1724
+	tristate "ICE/VT1724/1720 (Envy24HT/PT)"
+	depends on SND
+	select SND_MPU401_UART & SND_AC97_CODEC
+
+config SND_INTEL8X0
+	tristate "Intel i8x0/MX440, SiS 7012; Ali 5455; NForce Audio; AMD768/8111"
+	depends on SND
+	select SND_MPU401_UART & SND_AC97_CODEC
+
+config SND_INTEL8X0M
+	tristate "Intel i8x0/MX440; SiS 7013; NForce; AMD768/8111 modems (EXPERIMENTAL)"
+	depends on SND & EXPERIMENTAL
+	select SND_AC97_CODEC
+
+config SND_SONICVIBES
+	tristate "S3 SonicVibes"
+	depends on SND
+	select SND_OPL3_LIB & SND_MPU401_UART & SND_AC97_CODEC
+
+config SND_VIA82XX
+	tristate "VIA 82C686A/B, 8233 South Bridge"
+	depends on SND
+	select SND_MPU401_UART & SND_AC97_CODEC
+
+config SND_VX222
+	tristate "Digigram VX222"
+	depends on SND
+	select SND_VX_LIB
+
+endmenu
+
+config EXPERIMENTAL
+	bool
+	default n
+
+config PCI
+	bool
+	default n
+
+config SND
+	bool
+	default n
+
+config SND_HWDEP
+	bool
+	default n
+
+config SND_MPU401_UART
+	bool
+	default n
+
+config SND_OPL3_LIB
+	bool
+	default n
+
+config SND_PCM
+	bool
+	default n
+
+config SND_RAWMIDI
+	bool
+	default n
+
+config SND_VX_LIB
+	bool
+	default n
+
+config VIDEO_DEV
+	bool
+	default n
+

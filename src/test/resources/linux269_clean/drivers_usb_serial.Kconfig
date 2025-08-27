@@ -1,0 +1,167 @@
+menu MENU_USB_SERIAL
+	depends on USB
+
+config USB_SERIAL
+	tristate "USB Serial Converter support"
+	depends on USB
+
+# `=y` omitted
+config USB_SERIAL_CONSOLE
+	bool "USB Serial Console device support (EXPERIMENTAL)"
+	depends on USB_SERIAL & EXPERIMENTAL
+
+config USB_SERIAL_GENERIC
+	bool "USB Generic Serial Driver"
+	depends on USB_SERIAL
+
+config USB_SERIAL_BELKIN
+	tristate "USB Belkin and Peracom Single Port Serial Driver"
+	depends on USB_SERIAL
+
+config USB_SERIAL_WHITEHEAT
+	tristate "USB ConnectTech WhiteHEAT Serial Driver"
+	depends on USB_SERIAL & BROKEN_ON_SMP
+
+config USB_SERIAL_DIGI_ACCELEPORT
+	tristate "USB Digi International AccelePort USB Serial Driver"
+	depends on USB_SERIAL
+
+config USB_SERIAL_EMPEG
+	tristate "USB Empeg empeg-car Mark I/II Driver"
+	depends on USB_SERIAL
+
+config USB_SERIAL_FTDI_SIO
+	tristate "USB FTDI Single Port Serial Driver (EXPERIMENTAL)"
+	depends on USB_SERIAL & EXPERIMENTAL
+
+config USB_SERIAL_VISOR
+	tristate "USB Handspring Visor / Palm m50x / Sony Clie Driver"
+	depends on USB_SERIAL
+
+config USB_SERIAL_IPAQ
+	tristate "USB PocketPC PDA Driver"
+	depends on USB_SERIAL
+
+config USB_SERIAL_IR
+	tristate "USB IR Dongle Serial Driver (EXPERIMENTAL)"
+	depends on USB_SERIAL & EXPERIMENTAL
+
+config USB_SERIAL_EDGEPORT
+	tristate "USB Inside Out Edgeport Serial Driver"
+	depends on USB_SERIAL
+
+config USB_SERIAL_EDGEPORT_TI
+	tristate "USB Inside Out Edgeport Serial Driver (TI devices)"
+	depends on USB_SERIAL
+
+config USB_SERIAL_KEYSPAN_PDA
+	tristate "USB Keyspan PDA Single Port Serial Driver"
+	depends on USB_SERIAL
+
+config USB_SERIAL_KEYSPAN
+	tristate "USB Keyspan USA-xxx Serial Driver"
+	depends on USB_SERIAL
+
+config USB_SERIAL_KEYSPAN_MPR
+	bool "USB Keyspan MPR Firmware"
+	depends on USB_SERIAL_KEYSPAN
+
+config USB_SERIAL_KEYSPAN_USA28
+	bool "USB Keyspan USA-28 Firmware"
+	depends on USB_SERIAL_KEYSPAN
+
+config USB_SERIAL_KEYSPAN_USA28X
+	bool "USB Keyspan USA-28X Firmware"
+	depends on USB_SERIAL_KEYSPAN
+
+config USB_SERIAL_KEYSPAN_USA28XA
+	bool "USB Keyspan USA-28XA Firmware"
+	depends on USB_SERIAL_KEYSPAN
+
+config USB_SERIAL_KEYSPAN_USA28XB
+	bool "USB Keyspan USA-28XB Firmware"
+	depends on USB_SERIAL_KEYSPAN
+
+config USB_SERIAL_KEYSPAN_USA19
+	bool "USB Keyspan USA-19 Firmware"
+	depends on USB_SERIAL_KEYSPAN
+
+config USB_SERIAL_KEYSPAN_USA18X
+	bool "USB Keyspan USA-18X Firmware"
+	depends on USB_SERIAL_KEYSPAN
+
+config USB_SERIAL_KEYSPAN_USA19W
+	bool "USB Keyspan USA-19W Firmware"
+	depends on USB_SERIAL_KEYSPAN
+
+config USB_SERIAL_KEYSPAN_USA19QW
+	bool "USB Keyspan USA-19QW Firmware"
+	depends on USB_SERIAL_KEYSPAN
+
+config USB_SERIAL_KEYSPAN_USA19QI
+	bool "USB Keyspan USA-19QI Firmware"
+	depends on USB_SERIAL_KEYSPAN
+
+config USB_SERIAL_KEYSPAN_USA49W
+	bool "USB Keyspan USA-49W Firmware"
+	depends on USB_SERIAL_KEYSPAN
+
+config USB_SERIAL_KEYSPAN_USA49WLC
+	bool "USB Keyspan USA-49WLC Firmware"
+	depends on USB_SERIAL_KEYSPAN
+
+config USB_SERIAL_KLSI
+	tristate "USB KL5KUSB105 (Palmconnect) Driver (EXPERIMENTAL)"
+	depends on USB_SERIAL & EXPERIMENTAL
+
+config USB_SERIAL_KOBIL_SCT
+	tristate "USB KOBIL chipcard reader"
+	depends on USB_SERIAL
+
+config USB_SERIAL_MCT_U232
+	tristate "USB MCT Single Port Serial Driver"
+	depends on USB_SERIAL
+
+config USB_SERIAL_PL2303
+	tristate "USB Prolific 2303 Single Port Serial Driver"
+	depends on USB_SERIAL
+
+config USB_SERIAL_SAFE
+	tristate "USB Safe Serial (Encapsulated) Driver (EXPERIMENTAL)"
+	depends on USB_SERIAL & EXPERIMENTAL
+
+config USB_SERIAL_SAFE_PADDED
+	bool "USB Secure Encapsulated Driver - Padded"
+	depends on USB_SERIAL_SAFE
+
+config USB_SERIAL_CYBERJACK
+	tristate "USB REINER SCT cyberJack pinpad/e-com chipcard reader (EXPERIMENTAL)"
+	depends on USB_SERIAL & EXPERIMENTAL
+
+config USB_SERIAL_XIRCOM
+	tristate "USB Xircom / Entregra Single Port Serial Driver"
+	depends on USB_SERIAL
+
+config USB_SERIAL_OMNINET
+	tristate "USB ZyXEL omni.net LCD Plus Driver (EXPERIMENTAL)"
+	depends on USB_SERIAL & EXPERIMENTAL
+
+config USB_EZUSB
+	bool
+	depends on USB_SERIAL_KEYSPAN_PDA | USB_SERIAL_XIRCOM | USB_SERIAL_KEYSPAN | USB_SERIAL_WHITEHEAT
+	default y
+
+endmenu
+
+config BROKEN_ON_SMP
+	bool
+	default n
+
+config EXPERIMENTAL
+	bool
+	default n
+
+config USB
+	bool
+	default n
+

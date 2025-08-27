@@ -1,0 +1,133 @@
+# File adapted after automatic reduction
+
+config IP_MULTICAST
+	bool "IP: multicasting"
+	depends on INET
+
+config IP_ADVANCED_ROUTER
+	bool "IP: advanced router"
+	depends on INET
+
+config IP_MULTIPLE_TABLES
+	bool "IP: policy routing"
+	depends on IP_ADVANCED_ROUTER
+
+config IP_ROUTE_FWMARK
+	bool "IP: use netfilter MARK value as routing key"
+	depends on IP_MULTIPLE_TABLES & NETFILTER
+
+config IP_ROUTE_MULTIPATH
+	bool "IP: equal cost multipath"
+	depends on IP_ADVANCED_ROUTER
+
+config IP_ROUTE_VERBOSE
+	bool "IP: verbose route monitoring"
+	depends on IP_ADVANCED_ROUTER
+
+config IP_PNP
+	bool "IP: kernel level autoconfiguration"
+	depends on INET
+
+config IP_PNP_DHCP
+	bool "IP: DHCP support"
+	depends on IP_PNP
+
+config IP_PNP_BOOTP
+	bool "IP: BOOTP support"
+	depends on IP_PNP
+
+config IP_PNP_RARP
+	bool "IP: RARP support"
+	depends on IP_PNP
+
+config NET_IPIP
+	tristate "IP: tunneling"
+	depends on INET
+	select INET_TUNNEL
+
+config NET_IPGRE
+	tristate "IP: GRE tunnels over IP"
+	depends on INET
+	select XFRM
+
+config NET_IPGRE_BROADCAST
+	bool "IP: broadcast GRE over IP"
+	depends on IP_MULTICAST & NET_IPGRE
+
+config IP_MROUTE
+	bool "IP: multicast routing"
+	depends on IP_MULTICAST
+
+config IP_PIMSM_V1
+	bool "IP: PIM-SM version 1 support"
+	depends on IP_MROUTE
+
+config IP_PIMSM_V2
+	bool "IP: PIM-SM version 2 support"
+	depends on IP_MROUTE
+
+config ARPD
+	bool "IP: ARP daemon support (EXPERIMENTAL)"
+	depends on INET & EXPERIMENTAL
+
+config SYN_COOKIES
+	bool "IP: TCP syncookie support (disabled per default)"
+	depends on INET
+
+# These config symbols with multiple select dependencies were folded with &
+config INET_AH
+	tristate "IP: AH transformation"
+	select XFRM & CRYPTO & CRYPTO_HMAC & CRYPTO_MD5 & CRYPTO_SHA1
+
+config INET_ESP
+	tristate "IP: ESP transformation"
+	select XFRM & CRYPTO & CRYPTO_HMAC & CRYPTO_MD5 & CRYPTO_SHA1 & CRYPTO_DES
+
+config INET_IPCOMP
+	tristate "IP: IPComp transformation"
+	select XFRM & INET_TUNNEL & CRYPTO & CRYPTO_DEFLATE
+
+config INET_TUNNEL
+	tristate "IP: tunnel transformation"
+	select XFRM
+
+config CRYPTO
+	bool
+	default n
+
+config CRYPTO_DEFLATE
+	bool
+	default n
+
+config CRYPTO_DES
+	bool
+	default n
+
+config CRYPTO_HMAC
+	bool
+	default n
+
+config CRYPTO_MD5
+	bool
+	default n
+
+config CRYPTO_SHA1
+	bool
+	default n
+
+config EXPERIMENTAL
+	bool
+	default n
+
+config INET
+	bool
+	default n
+
+config NETFILTER
+	bool
+	default n
+
+config XFRM
+	bool
+	default n
+

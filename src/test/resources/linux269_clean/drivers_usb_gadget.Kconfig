@@ -1,0 +1,190 @@
+# File contained mixed tristate-boolean choice block
+# All bool confsyms were set to tristate
+
+menu MENU_USB_GADGET
+
+config USB_GADGET
+	tristate "Support for USB Gadgets"
+
+choice USB_PIC
+	tristate "USB Peripheral Controller"
+	depends on USB_GADGET
+
+config USB_GADGET_NET2280
+	tristate "NetChip 2280"
+	depends on PCI
+	select USB_GADGET_DUALSPEED
+
+config USB_NET2280
+	tristate
+	depends on USB_GADGET_NET2280
+	default USB_GADGET
+
+config USB_GADGET_PXA2XX
+	tristate "PXA 2xx or IXP 4xx"
+	depends on ARCH_PXA | ARCH_IXP4XX
+
+config USB_PXA2XX
+	tristate
+	depends on USB_GADGET_PXA2XX
+	default USB_GADGET
+
+config USB_PXA2XX_SMALL
+	tristate
+	depends on USB_GADGET_PXA2XX
+
+config USB_GADGET_GOKU
+	tristate "Toshiba TC86C001 'Goku-S'"
+	depends on PCI
+
+config USB_GOKU
+	tristate
+	depends on USB_GADGET_GOKU
+	default USB_GADGET
+
+config USB_GADGET_SA1100
+	tristate "SA 1100"
+	depends on ARCH_SA1100
+
+config USB_SA1100
+	tristate
+	depends on USB_GADGET_SA1100
+	default USB_GADGET
+
+config USB_GADGET_LH7A40X
+	tristate "LH7A40X"
+	depends on ARCH_LH7A40X
+
+config USB_LH7A40X
+	tristate
+	depends on USB_GADGET_LH7A40X
+	default USB_GADGET
+
+config USB_GADGET_DUMMY_HCD
+	tristate "Dummy HCD (DEVELOPMENT)"
+	depends on USB & EXPERIMENTAL
+	select USB_GADGET_DUALSPEED
+
+config USB_DUMMY_HCD
+	tristate
+	depends on USB_GADGET_DUMMY_HCD
+	default USB_GADGET
+
+config USB_GADGET_OMAP
+	tristate "OMAP USB Device Controller"
+	depends on ARCH_OMAP
+	select ISP1301_OMAP if MACH_OMAP_H2
+
+config USB_OMAP
+	tristate
+	depends on USB_GADGET_OMAP
+	default USB_GADGET
+
+config USB_OTG
+	tristate "OTG Support"
+	depends on USB_GADGET_OMAP & ARCH_OMAP_OTG & USB_OHCI_HCD
+
+config USB_OMAP_PROC
+	tristate "/proc/driver/udc file"
+	depends on USB_GADGET_OMAP
+
+endchoice
+
+config USB_GADGET_DUALSPEED
+	bool
+	depends on USB_GADGET
+	default n
+
+choice USB_GADGET_DRV
+	tristate "USB Gadget Drivers"
+	depends on USB_GADGET
+	default USB_ETH
+
+config USB_ZERO
+	tristate "Gadget Zero (DEVELOPMENT)"
+	depends on EXPERIMENTAL
+
+config USB_ZERO_HNPTEST
+	tristate "HNP Test Device"
+	depends on USB_ZERO & USB_OTG
+
+config USB_ETH
+	tristate "Ethernet Gadget"
+	depends on NET
+
+config USB_ETH_RNDIS
+	tristate "RNDIS support (EXPERIMENTAL)"
+	depends on USB_ETH & EXPERIMENTAL
+	default y
+
+config USB_GADGETFS
+	tristate "Gadget Filesystem (EXPERIMENTAL)"
+	depends on EXPERIMENTAL
+
+config USB_FILE_STORAGE
+	tristate "File-backed Storage Gadget"
+	depends on ~USB_GADGET_SA1100
+
+config USB_FILE_STORAGE_TEST
+	tristate "File-backed Storage Gadget testing version"
+	depends on USB_FILE_STORAGE
+	default n
+
+config USB_G_SERIAL
+	tristate "Serial Gadget"
+
+endchoice
+
+endmenu
+
+config ARCH_IXP4XX
+	bool
+	default n
+
+config ARCH_LH7A40X
+	bool
+	default n
+
+config ARCH_OMAP
+	bool
+	default n
+
+config ARCH_OMAP_OTG
+	bool
+	default n
+
+config ARCH_PXA
+	bool
+	default n
+
+config ARCH_SA1100
+	bool
+	default n
+
+config EXPERIMENTAL
+	bool
+	default n
+
+config ISP1301_OMAP
+	bool
+	default n
+
+config MACH_OMAP_H2
+	bool
+	default n
+
+config NET
+	bool
+	default n
+
+config PCI
+	bool
+	default n
+
+config USB
+	bool
+	default n
+
+config USB_OHCI_HCD
+	bool
+	default n

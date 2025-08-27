@@ -1,0 +1,71 @@
+menu MENU_MTD
+
+config MTD
+	tristate "Memory Technology Device (MTD) support"
+
+config MTD_DEBUG
+	bool "Debugging"
+	depends on MTD
+
+config MTD_PARTITIONS
+	bool "MTD partitioning support"
+	depends on MTD
+
+config MTD_CONCAT
+	tristate "MTD concatenating support"
+	depends on MTD
+
+config MTD_REDBOOT_PARTS
+	tristate "RedBoot partition table parsing"
+	depends on MTD_PARTITIONS
+
+config MTD_REDBOOT_PARTS_UNALLOCATED
+	bool "Include unallocated flash regions"
+	depends on MTD_REDBOOT_PARTS
+
+config MTD_REDBOOT_PARTS_READONLY
+	bool "Force read-only for RedBoot system images"
+	depends on MTD_REDBOOT_PARTS
+
+config MTD_CMDLINE_PARTS
+	bool "Command line partition table parsing"
+	depends on MTD_PARTITIONS
+
+config MTD_AFS_PARTS
+	tristate "ARM Firmware Suite partition parsing"
+	depends on ARM & MTD_PARTITIONS
+
+config MTD_CHAR
+	tristate "Direct char device access to MTD devices"
+	depends on MTD
+
+config MTD_BLOCK
+	tristate "Caching block device access to MTD devices"
+	depends on MTD
+
+config MTD_BLOCK_RO
+	tristate "Readonly block device access to MTD devices"
+	depends on ~MTD_BLOCK & MTD
+
+config FTL
+	tristate "FTL (Flash Translation Layer) support"
+	depends on MTD
+
+config NFTL
+	tristate "NFTL (NAND Flash Translation Layer) support"
+	depends on MTD
+
+config NFTL_RW
+	bool "Write support for NFTL"
+	depends on NFTL
+
+config INFTL
+	tristate "INFTL (Inverse NAND Flash Translation Layer) support"
+	depends on MTD
+
+endmenu
+
+config ARM
+	bool
+	default n
+

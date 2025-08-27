@@ -1,0 +1,423 @@
+menu MENU_CHARDEV
+
+config VT
+	bool "Virtual terminal"
+	select INPUT
+	default y
+
+config VT_CONSOLE
+	bool "Support for console on virtual terminal"
+	depends on VT
+	default y
+
+config HW_CONSOLE
+	bool
+	depends on VT & ~S390 & ~USERMODE
+	default y
+
+config SERIAL_NONSTANDARD
+	bool "Non-standard serial port support"
+
+config COMPUTONE
+	tristate "Computone IntelliPort Plus serial support"
+	depends on SERIAL_NONSTANDARD & BROKEN_ON_SMP
+
+config ROCKETPORT
+	tristate "Comtrol RocketPort support"
+	depends on SERIAL_NONSTANDARD
+
+config CYCLADES
+	tristate "Cyclades async mux support"
+	depends on SERIAL_NONSTANDARD
+
+config CYZ_INTR
+	bool "Cyclades-Z interrupt mode operation (EXPERIMENTAL)"
+	depends on EXPERIMENTAL & CYCLADES
+
+config DIGIEPCA
+	tristate "Digiboard Intelligent Async Support"
+	depends on SERIAL_NONSTANDARD & BROKEN_ON_SMP
+
+config DIGI
+	tristate "Digiboard PC/Xx Support"
+	depends on SERIAL_NONSTANDARD & ~DIGIEPCA & BROKEN_ON_SMP
+
+config ESPSERIAL
+	tristate "Hayes ESP serial port support"
+	depends on SERIAL_NONSTANDARD & ISA & BROKEN_ON_SMP
+
+config MOXA_INTELLIO
+	tristate "Moxa Intellio support"
+	depends on SERIAL_NONSTANDARD & BROKEN_ON_SMP
+
+config MOXA_SMARTIO
+	tristate "Moxa SmartIO support"
+	depends on SERIAL_NONSTANDARD & BROKEN_ON_SMP
+
+config ISI
+	tristate "Multi-Tech multiport card support (EXPERIMENTAL)"
+	depends on SERIAL_NONSTANDARD & PCI & EXPERIMENTAL & BROKEN_ON_SMP
+
+config SYNCLINK
+	tristate "Microgate SyncLink card support"
+	depends on SERIAL_NONSTANDARD & PCI
+
+config SYNCLINKMP
+	tristate "SyncLink Multiport support"
+	depends on SERIAL_NONSTANDARD
+
+config N_HDLC
+	tristate "HDLC line discipline support"
+	depends on SERIAL_NONSTANDARD
+
+config RISCOM8
+	tristate "SDL RISCom/8 card support"
+	depends on SERIAL_NONSTANDARD & BROKEN_ON_SMP
+
+config SPECIALIX
+	tristate "Specialix IO8+ card support"
+	depends on SERIAL_NONSTANDARD & BROKEN_ON_SMP
+
+config SPECIALIX_RTSCTS
+	bool "Specialix DTR/RTS pin is RTS"
+	depends on SPECIALIX
+
+config SX
+	tristate "Specialix SX (and SI) card support"
+	depends on SERIAL_NONSTANDARD & BROKEN_ON_SMP
+
+config RIO
+	tristate "Specialix RIO system support"
+	depends on SERIAL_NONSTANDARD & BROKEN_ON_SMP
+
+config RIO_OLDPCI
+	bool "Support really old RIO/PCI cards"
+	depends on RIO
+
+config STALDRV
+	bool "Stallion multiport serial support"
+	depends on SERIAL_NONSTANDARD
+
+config STALLION
+	tristate "Stallion EasyIO or EC8/32 support"
+	depends on STALDRV & BROKEN_ON_SMP
+
+config ISTALLION
+	tristate "Stallion EC8/64, ONboard, Brumby support"
+	depends on STALDRV & BROKEN_ON_SMP
+
+config SERIAL_TX3912
+	bool "TX3912/PR31700 serial port support"
+	depends on SERIAL_NONSTANDARD & MIPS & BROKEN_ON_SMP
+
+config SERIAL_TX3912_CONSOLE
+	bool "Console on TX3912/PR31700 serial port"
+	depends on SERIAL_TX3912
+
+config AU1000_UART
+	bool "Enable Au1000 UART Support"
+	depends on SERIAL_NONSTANDARD & MIPS
+
+config AU1000_SERIAL_CONSOLE
+	bool "Enable Au1000 serial console"
+	depends on AU1000_UART
+
+config QTRONIX_KEYBOARD
+	bool "Enable Qtronix 990P Keyboard Support"
+	depends on IT8712
+
+config IT8172_CIR
+	bool
+	depends on QTRONIX_KEYBOARD
+	default y
+
+config IT8172_SCR0
+	bool "Enable Smart Card Reader 0 Support "
+	depends on IT8712
+
+config IT8172_SCR1
+	bool "Enable Smart Card Reader 1 Support "
+	depends on IT8712
+
+config A2232
+	tristate "Commodore A2232 serial support (EXPERIMENTAL)"
+	depends on EXPERIMENTAL & ZORRO & BROKEN_ON_SMP
+
+config SGI_SNSC
+	bool "SGI Altix system controller communication support"
+	depends on (IA64_SGI_SN2 | IA64_GENERIC)
+
+config UNIX98_PTYS
+	bool "Unix98 PTY support" if EMBEDDED
+	default y
+
+config LEGACY_PTYS
+	bool "Legacy (BSD) PTY support"
+	default y
+
+config PRINTER
+	tristate "Parallel printer support"
+	depends on PARPORT
+
+config LP_CONSOLE
+	bool "Support for console on line printer"
+	depends on PRINTER
+
+config PPDEV
+	tristate "Support for user-space parallel port device drivers"
+	depends on PARPORT
+
+config TIPAR
+	tristate "Texas Instruments parallel link cable support"
+	depends on PARPORT
+
+config HVC_CONSOLE
+	bool "pSeries Hypervisor Virtual Console support"
+	depends on PPC_PSERIES
+
+config HVCS
+	tristate "IBM Hypervisor Virtual Console Server support"
+	depends on PPC_PSERIES
+
+config DS1620
+	tristate "NetWinder thermometer support"
+	depends on ARCH_NETWINDER
+
+config NWBUTTON
+	tristate "NetWinder Button"
+	depends on ARCH_NETWINDER
+
+config NWBUTTON_REBOOT
+	bool "Reboot Using Button"
+	depends on NWBUTTON
+
+config NWFLASH
+	tristate "NetWinder flash support"
+	depends on ARCH_NETWINDER
+
+config HW_RANDOM
+	tristate "Intel/AMD/VIA HW Random Number Generator support"
+	depends on (X86 | IA64) & PCI
+
+config NVRAM
+	tristate "/dev/nvram support"
+	depends on ATARI | X86 | X86_64 | ARM | GENERIC_NVRAM
+
+config RTC
+	tristate "Enhanced Real Time Clock Support"
+	depends on ~PPC32 & ~PARISC & ~IA64 & ~M68K
+
+config SGI_DS1286
+	tristate "SGI DS1286 RTC support"
+	depends on SGI_IP22
+
+config SGI_IP27_RTC
+	bool "SGI M48T35 RTC support"
+	depends on SGI_IP27
+
+config GEN_RTC
+	tristate "Generic /dev/rtc emulation"
+	depends on ~RTC & ~IA64 & ~ARM
+
+config GEN_RTC_X
+	bool "Extended RTC operation"
+	depends on GEN_RTC
+
+config EFI_RTC
+	bool "EFI Real Time Clock Services"
+	depends on IA64
+
+config COBALT_LCD
+	bool "Support for Cobalt LCD"
+	depends on MIPS_COBALT
+
+config DTLK
+	tristate "Double Talk PC internal speech card support"
+
+config R3964
+	tristate "Siemens R3964 line discipline"
+
+config APPLICOM
+	tristate "Applicom intelligent fieldbus card support"
+	depends on PCI
+
+config SONYPI
+	tristate "Sony Vaio Programmable I/O Control Device support (EXPERIMENTAL)"
+	depends on EXPERIMENTAL & X86 & PCI & ~ARCH_64BIT
+
+menu MENU_FTAPE
+
+config FTAPE
+	tristate "Ftape (QIC-80/Travan) support"
+	depends on BROKEN_ON_SMP & (ALPHA | X86)
+
+endmenu
+
+config MWAVE
+	tristate "ACP Modem (Mwave) support"
+	depends on X86
+	select SERIAL_8250
+
+config SCx200_GPIO
+	tristate "NatSemi SCx200 GPIO Support"
+	depends on SCx200
+
+config RAW_DRIVER
+	tristate "RAW driver (/dev/raw/rawN) (OBSOLETE)"
+
+config HPET
+	bool "HPET - High Precision Event Timer"
+	default n
+	depends on ACPI
+
+config HPET_RTC_IRQ
+	bool "HPET Control RTC IRQ"
+	default n
+	depends on HPET
+
+config HPET_MMAP
+	bool "Allow mmap of HPET"
+	default y
+	depends on HPET
+
+config HANGCHECK_TIMER
+	tristate "Hangcheck timer"
+	depends on X86_64 | X86
+
+config MMTIMER
+	tristate "MMTIMER Memory mapped RTC for SGI Altix"
+	depends on IA64_GENERIC | IA64_SGI_SN2
+	default y
+
+endmenu
+
+config ACPI
+	bool
+	default n
+
+config ALPHA
+	bool
+	default n
+
+config ARCH_NETWINDER
+	bool
+	default n
+
+config ARM
+	bool
+	default n
+
+config ATARI
+	bool
+	default n
+
+config BROKEN_ON_SMP
+	bool
+	default n
+
+config EXPERIMENTAL
+	bool
+	default n
+
+config GENERIC_NVRAM
+	bool
+	default n
+
+config IA64
+	bool
+	default n
+
+config IA64_GENERIC
+	bool
+	default n
+
+config IA64_SGI_SN2
+	bool
+	default n
+
+config INPUT
+	bool
+	default n
+
+config ISA
+	bool
+	default n
+
+config IT8712
+	bool
+	default n
+
+config M68K
+	bool
+	default n
+
+config MIPS
+	bool
+	default n
+
+config MIPS_COBALT
+	bool
+	default n
+
+config PARISC
+	bool
+	default n
+
+config PARPORT
+	bool
+	default n
+
+config PCI
+	bool
+	default n
+
+config PPC32
+	bool
+	default n
+
+config PPC_PSERIES
+	bool
+	default n
+
+config S390
+	bool
+	default n
+
+config SCx200
+	bool
+	default n
+
+config SERIAL_8250
+	bool
+	default n
+
+config SGI_IP22
+	bool
+	default n
+
+config SGI_IP27
+	bool
+	default n
+
+config USERMODE
+	bool
+	default n
+
+config X86
+	bool
+	default n
+
+# Stub edited manually
+config X86_64
+	bool
+	default n
+	depends on ARCH_64BIT
+
+config ARCH_64BIT
+	bool
+	default n
+
+config ZORRO
+	bool
+	default n
+

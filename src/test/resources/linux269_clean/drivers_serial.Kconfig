@@ -1,0 +1,525 @@
+menu MENU_SERIAL
+
+config SERIAL_8250
+	tristate "8250/16550 and compatible serial support"
+	depends on (BROKEN | ~SPARC64)
+	select SERIAL_CORE
+
+config SERIAL_8250_CONSOLE
+	bool "Console on 8250/16550 and compatible serial port"
+	depends on SERIAL_8250
+	select SERIAL_CORE_CONSOLE
+
+config SERIAL_8250_CS
+	tristate "8250/16550 PCMCIA device support"
+	depends on PCMCIA & SERIAL_8250
+
+config SERIAL_8250_ACPI
+	bool "8250/16550 device discovery via ACPI namespace"
+	default y
+	depends on ACPI_BUS & SERIAL_8250
+
+config SERIAL_8250_EXTENDED
+	bool "Extended 8250/16550 serial driver options"
+	depends on SERIAL_8250
+
+config SERIAL_8250_MANY_PORTS
+	bool "Support more than 4 legacy serial ports"
+	depends on SERIAL_8250_EXTENDED & ~IA64
+
+config SERIAL_8250_SHARE_IRQ
+	bool "Support for sharing serial interrupts"
+	depends on SERIAL_8250_EXTENDED
+
+config SERIAL_8250_DETECT_IRQ
+	bool "Autodetect IRQ on standard ports (unsafe)"
+	depends on SERIAL_8250_EXTENDED
+
+config SERIAL_8250_MULTIPORT
+	bool "Support special multiport boards"
+	depends on SERIAL_8250_EXTENDED
+
+config SERIAL_8250_RSA
+	bool "Support RSA serial ports"
+	depends on SERIAL_8250_EXTENDED
+
+comment "Non-8250 serial port support"
+
+config SERIAL_8250_ACORN
+	tristate "Acorn expansion card serial port support"
+	depends on ARM & ARCH_ACORN & SERIAL_8250
+
+config SERIAL_AMBA_PL010
+	tristate "ARM AMBA PL010 serial port support"
+	depends on ARM_AMBA
+	select SERIAL_CORE
+
+config SERIAL_AMBA_PL010_CONSOLE
+	bool "Support for console on AMBA serial port"
+	depends on SERIAL_AMBA_PL010
+	select SERIAL_CORE_CONSOLE
+
+config SERIAL_AMBA_PL011
+	tristate "ARM AMBA PL011 serial port support"
+	depends on ARM_AMBA
+	select SERIAL_CORE
+
+config SERIAL_AMBA_PL011_CONSOLE
+	bool "Support for console on AMBA serial port"
+	depends on SERIAL_AMBA_PL011
+	select SERIAL_CORE_CONSOLE
+
+config SERIAL_CLPS711X
+	tristate "CLPS711X serial port support"
+	depends on ARM & ARCH_CLPS711X
+	select SERIAL_CORE
+
+config SERIAL_CLPS711X_CONSOLE
+	bool "Support for console on CLPS711X serial port"
+	depends on SERIAL_CLPS711X
+	select SERIAL_CORE_CONSOLE
+
+config SERIAL_S3C2410
+	tristate "Samsung S3C2410 Serial port support"
+	depends on ARM & ARCH_S3C2410
+	select SERIAL_CORE
+
+config SERIAL_S3C2410_CONSOLE
+	bool "Support for console on S3C2410 serial port"
+	depends on SERIAL_S3C2410
+	select SERIAL_CORE_CONSOLE
+
+config SERIAL_BAST_SIO
+	bool "Support for BAST SuperIO serial ports"
+	depends on ARCH_BAST & SERIAL_8250
+
+config SERIAL_DZ
+	bool "DECstation DZ serial driver"
+	depends on MACH_DECSTATION & MIPS32
+	select SERIAL_CORE
+
+config SERIAL_DZ_CONSOLE
+	bool "Support console on DECstation DZ serial driver"
+	depends on SERIAL_DZ
+	select SERIAL_CORE_CONSOLE
+
+config SERIAL_21285
+	tristate "DC21285 serial port support"
+	depends on ARM & FOOTBRIDGE
+	select SERIAL_CORE
+
+config SERIAL_21285_CONSOLE
+	bool "Console on DC21285 serial port"
+	depends on SERIAL_21285
+	select SERIAL_CORE_CONSOLE
+
+config SERIAL_UART00
+	bool "Excalibur serial port (uart00) support"
+	depends on ARM & ARCH_CAMELOT
+	select SERIAL_CORE
+
+config SERIAL_UART00_CONSOLE
+	bool "Support for console on Excalibur serial port"
+	depends on SERIAL_UART00
+	select SERIAL_CORE_CONSOLE
+
+config SERIAL_PXA
+	bool "PXA serial port support"
+	depends on ARM & ARCH_PXA
+	select SERIAL_CORE
+
+config SERIAL_PXA_CONSOLE
+	bool "Console on PXA serial port"
+	depends on SERIAL_PXA
+	select SERIAL_CORE_CONSOLE
+
+config SERIAL_SA1100
+	bool "SA1100 serial port support"
+	depends on ARM & ARCH_SA1100
+	select SERIAL_CORE
+
+config SERIAL_SA1100_CONSOLE
+	bool "Console on SA1100 serial port"
+	depends on SERIAL_SA1100
+	select SERIAL_CORE_CONSOLE
+
+config SERIAL_SUNCORE
+	bool
+	depends on SPARC32 | SPARC64
+	select SERIAL_CORE & SERIAL_CORE_CONSOLE
+	default y
+
+config SERIAL_SUNZILOG
+	tristate "Sun Zilog8530 serial support"
+	depends on SPARC32 | SPARC64
+
+config SERIAL_SUNZILOG_CONSOLE
+	bool "Console on Sun Zilog8530 serial port"
+	depends on SERIAL_SUNZILOG
+
+config SERIAL_SUNSU
+	tristate "Sun SU serial support"
+	depends on (SPARC32 | SPARC64) & PCI
+
+config SERIAL_SUNSU_CONSOLE
+	bool "Console on Sun SU serial port"
+	depends on SERIAL_SUNSU
+
+config SERIAL_MUX
+	tristate "Serial MUX support"
+	depends on PARISC
+	select SERIAL_CORE
+	default y
+
+config SERIAL_MUX_CONSOLE
+	bool "Support for console on serial MUX"
+	depends on SERIAL_MUX
+	select SERIAL_CORE_CONSOLE
+	default y
+
+config PDC_CONSOLE
+	bool "PDC software console support"
+	depends on PARISC & ~SERIAL_MUX & VT
+	default n
+
+config SERIAL_SUNSAB
+	tristate "Sun Siemens SAB82532 serial support"
+	depends on (SPARC32 | SPARC64) & PCI
+
+config SERIAL_SUNSAB_CONSOLE
+	bool "Console on Sun Siemens SAB82532 serial port"
+	depends on SERIAL_SUNSAB
+
+config SERIAL_IP22_ZILOG
+	tristate "IP22 Zilog8530 serial support"
+	depends on SGI_IP22
+	select SERIAL_CORE
+
+config SERIAL_IP22_ZILOG_CONSOLE
+	bool "Console on IP22 Zilog8530 serial port"
+	depends on SERIAL_IP22_ZILOG
+	select SERIAL_CORE_CONSOLE
+
+config V850E_UART
+	bool "NEC V850E on-chip UART support"
+	depends on V850E_MA1 | V850E_ME2 | V850E_TEG | V850E2_ANNA | V850E_AS85EP1
+	select SERIAL_CORE
+	default y
+
+config V850E_UARTB
+		bool
+	depends V850E_UART & V850E_ME2
+	default y
+
+config V850E_UART_CONSOLE
+	bool "Use NEC V850E on-chip UART for console"
+	depends on V850E_UART
+	select SERIAL_CORE_CONSOLE
+
+config SERIAL_SH_SCI
+	tristate "SH SCI(F) serial port support"
+	depends on SUPERH | H8300
+	select SERIAL_CORE
+
+config SERIAL_SH_SCI_CONSOLE
+	bool "Support for console on SH SCI(F)"
+	depends on SERIAL_SH_SCI
+	select SERIAL_CORE_CONSOLE
+
+config SERIAL_AU1X00
+	bool "Enable Au1x00 UART Support"
+	depends on MIPS & SOC_AU1X00
+	select SERIAL_CORE
+
+config SERIAL_AU1X00_CONSOLE
+	bool "Enable Au1x00 serial console"
+	depends on SERIAL_AU1X00
+	select SERIAL_CORE_CONSOLE
+
+config SERIAL_CORE
+	tristate
+
+config SERIAL_CORE_CONSOLE
+	bool
+
+config SERIAL_68328
+	bool "68328 serial support"
+	depends on M68328 | M68EZ328 | M68VZ328
+
+config SERIAL_68328_RTS_CTS
+	bool "Support RTS/CTS on 68328 serial port"
+	depends on SERIAL_68328
+
+config SERIAL_COLDFIRE
+	bool "ColdFire serial support"
+	depends on COLDFIRE
+
+config SERIAL_68360_SMC
+	bool "68360 SMC uart support"
+	depends on M68360
+
+config SERIAL_68360_SCC
+	bool "68360 SCC uart support"
+	depends on M68360
+
+config SERIAL_68360
+	bool
+	depends on SERIAL_68360_SMC | SERIAL_68360_SCC
+	default y
+
+config SERIAL_PMACZILOG
+	tristate "PowerMac z85c30 ESCC support"
+	depends on PPC_OF
+	select SERIAL_CORE
+
+config SERIAL_PMACZILOG_CONSOLE
+	bool "Console on PowerMac z85c30 serial port"
+	depends on SERIAL_PMACZILOG
+	select SERIAL_CORE_CONSOLE
+
+config SERIAL_LH7A40X
+	tristate "Sharp LH7A40X embedded UART support"
+	depends on ARM & ARCH_LH7A40X
+	select SERIAL_CORE
+
+config SERIAL_LH7A40X_CONSOLE
+	bool "Support for console on Sharp LH7A40X serial port"
+	depends on SERIAL_LH7A40X
+	select SERIAL_CORE_CONSOLE
+
+config SERIAL_CPM
+	tristate "CPM SCC/SMC serial port support"
+	depends on CPM2 | NET_8XX
+	select SERIAL_CORE
+
+config SERIAL_CPM_CONSOLE
+	bool "Support for console on CPM SCC/SMC serial port"
+	depends on SERIAL_CPM
+	select SERIAL_CORE_CONSOLE
+
+config SERIAL_CPM_SCC1
+	bool "Support for SCC1 serial port"
+	depends on SERIAL_CPM
+
+config SERIAL_CPM_SCC2
+	bool "Support for SCC2 serial port"
+	depends on SERIAL_CPM
+
+config SERIAL_CPM_SCC3
+	bool "Support for SCC3 serial port"
+	depends on SERIAL_CPM
+
+config SERIAL_CPM_SCC4
+	bool "Support for SCC4 serial port"
+	depends on SERIAL_CPM
+
+config SERIAL_CPM_SMC1
+	bool "Support for SMC1 serial port"
+	depends on SERIAL_CPM
+
+config SERIAL_CPM_SMC2
+	bool "Support for SMC2 serial port"
+	depends on SERIAL_CPM
+
+config SERIAL_SGI_L1_CONSOLE
+	bool "SGI Altix L1 serial console support"
+	depends on IA64_GENERIC | IA64_SGI_SN2
+	select SERIAL_CORE & SERIAL_CORE_CONSOLE
+
+config SERIAL_MPC52xx
+	tristate "Freescale MPC52xx family PSC serial support"
+	depends on PPC_MPC52xx
+	select SERIAL_CORE
+
+config SERIAL_MPC52xx_CONSOLE
+	bool "Console on a Freescale MPC52xx family PSC serial port"
+	depends on SERIAL_MPC52xx
+	select SERIAL_CORE_CONSOLE
+
+config SERIAL_ICOM
+	tristate "IBM Multiport Serial Adapter"
+	depends on PPC_ISERIES | PPC_PSERIES
+	select SERIAL_CORE
+
+endmenu
+
+config ACPI_BUS
+	bool
+	default n
+
+config ARCH_ACORN
+	bool
+	default n
+
+config ARCH_BAST
+	bool
+	default n
+
+config ARCH_CAMELOT
+	bool
+	default n
+
+config ARCH_CLPS711X
+	bool
+	default n
+
+config ARCH_LH7A40X
+	bool
+	default n
+
+config ARCH_PXA
+	bool
+	default n
+
+config ARCH_S3C2410
+	bool
+	default n
+
+config ARCH_SA1100
+	bool
+	default n
+
+config ARM
+	bool
+	default n
+
+config ARM_AMBA
+	bool
+	default n
+
+config BROKEN
+	bool
+	default n
+
+config COLDFIRE
+	bool
+	default n
+
+config CPM2
+	bool
+	default n
+
+config FOOTBRIDGE
+	bool
+	default n
+
+config H8300
+	bool
+	default n
+
+config IA64
+	bool
+	default n
+
+config IA64_GENERIC
+	bool
+	default n
+
+config IA64_SGI_SN2
+	bool
+	default n
+
+config M68328
+	bool
+	default n
+
+config M68360
+	bool
+	default n
+
+config M68EZ328
+	bool
+	default n
+
+config M68VZ328
+	bool
+	default n
+
+config MACH_DECSTATION
+	bool
+	default n
+
+config MIPS
+	bool
+	default n
+
+config MIPS32
+	bool
+	default n
+
+config PARISC
+	bool
+	default n
+
+config PCI
+	bool
+	default n
+
+config PCMCIA
+	bool
+	default n
+
+config PPC_ISERIES
+	bool
+	default n
+
+config PPC_MPC52xx
+	bool
+	default n
+
+config PPC_OF
+	bool
+	default n
+
+config PPC_PSERIES
+	bool
+	default n
+
+config SGI_IP22
+	bool
+	default n
+
+config SOC_AU1X00
+	bool
+	default n
+
+config SPARC32
+	bool
+	default n
+
+config SPARC64
+	bool
+	default n
+
+config SUPERH
+	bool
+	default n
+
+config V850E2_ANNA
+	bool
+	default n
+
+config V850E_AS85EP1
+	bool
+	default n
+
+config V850E_MA1
+	bool
+	default n
+
+config V850E_ME2
+	bool
+	default n
+
+config V850E_TEG
+	bool
+	default n
+
+config VT
+	bool
+	default n
+
+config NET_8XX
+	bool
+	default n
+

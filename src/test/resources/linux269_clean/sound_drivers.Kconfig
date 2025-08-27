@@ -1,0 +1,70 @@
+menu GEN_DEV
+	depends on SND
+
+config SND_MPU401_UART
+	tristate
+	select SND_TIMER & SND_RAWMIDI
+
+config SND_OPL3_LIB
+	tristate
+	select SND_TIMER & SND_HWDEP
+
+config SND_OPL4_LIB
+	tristate
+	select SND_TIMER & SND_HWDEP
+
+config SND_VX_LIB
+	tristate
+	select SND_HWDEP & SND_PCM
+
+config SND_DUMMY
+	tristate "Dummy (/dev/null) soundcard"
+	depends on SND
+	select SND_PCM
+
+config SND_VIRMIDI
+	tristate "Virtual MIDI soundcard"
+	depends on SND_SEQUENCER
+	select SND_TIMER & SND_RAWMIDI
+
+config SND_MTPAV
+	tristate "MOTU MidiTimePiece AV multiport MIDI"
+	depends on SND
+	select SND_TIMER & SND_RAWMIDI
+
+config SND_SERIAL_U16550
+	tristate "UART16550 - MIDI only driver"
+	depends on SND
+	select SND_TIMER & SND_RAWMIDI
+
+config SND_MPU401
+	tristate "Generic MPU-401 UART driver"
+	depends on SND
+	select SND_MPU401_UART
+
+endmenu
+
+config SND
+	bool
+	default n
+
+config SND_HWDEP
+	bool
+	default n
+
+config SND_PCM
+	bool
+	default n
+
+config SND_RAWMIDI
+	bool
+	default n
+
+config SND_SEQUENCER
+	bool
+	default n
+
+config SND_TIMER
+	bool
+	default n
+

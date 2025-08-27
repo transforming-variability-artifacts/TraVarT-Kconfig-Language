@@ -1,0 +1,96 @@
+mainmenu ARCH_PARISC
+
+config PARISC
+	bool
+	default y
+
+config MMU
+	bool
+	default y
+
+config STACK_GROWSUP
+	bool
+	default y
+
+config UID16
+	bool
+
+config RWSEM_GENERIC_SPINLOCK
+	bool
+	default y
+
+config RWSEM_XCHGADD_ALGORITHM
+	bool
+
+config GENERIC_ISA_DMA
+	bool
+
+config PM
+	bool
+
+menu PARISC_TYPE
+
+choice PROCESSOR_TYPE
+	bool "Processor type"
+	default PA7000
+
+config PA7000
+	bool "PA7000/PA7100"
+
+config PA7100LC
+	bool "PA7100LC"
+
+config PA7200
+	bool "PA7200"
+
+config PA7300LC
+	bool "PA7300LC"
+
+config PA8X00
+	bool "PA8000 and up"
+
+endchoice
+
+config PARISC64
+	bool "64-bit kernel"
+	depends on PA8X00
+
+config SMP
+	bool "Symmetric multi-processing support"
+
+config HOTPLUG_CPU
+	bool
+	default y
+	select HOTPLUG
+
+config DISCONTIGMEM
+	bool "Discontiguous memory support (EXPERIMENTAL)"
+	depends on EXPERIMENTAL
+
+config PREEMPT
+	bool
+	default n
+
+config COMPAT
+	bool
+	depends on PARISC64
+	default y
+
+config HPUX
+	bool "Support for HP-UX binaries"
+	depends on ~PARISC64
+
+endmenu
+
+config EXPERIMENTAL
+	bool
+	default n
+
+config HOTPLUG
+	bool
+	default n
+
+config ARCH_64BIT
+	bool
+	select PARISC64
+

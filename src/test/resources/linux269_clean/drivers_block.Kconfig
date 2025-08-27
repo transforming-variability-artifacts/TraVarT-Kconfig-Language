@@ -1,0 +1,218 @@
+menu BLK_DEV
+
+config BLK_DEV_FD
+	tristate "Normal floppy disk support"
+	depends on (~ARCH_S390 & ~M68K & ~IA64) | Q40 | (SUN3X & BROKEN)
+
+config AMIGA_FLOPPY
+	tristate "Amiga floppy support"
+	depends on AMIGA
+
+config ATARI_FLOPPY
+	tristate "Atari floppy support"
+	depends on ATARI
+
+config BLK_DEV_SWIM_IOP
+	bool "Macintosh IIfx/Quadra 900/Quadra 950 floppy support (EXPERIMENTAL)"
+	depends on MAC & EXPERIMENTAL & BROKEN
+
+config MAC_FLOPPY
+	tristate "Support for PowerMac floppy"
+	depends on PPC_PMAC & ~PPC_PMAC64
+
+config BLK_DEV_PS2
+	tristate "PS/2 ESDI hard disk support"
+	depends on MCA & MCA_LEGACY
+
+config AMIGA_Z2RAM
+	tristate "Amiga Zorro II ramdisk support"
+	depends on ZORRO
+
+config ATARI_ACSI
+	tristate "Atari ACSI support"
+	depends on ATARI & BROKEN
+
+comment "Some devices (e.g. CD jukebox) support multiple LUNs"
+	depends on ATARI & ATARI_ACSI
+
+config ACSI_MULTI_LUN
+	bool "Probe all LUNs on each ACSI device"
+	depends on ATARI_ACSI
+
+config ATARI_SLM
+	tristate "Atari SLM laser printer support"
+	depends on ATARI & ATARI_ACSI
+
+config BLK_DEV_XD
+	tristate "XT hard disk support"
+	depends on ISA
+
+config PARIDE
+	tristate "Parallel port IDE device support"
+	depends on PARPORT
+
+config BLK_CPQ_DA
+	tristate "Compaq SMART2 support"
+	depends on PCI
+
+config BLK_CPQ_CISS_DA
+	tristate "Compaq Smart Array 5xxx support"
+	depends on PCI
+
+config CISS_SCSI_TAPE
+	bool "SCSI tape drive support for Smart Array 5xxx"
+	depends on BLK_CPQ_CISS_DA & SCSI & PROC_FS
+
+config BLK_DEV_DAC960
+	tristate "Mylex DAC960/DAC1100 PCI RAID Controller support"
+	depends on PCI
+
+config BLK_DEV_UMEM
+	tristate "Micro Memory MM5415 Battery Backed RAM support (EXPERIMENTAL)"
+	depends on PCI & EXPERIMENTAL
+
+config BLK_DEV_LOOP
+	tristate "Loopback device support"
+
+config BLK_DEV_CRYPTOLOOP
+	tristate "Cryptoloop Support"
+	select CRYPTO
+	depends on BLK_DEV_LOOP
+
+config BLK_DEV_NBD
+	tristate "Network block device support"
+	depends on NET
+
+config BLK_DEV_SX8
+	tristate "Promise SATA SX8 support"
+	depends on PCI
+
+config BLK_DEV_UB
+	tristate "Low Performance USB Block driver"
+	depends on USB
+
+config BLK_DEV_RAM
+	tristate "RAM disk support"
+
+config BLK_DEV_INITRD
+	bool "Initial RAM disk (initrd) support"
+	depends on BLK_DEV_RAM
+
+config LBD
+	bool "Support for Large Block Devices"
+	depends on X86 | MIPS32 | PPC32 | ARCH_S390_31 | SUPERH
+
+endmenu
+
+config AMIGA
+	bool
+	default n
+
+config ARCH_S390
+	bool
+	default n
+
+config ARCH_S390_31
+	bool
+	default n
+
+config ATARI
+	bool
+	default n
+
+config BROKEN
+	bool
+	default n
+
+config CRYPTO
+	bool
+	default n
+
+config EXPERIMENTAL
+	bool
+	default n
+
+config IA64
+	bool
+	default n
+
+config ISA
+	bool
+	default n
+
+config M68K
+	bool
+	default n
+
+config MAC
+	bool
+	default n
+
+config MCA
+	bool
+	default n
+
+config MCA_LEGACY
+	bool
+	default n
+
+config MIPS32
+	bool
+	default n
+
+config NET
+	bool
+	default n
+
+config PARPORT
+	bool
+	default n
+
+config PCI
+	bool
+	default n
+
+config PPC32
+	bool
+	default n
+
+config PPC_PMAC
+	bool
+	default n
+
+config PPC_PMAC64
+	bool
+	default n
+
+config PROC_FS
+	bool
+	default n
+
+config Q40
+	bool
+	default n
+
+config SCSI
+	bool
+	default n
+
+config SUN3X
+	bool
+	default n
+
+config SUPERH
+	bool
+	default n
+
+config USB
+	bool
+	default n
+
+config X86
+	bool
+	default n
+
+config ZORRO
+	bool
+	default n
+

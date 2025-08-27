@@ -1,0 +1,81 @@
+config CRIS_LOW_MAP
+	bool
+	depends on ETRAX_ARCH_V10 & ETRAX100LX
+	default y
+
+choice ETRAX_LEDS
+	bool "Product LED port"
+	depends on ETRAX_ARCH_V10
+	default ETRAX_PA_LEDS
+
+config ETRAX_PA_LEDS
+	bool "Port-PA-LEDs"
+
+config ETRAX_PB_LEDS
+	bool "Port-PB-LEDs"
+
+config ETRAX_CSP0_LEDS
+	bool "Port-CSP0-LEDs"
+
+config ETRAX_NO_LEDS
+	bool "None"
+
+endchoice
+
+choice ETRAX_DEBUG_PORT
+	bool "Product debug-port"
+	depends on ETRAX_ARCH_V10
+	default ETRAX_DEBUG_PORT0
+
+config ETRAX_DEBUG_PORT0
+	bool "Serial-0"
+
+config ETRAX_DEBUG_PORT1
+	bool "Serial-1"
+
+config ETRAX_DEBUG_PORT2
+	bool "Serial-2"
+
+config ETRAX_DEBUG_PORT3
+	bool "Serial-3"
+
+config ETRAX_DEBUG_PORT_NULL
+	bool "disabled"
+
+endchoice
+
+choice ETRAX_RESCUE_SER
+	bool "Product rescue-port"
+	depends on ETRAX_ARCH_V10
+	default ETRAX_RESCUE_SER0
+
+config ETRAX_RESCUE_SER0
+	bool "Serial-0"
+
+config ETRAX_RESCUE_SER1
+	bool "Serial-1"
+
+config ETRAX_RESCUE_SER2
+	bool "Serial-2"
+
+config ETRAX_RESCUE_SER3
+	bool "Serial-3"
+
+endchoice
+
+config ETRAX_SDRAM
+	bool "SDRAM support"
+	depends on ETRAX_ARCH_V10
+
+config ETRAX_SOFT_SHUTDOWN
+	bool "Software Shutdown Support"
+	depends on ETRAX_ARCH_V10
+
+config ETRAX100LX
+	bool
+	default n
+
+config ETRAX_ARCH_V10
+	bool
+	default n
+

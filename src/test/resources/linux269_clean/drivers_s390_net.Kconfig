@@ -1,0 +1,82 @@
+menu "S390_NET"
+	depends on NETDEVICES & ARCH_S390
+
+config LCS
+	tristate "Lan Channel Station Interface"
+	depends on NETDEVICES & (NET_ETHERNET | TR | FDDI)
+
+config CTC
+	tristate "CTC device support"
+	depends on NETDEVICES
+
+config IUCV
+	tristate "IUCV support (VM only)"
+
+config NETIUCV
+	tristate "IUCV network device support (VM only)"
+	depends on IUCV & NETDEVICES
+
+config SMSGIUCV
+	tristate "IUCV special message support (VM only)"
+	depends on IUCV
+
+config QETH
+	tristate "Gigabit Ethernet device support"
+	depends on NETDEVICES & IP_MULTICAST & QDIO
+
+comment "Gigabit Ethernet default settings"
+	depends on QETH
+
+config QETH_IPV6
+	bool "IPv6 support for gigabit ethernet"
+	depends on ((QETH & IPV6) | (~QETH & ~IPV6)) | (QETH & IPV6)
+
+config QETH_VLAN
+	bool "VLAN support for gigabit ethernet"
+	depends on ((QETH & VLAN_8021Q) | (~QETH & ~VLAN_8021Q)) | (QETH & VLAN_8021Q)
+
+config QETH_PERF_STATS
+	bool "Performance statistics in /proc"
+	depends on QETH
+
+config CCWGROUP
+	tristate
+
+endmenu
+
+config ARCH_S390
+	bool
+	default n
+
+config FDDI
+	bool
+	default n
+
+config IPV6
+	bool
+	default n
+
+config IP_MULTICAST
+	bool
+	default n
+
+config NETDEVICES
+	bool
+	default n
+
+config NET_ETHERNET
+	bool
+	default n
+
+config QDIO
+	bool
+	default n
+
+config TR
+	bool
+	default n
+
+config VLAN_8021Q
+	bool
+	default n
+

@@ -1,0 +1,61 @@
+config IPV6_PRIVACY
+	bool "IPv6: Privacy Extensions (RFC 3041) support"
+	depends on IPV6
+
+config INET6_AH
+	tristate "IPv6: AH transformation"
+	depends on IPV6
+	select XFRM & CRYPTO & CRYPTO_HMAC & CRYPTO_MD5 & CRYPTO_SHA1
+
+config INET6_ESP
+	tristate "IPv6: ESP transformation"
+	depends on IPV6
+	select XFRM & CRYPTO & CRYPTO_HMAC & CRYPTO_MD5 & CRYPTO_SHA1 & CRYPTO_DES
+
+config INET6_IPCOMP
+	tristate "IPv6: IPComp transformation"
+	depends on IPV6
+	select XFRM & INET6_TUNNEL & CRYPTO & CRYPTO_DEFLATE
+
+config INET6_TUNNEL
+	tristate "IPv6: tunnel transformation"
+	depends on IPV6
+	select XFRM
+
+config IPV6_TUNNEL
+	tristate "IPv6: IPv6-in-IPv6 tunnel"
+	depends on IPV6
+	select INET6_TUNNEL
+
+config CRYPTO
+	bool
+	default n
+
+config CRYPTO_DEFLATE
+	bool
+	default n
+
+config CRYPTO_DES
+	bool
+	default n
+
+config CRYPTO_HMAC
+	bool
+	default n
+
+config CRYPTO_MD5
+	bool
+	default n
+
+config CRYPTO_SHA1
+	bool
+	default n
+
+config IPV6
+	bool
+	default n
+
+config XFRM
+	bool
+	default n
+

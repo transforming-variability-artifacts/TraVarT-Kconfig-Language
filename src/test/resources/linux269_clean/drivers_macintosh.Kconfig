@@ -1,0 +1,119 @@
+
+menu MENU_MAC
+	depends on PPC | MAC
+
+config ADB
+	bool "Apple Desktop Bus (ADB) support"
+	depends on MAC | PPC_PMAC
+
+config ADB_MACII
+	bool "Include Mac II ADB driver"
+	depends on ADB & MAC
+
+config ADB_MACIISI
+	bool "Include Mac IIsi ADB driver"
+	depends on ADB & MAC
+
+config ADB_IOP
+	bool "Include IOP (IIfx/Quadra 9x0) ADB driver"
+	depends on ADB & MAC
+
+config ADB_PMU68K
+	bool "Include PMU (Powerbook) ADB driver"
+	depends on ADB & MAC
+
+config ADB_CUDA
+	bool "Support for CUDA based Macs and PowerMacs"
+	depends on (ADB | PPC_PMAC) & ~PPC_PMAC64
+
+config ADB_PMU
+	bool "Support for PMU  based PowerMacs"
+	depends on PPC_PMAC
+
+config PMAC_PBOOK
+	bool "Power management support for PowerBooks"
+	depends on ADB_PMU
+
+config PM
+	bool
+	depends on PPC_PMAC & ADB_PMU & PMAC_PBOOK
+	default y
+
+config PMAC_APM_EMU
+	tristate "APM emulation"
+	depends on PMAC_PBOOK
+
+config PMAC_BACKLIGHT
+	bool "Backlight control for LCD screens"
+	depends on ADB_PMU
+
+config MAC_SERIAL
+	tristate "Support for PowerMac serial ports (OBSOLETE DRIVER)"
+	depends on PPC_PMAC & BROKEN
+
+config ADB_MACIO
+	bool "Include MacIO (CHRP) ADB driver"
+	depends on ADB & PPC_CHRP & ~PPC_PMAC64
+
+config INPUT_ADBHID
+	bool "Support for ADB input devices (keyboard, mice, ...)"
+	depends on ADB & INPUT
+
+config MAC_EMUMOUSEBTN
+	bool "Support for mouse button 2+3 emulation"
+	depends on INPUT_ADBHID
+
+config THERM_WINDTUNNEL
+	tristate "Support for thermal management on Windtunnel G4s"
+	depends on I2C & I2C_KEYWEST & PPC_PMAC & ~PPC_PMAC64
+
+config THERM_ADT746X
+	tristate "Support for thermal mgmnt on laptops with ADT 746x chipset"
+	depends on I2C & I2C_KEYWEST & PPC_PMAC & ~PPC_PMAC64
+
+config THERM_PM72
+	tristate "Support for thermal management on PowerMac G5"
+	depends on I2C & I2C_KEYWEST & PPC_PMAC64
+
+config ANSLCD
+	tristate "Support for ANS LCD display"
+	depends on ADB_CUDA & PPC_PMAC
+
+endmenu
+
+config BROKEN
+	bool
+	default n
+
+config I2C
+	bool
+	default n
+
+config I2C_KEYWEST
+	bool
+	default n
+
+config INPUT
+	bool
+	default n
+
+config MAC
+	bool
+	default n
+
+config PPC
+	bool
+	default n
+
+config PPC_CHRP
+	bool
+	default n
+
+config PPC_PMAC
+	bool
+	default n
+
+config PPC_PMAC64
+	bool
+	default n
+

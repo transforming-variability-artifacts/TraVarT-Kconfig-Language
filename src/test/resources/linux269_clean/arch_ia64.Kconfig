@@ -1,0 +1,199 @@
+mainmenu MENU_IA
+
+menu MENU_PROCESSOR_TYPE
+
+config IA64
+	bool
+	default y
+
+config 64BIT
+	bool
+	default y
+
+config MMU
+	bool
+	default y
+
+config RWSEM_XCHGADD_ALGORITHM
+	bool
+	default y
+
+config TIME_INTERPOLATION
+	bool
+	default y
+
+config EFI
+	bool
+	default y
+
+config GENERIC_IOMAP
+	bool
+	default y
+
+choice IA64_TYPE
+	bool "System type"
+	default IA64_GENERIC
+
+config IA64_GENERIC
+	bool "generic"
+	select NUMA & ACPI_NUMA & VIRTUAL_MEM_MAP & DISCONTIGMEM
+
+config IA64_DIG
+	bool "DIG-compliant"
+
+config IA64_HP_ZX1
+	bool "HP-zx1/sx1000"
+
+config IA64_SGI_SN2
+	bool "SGI-SN2"
+
+config IA64_HP_SIM
+	bool "Ski-simulator"
+
+endchoice
+
+choice PROCESSOR_TYPE
+	bool "Processor type"
+	default ITANIUM
+
+config ITANIUM
+	bool "Itanium"
+
+config MCKINLEY
+	bool "Itanium 2"
+
+endchoice
+
+choice IA64_PAGE_SIZE
+	bool "Kernel page size"
+	default IA64_PAGE_SIZE_16KB
+
+config IA64_PAGE_SIZE_4KB
+	bool "4KB"
+
+config IA64_PAGE_SIZE_8KB
+	bool "8KB"
+
+config IA64_PAGE_SIZE_16KB
+	bool "16KB"
+
+config IA64_PAGE_SIZE_64KB
+	bool "64KB"
+	depends on ~ITANIUM
+
+endchoice
+
+config IA64_BRL_EMU
+	bool
+	depends on ITANIUM
+	default y
+
+config ITANIUM_BSTEP_SPECIFIC
+	bool "Itanium B-step specific code"
+	depends on ITANIUM
+
+# Remove auxiliary ifs across several confsyms
+config NUMA
+	bool "NUMA support"
+	depends on ~IA64_HP_SIM
+	default y
+
+config VIRTUAL_MEM_MAP
+	bool "Virtual mem map"
+	default y
+
+config DISCONTIGMEM
+	bool "Discontiguous memory support"
+	depends on (IA64_DIG | IA64_SGI_SN2 | IA64_GENERIC | IA64_HP_ZX1) & NUMA & VIRTUAL_MEM_MAP
+	default y
+
+config IA64_CYCLONE
+	bool "Cyclone (EXA) Time Source support"
+
+config IOSAPIC
+	bool
+	depends on ~IA64_HP_SIM
+	default y
+
+config IA64_SGI_SN_SIM
+	bool "SGI Medusa Simulator Support"
+	depends on IA64_SGI_SN2
+
+config SMP
+	bool "Symmetric multi-processing support"
+
+config HOTPLUG_CPU
+	bool "Support for hot-pluggable CPUs (EXPERIMENTAL)"
+	depends on SMP & HOTPLUG & EXPERIMENTAL
+	default n
+
+config PREEMPT
+	bool "Preemptible Kernel"
+
+config HAVE_DEC_LOCK
+	bool
+	depends on (SMP | PREEMPT)
+	default y
+
+config IA32_SUPPORT
+	bool "Support for Linux/x86 binaries"
+
+config COMPAT
+	bool
+	depends on IA32_SUPPORT
+	default y
+
+config IA64_MCA_RECOVERY
+	tristate "MCA recovery from errors other than TLB."
+
+config PERFMON
+	bool "Performance monitor support"
+
+config IA64_PALINFO
+	tristate "/proc/pal support"
+
+endmenu
+
+menu MENU_PM
+
+config PM
+	bool "Power Management support"
+	depends on IA64_GENERIC | IA64_DIG | IA64_HP_ZX1
+	default y
+
+config ACPI
+	bool
+	depends on ~IA64_HP_SIM
+	default y
+
+# Remove empty if block
+
+endmenu
+
+# Omitted if block (factorized into menu)
+
+menu "Bus options (PCI, PCMCIA)"
+	depends on ~IA64_HP_SIM
+
+config PCI
+	bool "PCI support"
+
+# Default value statement omitted
+config PCI_DOMAINS
+	bool
+	default y
+
+endmenu
+
+config ACPI_NUMA
+	bool
+	default n
+
+config EXPERIMENTAL
+	bool
+	default n
+
+config HOTPLUG
+	bool
+	default n
+

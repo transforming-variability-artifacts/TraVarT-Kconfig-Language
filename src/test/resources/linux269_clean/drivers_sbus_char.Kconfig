@@ -1,0 +1,67 @@
+menu MENU_SBUS
+
+config SUN_OPENPROMIO
+	tristate "/dev/openprom device support"
+
+config SUN_MOSTEK_RTC
+	tristate "Mostek real time clock support"
+
+config OBP_FLASH
+	tristate "OBP Flash Device support"
+	depends on SPARC64
+
+config SUN_BPP
+	tristate "Bidirectional parallel port support (OBSOLETE)"
+	depends on EXPERIMENTAL
+
+config SUN_VIDEOPIX
+	tristate "Videopix Frame Grabber (EXPERIMENTAL)"
+	depends on EXPERIMENTAL & (BROKEN | ~ARCH_64BIT)
+
+config SUN_AURORA
+	tristate "Aurora Multiboard 1600se (EXPERIMENTAL)"
+	depends on EXPERIMENTAL & BROKEN
+
+config TADPOLE_TS102_UCTRL
+	tristate "Tadpole TS102 Microcontroller support (EXPERIMENTAL)"
+	depends on EXPERIMENTAL & SPARC32
+
+config SUN_JSFLASH
+	tristate "JavaStation OS Flash SIMM (EXPERIMENTAL)"
+	depends on EXPERIMENTAL & SPARC32
+
+config APM_RTC_IS_GMT
+	bool
+	depends on EXPERIMENTAL & SPARC32 & PCI
+	default y
+
+config RTC
+	tristate "PC-style Real Time Clock Support"
+	depends on PCI & EXPERIMENTAL & SPARC32
+
+endmenu
+
+config ARCH_64BIT
+	bool
+	default n
+
+config BROKEN
+	bool
+	default n
+
+config EXPERIMENTAL
+	bool
+	default n
+
+config PCI
+	bool
+	default n
+
+config SPARC32
+	bool
+	default n
+
+config SPARC64
+	bool
+	default n
+

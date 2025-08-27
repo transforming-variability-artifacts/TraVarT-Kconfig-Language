@@ -1,0 +1,191 @@
+menu MENU_ISA
+	depends on SND & ISA
+
+config SND_AD1816A
+	tristate "Analog Devices SoundPort AD1816A"
+	depends on SND & ISAPNP
+	select SND_OPL3_LIB & SND_MPU401_UART & SND_PCM
+
+config SND_AD1848
+	tristate "Generic AD1848/CS4248 driver"
+	depends on SND
+	select SND_PCM
+
+config SND_CS4231
+	tristate "Generic Cirrus Logic CS4231 driver"
+	depends on SND
+	select SND_MPU401_UART & SND_PCM
+
+config SND_CS4232
+	tristate "Generic Cirrus Logic CS4232 driver"
+	depends on SND
+	select SND_OPL3_LIB & SND_MPU401_UART & SND_PCM
+
+config SND_CS4236
+	tristate "Generic Cirrus Logic CS4236+ driver"
+	depends on SND
+	select SND_OPL3_LIB & SND_MPU401_UART & SND_PCM
+
+config SND_ES968
+	tristate "Generic ESS ES968 driver"
+	depends on SND & ISAPNP
+	select SND_MPU401_UART & SND_PCM
+
+config SND_ES1688
+	tristate "Generic ESS ES688/ES1688 driver"
+	depends on SND
+	select SND_OPL3_LIB & SND_MPU401_UART & SND_PCM
+
+config SND_ES18XX
+	tristate "Generic ESS ES18xx driver"
+	depends on SND
+	select SND_OPL3_LIB & SND_MPU401_UART & SND_PCM
+
+config SND_GUS_SYNTH
+	tristate
+
+config SND_GUSCLASSIC
+	tristate "Gravis UltraSound Classic"
+	depends on SND
+	select SND_RAWMIDI & SND_PCM & SND_GUS_SYNTH
+
+config SND_GUSEXTREME
+	tristate "Gravis UltraSound Extreme"
+	depends on SND
+	select SND_HWDEP & SND_MPU401_UART & SND_PCM & SND_GUS_SYNTH
+
+config SND_GUSMAX
+	tristate "Gravis UltraSound MAX"
+	depends on SND
+	select SND_RAWMIDI & SND_PCM & SND_GUS_SYNTH
+
+config SND_INTERWAVE
+	tristate "AMD InterWave, Gravis UltraSound PnP"
+	depends on SND
+	select SND_RAWMIDI & SND_PCM & SND_GUS_SYNTH
+
+config SND_INTERWAVE_STB
+	tristate "AMD InterWave + TEA6330T (UltraSound 32-Pro)"
+	depends on SND
+	select SND_RAWMIDI & SND_PCM & SND_GUS_SYNTH
+
+config SND_OPTI92X_AD1848
+	tristate "OPTi 82C92x - AD1848"
+	depends on SND
+	select SND_OPL3_LIB & SND_OPL4_LIB & SND_MPU401_UART & SND_PCM
+
+config SND_OPTI92X_CS4231
+	tristate "OPTi 82C92x - CS4231"
+	depends on SND
+	select SND_OPL3_LIB & SND_OPL4_LIB & SND_MPU401_UART & SND_PCM
+
+config SND_OPTI93X
+	tristate "OPTi 82C93x"
+	depends on SND
+	select SND_OPL3_LIB & SND_MPU401_UART & SND_PCM
+
+config SND_SB8
+	tristate "Sound Blaster 1.0/2.0/Pro (8-bit)"
+	depends on SND
+	select SND_OPL3_LIB & SND_RAWMIDI & SND_PCM
+
+config SND_SB16
+	tristate "Sound Blaster 16 (PnP)"
+	depends on SND
+	select SND_OPL3_LIB & SND_MPU401_UART & SND_PCM
+
+config SND_SBAWE
+	tristate "Sound Blaster AWE (32,64) (PnP)"
+	depends on SND
+	select SND_OPL3_LIB & SND_MPU401_UART & SND_PCM
+
+config SND_SB16_CSP
+	bool "Sound Blaster 16/AWE CSP support"
+	depends on (SND_SB16 | SND_SBAWE) & (BROKEN | ~PPC)
+
+config SND_WAVEFRONT
+	tristate "Turtle Beach Maui,Tropez,Tropez+ (Wavefront)"
+	depends on SND
+	select SND_OPL3_LIB & SND_MPU401_UART & SND_PCM
+
+config SND_ALS100
+	tristate "Avance Logic ALS100/ALS120"
+	depends on SND & ISAPNP
+	select SND_OPL3_LIB & SND_MPU401_UART & SND_PCM
+
+config SND_AZT2320
+	tristate "Aztech Systems AZT2320"
+	depends on SND & ISAPNP
+	select SND_OPL3_LIB & SND_MPU401_UART & SND_PCM
+
+config SND_CMI8330
+	tristate "C-Media CMI8330"
+	depends on SND
+	select SND_PCM
+
+config SND_DT019X
+	tristate "Diamond Technologies DT-019X, Avance Logic ALS-007"
+	depends on SND & ISAPNP
+	select SND_OPL3_LIB & SND_MPU401_UART & SND_PCM
+
+config SND_OPL3SA2
+	tristate "Yamaha OPL3-SA2/SA3"
+	depends on SND
+	select SND_OPL3_LIB & SND_MPU401_UART & SND_PCM
+
+config SND_SGALAXY
+	tristate "Aztech Sound Galaxy"
+	depends on SND
+	select SND_PCM
+
+config SND_SSCAPE
+	tristate "Ensoniq SoundScape PnP driver"
+	depends on SND
+	select SND_HWDEP & SND_MPU401_UART & SND_PCM
+
+endmenu
+
+config BROKEN
+	bool
+	default n
+
+config ISA
+	bool
+	default n
+
+config ISAPNP
+	bool
+	default n
+
+config PPC
+	bool
+	default n
+
+config SND
+	bool
+	default n
+
+config SND_HWDEP
+	bool
+	default n
+
+config SND_MPU401_UART
+	bool
+	default n
+
+config SND_OPL3_LIB
+	bool
+	default n
+
+config SND_OPL4_LIB
+	bool
+	default n
+
+config SND_PCM
+	bool
+	default n
+
+config SND_RAWMIDI
+	bool
+	default n
+

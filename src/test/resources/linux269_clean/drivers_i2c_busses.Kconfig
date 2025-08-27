@@ -1,0 +1,245 @@
+menu MENU_I2C
+	depends on I2C
+
+config I2C_ALI1535
+	tristate "ALI 1535"
+	depends on I2C & PCI & EXPERIMENTAL
+
+config I2C_ALI1563
+	tristate "ALI 1563"
+	depends on I2C & PCI & EXPERIMENTAL
+
+config I2C_ALI15X3
+	tristate "ALI 15x3"
+	depends on I2C & PCI & EXPERIMENTAL
+
+config I2C_AMD756
+	tristate "AMD 756/766"
+	depends on I2C & EXPERIMENTAL
+
+config I2C_AMD8111
+	tristate "AMD 8111"
+	depends on I2C & EXPERIMENTAL
+
+config I2C_ELEKTOR
+	tristate "Elektor ISA card"
+	depends on I2C & ISA & BROKEN_ON_SMP
+	select I2C_ALGOPCF
+
+config I2C_HYDRA
+	tristate "CHRP Apple Hydra Mac I/O I2C interface"
+	depends on I2C & PCI & PPC_CHRP & EXPERIMENTAL
+	select I2C_ALGOBIT
+
+config I2C_I801
+	tristate "Intel 801"
+	depends on I2C & PCI & EXPERIMENTAL
+
+config I2C_I810
+	tristate "Intel 810/815"
+	depends on I2C & PCI & EXPERIMENTAL
+	select I2C_ALGOBIT
+
+config I2C_IBM_IIC
+	tristate "IBM PPC 4xx on-chip I2C interface"
+	depends on IBM_OCP & I2C
+
+config I2C_IOP3XX
+	tristate "Intel XScale IOP3xx on-chip I2C interface"
+	depends on ARCH_IOP3XX & I2C
+
+config I2C_ISA
+	tristate "ISA Bus support"
+	depends on I2C & EXPERIMENTAL
+
+config I2C_ITE
+	tristate "ITE I2C Adapter"
+	depends on I2C & MIPS_ITE8172
+	select I2C_ALGOITE
+
+config I2C_IXP4XX
+	tristate "IXP4xx GPIO-Based I2C Interface"
+	depends on I2C & ARCH_IXP4XX
+	select I2C_ALGOBIT
+
+config I2C_IXP2000
+	tristate "IXP2000 GPIO-Based I2C Interface"
+	depends on I2C & ARCH_IXP2000
+	select I2C_ALGOBIT
+
+config I2C_KEYWEST
+	tristate "Powermac Keywest I2C interface"
+	depends on I2C & PPC_PMAC
+
+config I2C_MPC
+	tristate "MPC107/824x/85xx/52xx"
+	depends on I2C & FSL_OCP
+
+config I2C_NFORCE2
+	tristate "Nvidia Nforce2"
+	depends on I2C & PCI & EXPERIMENTAL
+
+config I2C_PARPORT
+	tristate "Parallel port adapter"
+	depends on I2C & PARPORT
+	select I2C_ALGOBIT
+
+config I2C_PARPORT_LIGHT
+	tristate "Parallel port adapter (light)"
+	depends on I2C
+	select I2C_ALGOBIT
+
+config I2C_PIIX4
+	tristate "Intel PIIX4"
+	depends on I2C & PCI & EXPERIMENTAL & ~ARCH_64BIT
+
+config I2C_PROSAVAGE
+	tristate "S3/VIA (Pro)Savage"
+	depends on I2C & PCI & EXPERIMENTAL
+	select I2C_ALGOBIT
+
+config I2C_RPXLITE
+	tristate "Embedded Planet RPX Lite/Classic support"
+	depends on (RPXLITE | RPXCLASSIC) & I2C
+	select I2C_ALGO8XX
+
+config I2C_SAVAGE4
+	tristate "S3 Savage 4"
+	depends on I2C & PCI & EXPERIMENTAL
+	select I2C_ALGOBIT
+
+config SCx200_I2C
+	tristate "NatSemi SCx200 I2C using GPIO pins"
+	depends on SCx200_GPIO & I2C
+	select I2C_ALGOBIT
+
+config SCx200_ACB
+	tristate "NatSemi SCx200 ACCESS.bus"
+	depends on I2C
+
+config I2C_SIS5595
+	tristate "SiS 5595"
+	depends on I2C & PCI & EXPERIMENTAL
+
+config I2C_SIS630
+	tristate "SiS 630/730"
+	depends on I2C & PCI & EXPERIMENTAL
+
+config I2C_SIS96X
+	tristate "SiS 96x"
+	depends on I2C & PCI & EXPERIMENTAL
+
+config I2C_VIA
+	tristate "VIA 82C586B"
+	depends on I2C & PCI & EXPERIMENTAL
+	select I2C_ALGOBIT
+
+config I2C_VIAPRO
+	tristate "VIA 82C596/82C686/823x"
+	depends on I2C & PCI & EXPERIMENTAL
+
+config I2C_VOODOO3
+	tristate "Voodoo 3"
+	depends on I2C & PCI & EXPERIMENTAL
+	select I2C_ALGOBIT
+
+config I2C_PCA_ISA
+	tristate "PCA9564 on an ISA bus"
+	depends on I2C
+	select I2C_ALGOPCA
+
+endmenu
+
+# Stub added manually
+config ARCH_64BIT
+	bool
+	default n
+
+config ARCH_IOP3XX
+	bool
+	default n
+
+config ARCH_IXP2000
+	bool
+	default n
+
+config ARCH_IXP4XX
+	bool
+	default n
+
+config BROKEN_ON_SMP
+	bool
+	default n
+
+config EXPERIMENTAL
+	bool
+	default n
+
+config FSL_OCP
+	bool
+	default n
+
+config I2C
+	bool
+	default n
+
+config I2C_ALGO8XX
+	bool
+	default n
+
+config I2C_ALGOBIT
+	bool
+	default n
+
+config I2C_ALGOITE
+	bool
+	default n
+
+config I2C_ALGOPCA
+	bool
+	default n
+
+config I2C_ALGOPCF
+	bool
+	default n
+
+config IBM_OCP
+	bool
+	default n
+
+config ISA
+	bool
+	default n
+
+config MIPS_ITE8172
+	bool
+	default n
+
+config PARPORT
+	bool
+	default n
+
+config PCI
+	bool
+	default n
+
+config PPC_CHRP
+	bool
+	default n
+
+config PPC_PMAC
+	bool
+	default n
+
+config RPXCLASSIC
+	bool
+	default n
+
+config RPXLITE
+	bool
+	default n
+
+config SCx200_GPIO
+	bool
+	default n
+
