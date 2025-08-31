@@ -26,8 +26,11 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.logicng.formulas.FType;
 import org.logicng.formulas.Formula;
 import org.logicng.formulas.FormulaFactory;
+import org.logicng.formulas.Implication;
+import org.logicng.formulas.Literal;
 import org.logicng.formulas.Variable;
 import org.slf4j.event.Level;
 
@@ -47,9 +50,11 @@ import de.kit.kastel.travart.kconfig.model.nodes.choice.KconfigBooleanChoice;
 import de.kit.kastel.travart.kconfig.model.nodes.menu.KconfigMenuNode;
 import de.kit.kastel.travart.kconfig.model.nodes.value.KconfigBooleanNode;
 import de.kit.kastel.travart.kconfig.parser.TreeProcessor;
+
 import de.vill.model.Feature;
 import de.vill.model.FeatureModel;
 import de.vill.model.Group.GroupType;
+import de.vill.model.constraint.Constraint;
 import de.vill.model.constraint.ImplicationConstraint;
 
 // TODO Break up individual transformation rules and move to TransformKCtoFMUtil
@@ -103,18 +108,38 @@ public class KconfigModelOneWayGraphTransformer {
 		KconfigModelImpl kmodel = new KconfigModelImpl("0", root.getFeatureName());
 		LOGGER.debug("Source model size: " + FeatureModelStatistics.getInstance().getVariabilityElementsCount(model));
 		processFeature(root, null, kmodel.getInnerGraph());
-		LOGGER.debug("State after processFeature call on innerGraph: " + kmodel.getInnerGraph().toString());
+		//LOGGER.debug("State after processFeature call on innerGraph: " + kmodel.getInnerGraph().toString());
 		// Attempt best-effort transformation for feature model constraints
-		for (ImplicationConstraint ccc : TraVarTUtils.getOwnConstraints(model).stream()
-				.filter(ImplicationConstraint.class::isInstance).map(ImplicationConstraint.class::cast)
-				.collect(Collectors.toList())) {
-			LOGGER.debug("Now transforming constraint: " + ccc);
-			Formula lhs = TraVarTUtils.buildFormulaFromConstraint(ccc.getLeft(), f);
-			Formula rhs = TraVarTUtils.buildFormulaFromConstraint(ccc.getRight(), f);
-			var sourceNode = TreeProcessor.extractNodes(lhs, kmodel.getInnerGraph()).getFirst();
-			// Map to equivalent dependency if the constraint's lhs is an atomic formula (i.e. node-respective variable)
-			if (lhs.isAtomicFormula()) {
-				kmodel.addDependency(sourceNode, rhs, false);
+		for (Constraint c : TraVarTUtils.getOwnConstraints(model)) {
+			// Try to match format A -> Y, where A is a literal and Y is a term
+			Formula constraintFormula = TraVarTUtils.buildFormulaFromConstraint(c, f);
+			Formula cfNff = constraintFormula.nnf();
+			if (constraintFormula.type() == FType.IMPL) {
+				LOGGER.debug("Constraint is an implication, check if it's already in A -> Y form... " + constraintFormula.toString());
+				var lhsNodes = TreeProcessor.extractNodes(((Implication) constraintFormula).left(), kmodel.getInnerGraph());
+				// If the implication is already defined as A -> Y, simply attach formula to matching node
+				if (lhsNodes.size() == 1) {
+					LOGGER.debug("Form matched, adding dependency to " + lhsNodes.getFirst() + "...");
+					kmodel.addDependency(lhsNodes.getFirst(), ((Implication) constraintFormula).right(), false);
+					continue;
+				}
+				LOGGER.debug("Constraint is an implication, but left-hand side has multiple literals. Trying with NNF heuristic instead...");
+			}
+			if (cfNff.type() == FType.OR) {
+				LOGGER.debug("NNF is a disjunction, trying to match single negated literal... " + cfNff.toString());
+				List<Formula> negated = cfNff.literals().stream().filter(e -> !e.phase()).collect(Collectors.toList());
+				if (negated.size() == 1) {
+					LOGGER.debug("Detected constraint with format A -> Y, where A is a literal and Y is a term");
+					Literal lhs = (Literal) negated.get(0);
+					LOGGER.debug("A is " + lhs.toString());					
+					Formula rhs = f.or(cfNff.literals().stream().filter(e -> e != lhs).collect(Collectors.toList()));
+					LOGGER.debug("Y is " + rhs.toString());
+					List<KconfigNode> lhsNodes = TreeProcessor.extractNodes(rhs, kmodel.getInnerGraph());
+					if (lhsNodes.size() == 1) {
+						LOGGER.debug("Adding dependency for " + lhsNodes.getFirst().getName() + ": " + constraintFormula.toString());
+						kmodel.addDependency(lhsNodes.getFirst(), rhs, false);
+					}
+				}
 			}
 		}
 		// Substitute dependency expressions according to submap

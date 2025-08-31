@@ -377,7 +377,7 @@ public class KconfigModelTwoWayGraphTransformer {
 			}
 			if (sourceNodes.size() > 1) {
 				throw new IllegalStateException(
-						"While processing dependencies: Dependency contains illegal source expression, cannot process ");
+						"Model contains constraint with composite left-side, not supported!");
 			}
 			// Is the currently processed implication marked as a select dependency? Compare attributes
 			int selectMarker = (int) ObjectUtils.defaultIfNull(TraVarTUtils.getAttributeValue(

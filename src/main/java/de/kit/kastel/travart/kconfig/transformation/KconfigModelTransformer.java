@@ -15,6 +15,10 @@
 package de.kit.kastel.travart.kconfig.transformation;
 
 import at.jku.cps.travart.core.transformation.*;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import at.jku.cps.travart.core.common.IStatistics;
 import at.jku.cps.travart.core.exception.NotSupportedVariabilityTypeException;
 import de.kit.kastel.travart.kconfig.KconfigModelStatistics;
@@ -24,6 +28,8 @@ import de.kit.kastel.travart.kconfig.transformation.roundtrip.KconfigModelRoundt
 import de.vill.model.FeatureModel;
 
 public class KconfigModelTransformer extends AbstractBenchmarkingTransformer<KconfigModel> {
+	
+	private static final Logger LOGGER = LogManager.getLogger(KconfigModelTransformer.class);
 
 	private final KconfigModelOneWayTransformer kconfigModelOneWayTransformer = new KconfigModelOneWayTransformer();
 	private final KconfigModelRoundtripTransformer kconfigModelRoundtripTransformer = new KconfigModelRoundtripTransformer();
@@ -32,7 +38,8 @@ public class KconfigModelTransformer extends AbstractBenchmarkingTransformer<Kco
 	public FeatureModel transformInner(final KconfigModel model, final String modelName, final STRATEGY strategy)
 			throws NotSupportedVariabilityTypeException {
 		if (strategy == STRATEGY.ROUNDTRIP) {
-			kconfigModelRoundtripTransformer.transform(model, modelName);			
+			LOGGER.debug("Invoking roundtrip transformer, Kconfig to UVL");
+			return kconfigModelRoundtripTransformer.transform(model, modelName);
 		}
 		return kconfigModelOneWayTransformer.transform(model, modelName);
 	}
@@ -41,7 +48,8 @@ public class KconfigModelTransformer extends AbstractBenchmarkingTransformer<Kco
 	public KconfigModel transformInner(final FeatureModel model, final String modelName, final STRATEGY strategy)
 			throws NotSupportedVariabilityTypeException {
 		if (strategy == STRATEGY.ROUNDTRIP) {
-			kconfigModelRoundtripTransformer.transform(model, modelName);
+			LOGGER.debug("Invoking roundtrip transformer, UVL to Kconfig");
+			return kconfigModelRoundtripTransformer.transform(model, modelName);
 		}
 		return kconfigModelOneWayTransformer.transform(model, modelName, bus, verbosity);
 	}
