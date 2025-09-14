@@ -31,6 +31,7 @@ import org.logicng.formulas.Formula;
 import org.logicng.formulas.FormulaFactory;
 import org.logicng.formulas.Implication;
 import org.logicng.formulas.Literal;
+import org.logicng.formulas.Or;
 import org.logicng.formulas.Variable;
 import org.slf4j.event.Level;
 
@@ -55,7 +56,6 @@ import de.vill.model.Feature;
 import de.vill.model.FeatureModel;
 import de.vill.model.Group.GroupType;
 import de.vill.model.constraint.Constraint;
-import de.vill.model.constraint.ImplicationConstraint;
 
 // TODO Break up individual transformation rules and move to TransformKCtoFMUtil
 public class KconfigModelOneWayGraphTransformer {
@@ -126,34 +126,55 @@ public class KconfigModelOneWayGraphTransformer {
 				LOGGER.debug("Constraint is an implication, but left-hand side has multiple literals. Trying with NNF heuristic instead...");
 			}
 			if (cfNff.type() == FType.OR) {
-				LOGGER.debug("NNF is a disjunction, trying to match single negated literal... " + cfNff.toString());
-				List<Formula> negated = cfNff.literals().stream().filter(e -> !e.phase()).collect(Collectors.toList());
-				if (negated.size() == 1) {
+				Or cfNffDj = (Or) cfNff;
+				LOGGER.debug("NNF is a disjunction, trying to match single negated literal... " + cfNffDj.toString());
+				List<Formula> negated = cfNffDj.stream().filter(e -> e instanceof Literal)
+						.filter(e -> !((Literal) e).phase())
+						.collect(Collectors.toList());
+				if (negated.size() >= 1) {
 					LOGGER.debug("Detected constraint with format A -> Y, where A is a literal and Y is a term");
-					Literal lhs = (Literal) negated.get(0);
-					LOGGER.debug("A is " + lhs.toString());					
-					Formula rhs = f.or(cfNff.literals().stream().filter(e -> e != lhs).collect(Collectors.toList()));
+					Literal lhsNegated = (Literal) negated.getFirst(); // Get first negated literal
+					if (negated.size() > 1) {
+						LOGGER.debug("Multiple possible implication forms (=" + negated.size() + "), chose "+ lhsNegated + " as left side...");
+					}
+					Formula rhs = f.or(cfNffDj.stream().filter(e -> e != lhsNegated).collect(Collectors.toList()));
+					// After calculating rhs, negate lhs
+					var lhs = lhsNegated.negate();
+					LOGGER.debug("A is " + lhs.toString());
 					LOGGER.debug("Y is " + rhs.toString());
-					List<KconfigNode> lhsNodes = TreeProcessor.extractNodes(rhs, kmodel.getInnerGraph());
+					List<KconfigNode> lhsNodes = TreeProcessor.extractNodes(lhs, kmodel.getInnerGraph());
 					if (lhsNodes.size() == 1) {
-						LOGGER.debug("Adding dependency for " + lhsNodes.getFirst().getName() + ": " + constraintFormula.toString());
-						kmodel.addDependency(lhsNodes.getFirst(), rhs, false);
+						boolean equivalency = f.implication(lhs, rhs).isEquivalentTo(constraintFormula);
+						LOGGER.debug("NNF heuristic provided: " + constraintFormula.toString() + " is " + cfNffDj.toString() + ", which should matches to "
+								+ f.implication(lhs, rhs) + " (equivalency: " + equivalency + ")");
+						if (!equivalency) {
+							LOGGER.warn("NNF heuristic's suggestion is not equivalent to actual constraint formula, ignoring!");							
+						} else {
+							LOGGER.debug("Adding dependency for " + lhsNodes.getFirst().getName() + ": " + constraintFormula.toString());
+							kmodel.addDependency(lhsNodes.getFirst(), rhs, false);
+						}
+						// Skip debug message for non-matching clause
+						continue;
+					} else {
+						throw new IllegalStateException("NNF heuristic inconsistent for constraint " + constraintFormula.toString() + ", model is broken!");
 					}
 				}
 			}
+			LOGGER.debug("Cannot transform constraint (no matching heuristic), ignoring " + constraintFormula.toString());
 		}
 		// Substitute dependency expressions according to submap
 		for (Map.Entry<KconfigNode, Collection<MutablePair<Formula, Boolean>>> deps : kmodel.getDependencies()
 				.entrySet()) {
 			for (MutablePair<Formula, Boolean> exp : deps.getValue()) {
-				Formula subExp = exp.getLeft();
+				Formula subExp = f.importFormula(exp.getLeft());
 				for (Map.Entry<Variable, Formula> substitution : NODE_EXP_SUB_MAP.entrySet()) {
 					if (substitution.getValue().containsVariable(deps.getKey().getName())) {
 						continue;
 					}
 					// Not very robust, but seems to work... for now
 					// In general, avoid substituting if the source node occurs on the rhs of the substitution tuple
-					subExp = subExp.substitute(substitution.getKey(), substitution.getValue());
+					// Need to import as substitution was built by transformation formula factory
+					subExp = subExp.substitute((Variable) f.importFormula(substitution.getKey()), f.importFormula(substitution.getValue()));
 				}
 				exp.setLeft(subExp);
 			}

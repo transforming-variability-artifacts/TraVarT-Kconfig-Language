@@ -284,6 +284,12 @@ public class KconfigModelTwoWayGraphTransformer {
 		// Quick and dirty debugging; somehow getFeatureMap and getFeature don't match...
 		System.out.println("Source feature name: " + source.getName() + " matched feature? " + Objects.nonNull(sourceFeature));
 		System.out.println("Target feature name: " + target.getName() + " matched feature? " + Objects.nonNull(targetFeature));
+		if (Objects.isNull(targetFeature) || Objects.isNull(sourceFeature)) {
+			System.err.println("Tried to process rule before processing source/target node?");
+			System.err.println("Cannot process dependency " + source.getName() + " -> " + target.getName());
+			LOGGER.warn("This might be caused by a bug with the feature map (assuming model definition is consistent)!");
+			return List.of();
+		}
 		if (source instanceof KconfigTristateNode || source instanceof KconfigTristateChoice) {
 			// TODO Do not ignore menuconfig nodes
 			if (target instanceof KconfigBooleanNode || target instanceof KconfigBooleanChoice) {
@@ -376,6 +382,7 @@ public class KconfigModelTwoWayGraphTransformer {
 				continue; // Probably an implication with attributes, ignore it
 			}
 			if (sourceNodes.size() > 1) {
+				// FIXME Use detection over NNFs as used in one-way transformation
 				throw new IllegalStateException(
 						"Model contains constraint with composite left-side, not supported!");
 			}

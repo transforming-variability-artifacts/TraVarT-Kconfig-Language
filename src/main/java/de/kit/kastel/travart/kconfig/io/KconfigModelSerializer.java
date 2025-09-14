@@ -48,11 +48,12 @@ public class KconfigModelSerializer implements ISerializer<KconfigModel> {
 	 * WIP
 	 */
 	public void serialize(final KconfigModel km, StringBuilder writer, KconfigNode node, int tabulation) throws NotSupportedVariabilityTypeException {
-			if (node instanceof KconfigMenuNode) {
+			if (node instanceof KconfigMenuNode menuNode) {
 				switch (node) {
 				case KconfigBooleanChoice bc:
 					writer.append("\t".repeat(tabulation) + "choice " + node.getName() + "\n");					
 					writer.append("\t".repeat(tabulation+1) + "bool\n");
+					processDependencies(km, bc, writer, tabulation+1);
 					for (KconfigNode child : getDefinitionOrder(bc.getSubgraph(km))) {
 						LOGGER.info("Calculated subgraph for " + bc.getName() + ", now serializing " + child.getName() + " from subgraph!");
 						serialize(km, writer, child, tabulation+1);
@@ -62,6 +63,7 @@ public class KconfigModelSerializer implements ISerializer<KconfigModel> {
 				case KconfigTristateChoice tc:
 					writer.append("\t".repeat(tabulation) + "choice " + node.getName() + "\n");
 					writer.append("\t".repeat(tabulation+1) + "tristate\n");
+					processDependencies(km, tc, writer, tabulation+1);
 					for (KconfigNode child : getDefinitionOrder(tc.getSubgraph(km))) {
 						LOGGER.info("Calculated subgraph for " + tc.getName() + ", now serializing " + child.getName() + " from subgraph!");
 						serialize(km, writer, child, tabulation+1);
@@ -80,7 +82,14 @@ public class KconfigModelSerializer implements ISerializer<KconfigModel> {
 					writer.append("menuconfig " + node.getName() + "\n");
 					break;
 				default:
-					throw new IllegalStateException("Cannot write invalid Kconfig model!");
+					LOGGER.debug("Matched default case for KconfigMenuNode, hoping for actual menu block...");
+					writer.append("menu " + node.getName() + "\n");
+					processDependencies(km, menuNode, writer, tabulation+1);
+					for (KconfigNode child : getDefinitionOrder(menuNode.getSubgraph(km))) {
+						LOGGER.info("Calculated subgraph for " + node.getName() + ", now serializing " + child.getName() + " from subgraph!");
+						serialize(km, writer, child, tabulation+1);
+					}
+					writer.append("\t".repeat(tabulation) + "endmenu\n\n");
 				}
 			} else if (node instanceof KconfigValueNode) {
 				// TODO Ensure that the order in which config symbols occur is valid
