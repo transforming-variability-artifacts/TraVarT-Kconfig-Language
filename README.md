@@ -1,5 +1,7 @@
 # Kconfig plugin for TraVarT
 
+[![DOI](https://zenodo.org/badge/844437079.svg)](https://doi.org/10.5281/zenodo.18508035)
+
 This repository contains an adaptation of
 [Kfeature](https://codeberg.org/6b6279/Kfeature) as a plugin for
 [TraVarT](https://github.com/SECPS/TraVarT).
